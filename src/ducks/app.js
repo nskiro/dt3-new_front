@@ -3,7 +3,7 @@ import { push } from 'react-router-redux'
 import { pendingTask, begin, end } from 'react-redux-spinner'
 import { message } from 'antd'
 
-import axios from '../axiosInst';
+import axios from '../axiosInst'
 
 const REDUCER = 'app'
 const NS = `@@${REDUCER}/`
@@ -90,19 +90,17 @@ export async function login(username, password, dispatch) {
     if (res.data) {
       window.localStorage.setItem('app.Authorization', res.data.token)
       window.localStorage.setItem('app.Role', 'administrator')
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token;
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token
       dispatch(_setHideLogin(true))
       dispatch(push('/dashboard'))
-      return true;
-    }
-    else {
+      return true
+    } else {
       dispatch(push('/login'))
       dispatch(_setFrom(''))
       return false
     }
-  }
-  catch(err){
-    alert(err.response.data);
+  } catch (err) {
+    alert(err.response.data)
   }
 }
 

@@ -14,7 +14,7 @@ class DashboardAlphaPage extends React.Component {
     return (
       <Page {...props}>
         <Helmet title="Dashboard Alpha" />
-        <img src={EBImage} style={{maxWidth: '100%'}} alt="" />
+        <img src={EBImage} style={{ maxWidth: '100%' }} alt="" />
       </Page>
     )
   }

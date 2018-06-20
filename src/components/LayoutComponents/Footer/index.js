@@ -5,10 +5,7 @@ import './style.scss'
 class AppFooter extends React.Component {
   render() {
     return (
-      <div className="footer">
-        © {new Date().getFullYear()} Duc Thanh 3.
-        All rights reserved
-      </div>
+      <div className="footer">© {new Date().getFullYear()} Duc Thanh 3. All rights reserved</div>
     )
   }
 }

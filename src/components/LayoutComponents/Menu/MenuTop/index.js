@@ -4,7 +4,7 @@ import { Menu } from 'antd'
 import { Link, withRouter } from 'react-router-dom'
 import { reduce } from 'lodash'
 import { setLayoutState } from 'ducks/app'
-import ProfileMenu from '../../TopBar/ProfileMenu';
+import ProfileMenu from '../../TopBar/ProfileMenu'
 import { default as menuData } from './menuData'
 import LogoEB from '../../../../images/Logo EB Wide.png'
 import 'rc-drawer-menu/assets/index.css'
@@ -82,7 +82,7 @@ class MenuTop extends React.Component {
   }
 
   getActiveMenuItem = (props, items) => {
-    const { selectedKeys, pathname } = this.state;
+    const { selectedKeys, pathname } = this.state
     let { collapsed } = props
     let [activeMenuItem, ...path] = this.getPath(items, !selectedKeys ? pathname : selectedKeys)
 
@@ -123,8 +123,8 @@ class MenuTop extends React.Component {
           onClick={
             this.props.isMobile
               ? () => {
-                dispatch(setLayoutState({ menuCollapsed: false }))
-              }
+                  dispatch(setLayoutState({ menuCollapsed: false }))
+                }
               : undefined
           }
         >
@@ -133,11 +133,11 @@ class MenuTop extends React.Component {
         </Link>
       </Menu.Item>
     ) : (
-          <Menu.Item key={key} disabled={disabled}>
-            <span className="menuTop__item-title">{title}</span>
-            {icon && <span className={icon + ' menuTop__icon'} />}
-          </Menu.Item>
-        )
+      <Menu.Item key={key} disabled={disabled}>
+        <span className="menuTop__item-title">{title}</span>
+        {icon && <span className={icon + ' menuTop__icon'} />}
+      </Menu.Item>
+    )
   }
 
   componentWillMount() {

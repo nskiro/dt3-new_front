@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Col } from 'antd';
+import { Row, Col } from 'antd'
 import LoginForm from './LoginForm'
 import LogoDT from '../../../images/Logo DT.png'
 import LogoEB from '../../../images/Logo EB.png'
@@ -22,7 +22,11 @@ class Login extends React.Component {
       <div className="main-login main-login--fullscreen">
         <Row type="flex" justify="space-around" align="middle">
           <Col span={6}>
-            <img src={LogoDT} alt="Ergo Baby" style={{ maxHeight: '156px', display: 'block', margin: 'auto' }} />
+            <img
+              src={LogoDT}
+              alt="Ergo Baby"
+              style={{ maxHeight: '156px', display: 'block', margin: 'auto' }}
+            />
           </Col>
           <Col span={12}>
             <div className="login-form">
@@ -30,10 +34,14 @@ class Login extends React.Component {
             </div>
           </Col>
           <Col span={6}>
-            <img src={LogoEB} alt="Ergo Baby" style={{ maxHeight: '156px', display: 'block', margin: 'auto' }} />
+            <img
+              src={LogoEB}
+              alt="Ergo Baby"
+              style={{ maxHeight: '156px', display: 'block', margin: 'auto' }}
+            />
           </Col>
         </Row>
-      </div >
+      </div>
     )
   }
 }

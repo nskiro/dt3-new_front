@@ -20,7 +20,7 @@ const loadableRoutes = {
   // Dashboards
   '/dashboard': {
     component: loadable(() => import('pages/Dashboard')),
-  }
+  },
 }
 
 class Routes extends React.Component {
