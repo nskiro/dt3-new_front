@@ -1,7 +1,9 @@
 import { createAction, createReducer } from 'redux-act'
 import { push } from 'react-router-redux'
 import { pendingTask, begin, end } from 'react-redux-spinner'
-import { notification } from 'antd'
+import { message } from 'antd'
+
+import axios from '../axiosInst';
 
 const REDUCER = 'app'
 const NS = `@@${REDUCER}/`
@@ -58,8 +60,8 @@ export const initAuth = roles => (dispatch, getState) => {
       }),
     )
     if (!roles.find(role => role === userRole)) {
-      if (!(state.routing.location.pathname === '/dashboard/alpha')) {
-        dispatch(push('/dashboard/alpha'))
+      if (!(state.routing.location.pathname === '/dashboard')) {
+        dispatch(push('/dashboard'))
       }
       return Promise.resolve(false)
     }
@@ -82,41 +84,26 @@ export const initAuth = roles => (dispatch, getState) => {
   }
 }
 
-export function login(username, password, dispatch) {
-  // Use Axios there to get User Auth Token with Basic Method Authentication
-
-  if (username === 'admin@mediatec.org' && password === '123123') {
-    window.localStorage.setItem('app.Authorization', '')
-    window.localStorage.setItem('app.Role', 'administrator')
-    dispatch(_setHideLogin(true))
-    dispatch(push('/dashboard/alpha'))
-    notification.open({
-      type: 'success',
-      message: 'You have successfully logged in!',
-      description:
-        'Welcome to the Clean UI Admin Template. The Clean UI Admin Template is a complimentary template that empowers developers to make perfect looking and useful apps!',
-    })
-    return true
+export async function login(username, password, dispatch) {
+  try {
+    const res = await axios.post('/user/login', { username: username, password: password })
+    if (res.data) {
+      window.localStorage.setItem('app.Authorization', res.data.token)
+      window.localStorage.setItem('app.Role', 'administrator')
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token;
+      dispatch(_setHideLogin(true))
+      dispatch(push('/dashboard'))
+      return true;
+    }
+    else {
+      dispatch(push('/login'))
+      dispatch(_setFrom(''))
+      return false
+    }
   }
-
-  if (username === 'agent@mediatec.org' && password === '123123') {
-    window.localStorage.setItem('app.Authorization', '')
-    window.localStorage.setItem('app.Role', 'agent')
-    dispatch(_setHideLogin(true))
-    dispatch(push('/dashboard/alpha'))
-    notification.open({
-      type: 'success',
-      message: 'You have successfully logged in!',
-      description:
-        'Welcome to the Clean UI Admin Template. The Clean UI Admin Template is a complimentary template that empowers developers to make perfect looking and useful apps!',
-    })
-    return true
+  catch(err){
+    alert(err.response.data);
   }
-
-  dispatch(push('/login'))
-  dispatch(_setFrom(''))
-
-  return false
 }
 
 export const logout = () => (dispatch, getState) => {

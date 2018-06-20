@@ -4,7 +4,9 @@ import { Menu } from 'antd'
 import { Link, withRouter } from 'react-router-dom'
 import { reduce } from 'lodash'
 import { setLayoutState } from 'ducks/app'
+import ProfileMenu from '../../TopBar/ProfileMenu';
 import { default as menuData } from './menuData'
+import LogoEB from '../../../../images/Logo EB Wide.png'
 import 'rc-drawer-menu/assets/index.css'
 import './style.scss'
 
@@ -121,8 +123,8 @@ class MenuTop extends React.Component {
           onClick={
             this.props.isMobile
               ? () => {
-                  dispatch(setLayoutState({ menuCollapsed: false }))
-                }
+                dispatch(setLayoutState({ menuCollapsed: false }))
+              }
               : undefined
           }
         >
@@ -131,11 +133,11 @@ class MenuTop extends React.Component {
         </Link>
       </Menu.Item>
     ) : (
-      <Menu.Item key={key} disabled={disabled}>
-        <span className="menuTop__item-title">{title}</span>
-        {icon && <span className={icon + ' menuTop__icon'} />}
-      </Menu.Item>
-    )
+          <Menu.Item key={key} disabled={disabled}>
+            <span className="menuTop__item-title">{title}</span>
+            {icon && <span className={icon + ' menuTop__icon'} />}
+          </Menu.Item>
+        )
   }
 
   componentWillMount() {
@@ -164,7 +166,7 @@ class MenuTop extends React.Component {
       <div className="menuTop">
         <div className="menuTop__logo">
           <div className="menuTop__logoContainer">
-            <img src="resources/images/logo-inverse.png" alt="" />
+            <img src={LogoEB} alt="" />
           </div>
         </div>
         <Menu
@@ -176,11 +178,12 @@ class MenuTop extends React.Component {
           mode="horizontal"
           className="menuTop__navigation"
         >
-          <Menu.Item key={'settings'}>
+          {menuItems}
+          <ProfileMenu />
+          {/* <Menu.Item key={'settings'}>
             <span className="menuTop__item-title">Settings</span>
             <span className={'icmn icmn-cog menuTop__icon utils__spin-delayed--pseudo-selector'} />
-          </Menu.Item>
-          {menuItems}
+          </Menu.Item> */}
         </Menu>
       </div>
     )

@@ -22,3 +22,4 @@ yarn-lock.log*
 yarn.lock*
 /src/**/*.css
 package-lock.json*
+debug.log*

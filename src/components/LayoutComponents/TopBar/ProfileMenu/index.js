@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { logout } from 'ducks/app'
-import { Menu, Dropdown, Avatar, Badge } from 'antd'
+import { Menu, Dropdown, Avatar } from 'antd'
 
 const mapDispatchToProps = dispatch => ({
   logout: event => {
@@ -75,9 +75,7 @@ class ProfileMenu extends React.Component {
           onVisibleChange={this.addCount}
         >
           <a className="ant-dropdown-link" href="/">
-            <Badge count={count}>
-              <Avatar className="topbar__avatar" shape="square" size="large" icon="user" />
-            </Badge>
+            <Avatar className="topbar__avatar" shape="square" size="large" icon="user" />
           </a>
         </Dropdown>
       </div>

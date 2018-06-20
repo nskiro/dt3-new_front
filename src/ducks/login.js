@@ -11,7 +11,6 @@ export const submit = ({ username, password }: { username: string, password: str
   dispatch(app.addSubmitForm(REDUCER))
 
   let isLoggined = app.login(username, password, dispatch)
-
   if (isLoggined) {
     dispatch(app.deleteSubmitForm(REDUCER))
   } else {
