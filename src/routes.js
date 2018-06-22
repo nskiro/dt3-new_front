@@ -21,6 +21,10 @@ const loadableRoutes = {
   '/dashboard': {
     component: loadable(() => import('pages/Dashboard')),
   },
+
+  '/fabric': {
+    component: loadable(() => import('pages/PreProduction/Fabric/Warehouse')),
+  },
 }
 
 class Routes extends React.Component {
