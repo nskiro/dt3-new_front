@@ -13,8 +13,8 @@ import './style.scss'
 const SubMenu = Menu.SubMenu
 const Divider = Menu.Divider
 
-const menuData =[]// JSON.parse(window.sessionStorage.getItem('app.Menus'));
-console.log('menuData ==>' + JSON.stringify(menuData));
+const menuData = [] // JSON.parse(window.sessionStorage.getItem('app.Menus'));
+console.log('menuData ==>' + JSON.stringify(menuData))
 
 const mapStateToProps = ({ app, routing }, props) => {
   const { layoutState } = app
@@ -85,11 +85,11 @@ class MenuTop extends React.Component {
   }
 
   getActiveMenuItem = (props, initems) => {
-    let items = [];
+    let items = []
     if (initems) {
-      items = initems;
+      items = initems
     }
-    console.log(JSON.stringify(items));
+    console.log(JSON.stringify(items))
     const { selectedKeys, pathname } = this.state
     let { collapsed } = props
     let [activeMenuItem, ...path] = this.getPath(items, !selectedKeys ? pathname : selectedKeys)
@@ -101,9 +101,9 @@ class MenuTop extends React.Component {
   }
 
   generateMenuPartitions(initems) {
-    let items = [];
+    let items = []
     if (initems) {
-      items = initems;
+      items = initems
     }
     return items.map(menuItem => {
       if (menuItem.children) {
@@ -135,8 +135,8 @@ class MenuTop extends React.Component {
           onClick={
             this.props.isMobile
               ? () => {
-                dispatch(setLayoutState({ menuCollapsed: false }))
-              }
+                  dispatch(setLayoutState({ menuCollapsed: false }))
+                }
               : undefined
           }
         >
@@ -145,11 +145,11 @@ class MenuTop extends React.Component {
         </Link>
       </Menu.Item>
     ) : (
-          <Menu.Item key={key} disabled={disabled}>
-            <span className="menuTop__item-title">{title}</span>
-            {icon && <span className={icon + ' menuTop__icon'} />}
-          </Menu.Item>
-        )
+      <Menu.Item key={key} disabled={disabled}>
+        <span className="menuTop__item-title">{title}</span>
+        {icon && <span className={icon + ' menuTop__icon'} />}
+      </Menu.Item>
+    )
   }
 
   componentWillMount() {
