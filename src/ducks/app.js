@@ -37,9 +37,10 @@ export const resetHideLogin = () => (dispatch, getState) => {
 export const initAuth = roles => (dispatch, getState) => {
   // Use Axios there to get User Data by Auth Token with Bearer Method Authentication
 
-  const userRole = window.localStorage.getItem('app.Role')
+  const userRole = window.sessionStorage.getItem('app.Role')
   const state = getState()
 
+  /*
   const users = {
     administrator: {
       email: 'admin@mediatec.org',
@@ -50,6 +51,7 @@ export const initAuth = roles => (dispatch, getState) => {
       role: 'agent',
     },
   }
+  */
 
   const setUser = userState => {
     dispatch(
@@ -59,16 +61,25 @@ export const initAuth = roles => (dispatch, getState) => {
         },
       }),
     )
-    if (!roles.find(role => role === userRole)) {
-      if (!(state.routing.location.pathname === '/dashboard')) {
-        dispatch(push('/dashboard'))
-      }
-      return Promise.resolve(false)
+    //if (!roles.find(role => role === userRole)) {
+    if (!(state.routing.location.pathname === '/dashboard')) {
+      dispatch(push('/dashboard'))
     }
-    return Promise.resolve(true)
+    return Promise.resolve(false)
+    // }
+    // return Promise.resolve(true)
   }
 
   switch (userRole) {
+    case userRole:
+      return setUser(userRole)
+    default:
+      const location = state.routing.location
+      const from = location.pathname + location.search
+      dispatch(_setFrom(from))
+      dispatch(push('/login'))
+      return Promise.reject()
+    /*
     case 'administrator':
       return setUser(users.administrator, userRole)
 
@@ -81,6 +92,7 @@ export const initAuth = roles => (dispatch, getState) => {
       dispatch(_setFrom(from))
       dispatch(push('/login'))
       return Promise.reject()
+      */
   }
 }
 
@@ -88,9 +100,12 @@ export async function login(username, password, dispatch) {
   try {
     const res = await axios.post('/user/login', { username: username, password: password })
     if (res.data) {
-      window.localStorage.setItem('app.Authorization', res.data.token)
-      window.localStorage.setItem('app.Role', 'administrator')
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token
+      window.sessionStorage.setItem('app.Authorization', res.data.token);
+      window.sessionStorage.setItem('app.Role', res.data.role);
+      window.sessionStorage.setItem('app.Group', res.data.group);
+      window.sessionStorage.setItem('app.Menus', JSON.stringify(res.data.menu));
+      window.sessionStorage.setItem('app.Links', JSON.stringify(res.data.link));
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token;
       dispatch(_setHideLogin(true))
       dispatch(push('/dashboard'))
       return true
@@ -113,8 +128,11 @@ export const logout = () => (dispatch, getState) => {
       },
     }),
   )
-  window.localStorage.setItem('app.Authorization', '')
-  window.localStorage.setItem('app.Role', '')
+  window.sessionStorage.removeItem('app.Authorization');
+  window.sessionStorage.removeItem('app.Role');
+  window.sessionStorage.removeItem('app.Group');
+  window.sessionStorage.removeItem('app.Menus');
+  window.sessionStorage.removeItem('app.Links');
   dispatch(push('/login'))
 }
 

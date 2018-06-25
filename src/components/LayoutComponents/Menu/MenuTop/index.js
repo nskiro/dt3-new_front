@@ -5,13 +5,16 @@ import { Link, withRouter } from 'react-router-dom'
 import { reduce } from 'lodash'
 import { setLayoutState } from 'ducks/app'
 import ProfileMenu from '../../TopBar/ProfileMenu'
-import { default as menuData } from './menuData'
+//import { default as menuData } from './menuData'
 import LogoEB from '../../../../images/Logo EB Wide.png'
 import 'rc-drawer-menu/assets/index.css'
 import './style.scss'
 
 const SubMenu = Menu.SubMenu
 const Divider = Menu.Divider
+
+const menuData =[]// JSON.parse(window.sessionStorage.getItem('app.Menus'));
+console.log('menuData ==>' + JSON.stringify(menuData));
 
 const mapStateToProps = ({ app, routing }, props) => {
   const { layoutState } = app
@@ -81,7 +84,12 @@ class MenuTop extends React.Component {
     return items.length > 0 ? items : false
   }
 
-  getActiveMenuItem = (props, items) => {
+  getActiveMenuItem = (props, initems) => {
+    let items = [];
+    if (initems) {
+      items = initems;
+    }
+    console.log(JSON.stringify(items));
     const { selectedKeys, pathname } = this.state
     let { collapsed } = props
     let [activeMenuItem, ...path] = this.getPath(items, !selectedKeys ? pathname : selectedKeys)
@@ -92,7 +100,11 @@ class MenuTop extends React.Component {
     })
   }
 
-  generateMenuPartitions(items) {
+  generateMenuPartitions(initems) {
+    let items = [];
+    if (initems) {
+      items = initems;
+    }
     return items.map(menuItem => {
       if (menuItem.children) {
         let subMenuTitle = (
@@ -123,8 +135,8 @@ class MenuTop extends React.Component {
           onClick={
             this.props.isMobile
               ? () => {
-                  dispatch(setLayoutState({ menuCollapsed: false }))
-                }
+                dispatch(setLayoutState({ menuCollapsed: false }))
+              }
               : undefined
           }
         >
@@ -133,11 +145,11 @@ class MenuTop extends React.Component {
         </Link>
       </Menu.Item>
     ) : (
-      <Menu.Item key={key} disabled={disabled}>
-        <span className="menuTop__item-title">{title}</span>
-        {icon && <span className={icon + ' menuTop__icon'} />}
-      </Menu.Item>
-    )
+          <Menu.Item key={key} disabled={disabled}>
+            <span className="menuTop__item-title">{title}</span>
+            {icon && <span className={icon + ' menuTop__icon'} />}
+          </Menu.Item>
+        )
   }
 
   componentWillMount() {
