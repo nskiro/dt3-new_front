@@ -13,8 +13,8 @@ import './style.scss'
 const SubMenu = Menu.SubMenu
 const Divider = Menu.Divider
 
-const menuData = [] // JSON.parse(window.sessionStorage.getItem('app.Menus'));
-console.log('menuData ==>' + JSON.stringify(menuData))
+//const menuData = JSON.parse(window.sessionStorage.getItem('app.Menus'));
+//console.log('menuData ==>' + JSON.stringify(menuData))
 
 const mapStateToProps = ({ app, routing }, props) => {
   const { layoutState } = app
@@ -36,6 +36,14 @@ class MenuTop extends React.Component {
     selectedKeys: '',
     openKeys: [''],
     settingsOpened: this.props.settingsOpened,
+    menuData: []
+  }
+
+  componentDidMount = () => {
+    let menuData = JSON.parse(window.sessionStorage.getItem('app.Menus'));
+
+    this.setState({ menuData: menuData });
+    this.getActiveMenuItem(this.props, menuData)
   }
 
   handleClick = e => {
@@ -89,7 +97,7 @@ class MenuTop extends React.Component {
     if (initems) {
       items = initems
     }
-    console.log(JSON.stringify(items))
+    console.log('items =>' + JSON.stringify(items))
     const { selectedKeys, pathname } = this.state
     let { collapsed } = props
     let [activeMenuItem, ...path] = this.getPath(items, !selectedKeys ? pathname : selectedKeys)
@@ -135,8 +143,8 @@ class MenuTop extends React.Component {
           onClick={
             this.props.isMobile
               ? () => {
-                  dispatch(setLayoutState({ menuCollapsed: false }))
-                }
+                dispatch(setLayoutState({ menuCollapsed: false }))
+              }
               : undefined
           }
         >
@@ -145,15 +153,15 @@ class MenuTop extends React.Component {
         </Link>
       </Menu.Item>
     ) : (
-      <Menu.Item key={key} disabled={disabled}>
-        <span className="menuTop__item-title">{title}</span>
-        {icon && <span className={icon + ' menuTop__icon'} />}
-      </Menu.Item>
-    )
+          <Menu.Item key={key} disabled={disabled}>
+            <span className="menuTop__item-title">{title}</span>
+            {icon && <span className={icon + ' menuTop__icon'} />}
+          </Menu.Item>
+        )
   }
 
   componentWillMount() {
-    this.getActiveMenuItem(this.props, menuData)
+    // this.getActiveMenuItem(this.props, menuData)
   }
 
   componentWillReceiveProps(newProps) {
@@ -165,14 +173,17 @@ class MenuTop extends React.Component {
       },
       () => {
         if (!newProps.isMobile) {
-          this.getActiveMenuItem(newProps, menuData)
+          let menus = JSON.parse(window.sessionStorage.getItem('app.Menus'));
+          console.log('menus =>' + JSON.stringify(menus));
+          if (!menus) { menus = [] }
+          this.getActiveMenuItem(newProps, menus)
         }
       },
     )
   }
 
   render() {
-    const { selectedKeys, openKeys, theme } = this.state
+    const { selectedKeys, openKeys, theme, menuData } = this.state
     const menuItems = this.generateMenuPartitions(menuData)
     return (
       <div className="menuTop">
@@ -202,4 +213,4 @@ class MenuTop extends React.Component {
   }
 }
 
-export { MenuTop, menuData }
+export { MenuTop }
