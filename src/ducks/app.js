@@ -37,7 +37,7 @@ export const resetHideLogin = () => (dispatch, getState) => {
 export const initAuth = roles => (dispatch, getState) => {
   // Use Axios there to get User Data by Auth Token with Bearer Method Authentication
 
-  const userRole = window.sessionStorage.getItem('app.Role')
+  const userRole = window.sessionStorage.getItem('app.Roles')
   const state = getState()
 
   /*
@@ -101,10 +101,11 @@ export async function login(username, password, dispatch) {
     const res = await axios.post('/user/login', { username: username, password: password })
     if (res.data) {
       window.sessionStorage.setItem('app.Authorization', res.data.token)
-      window.sessionStorage.setItem('app.Role', res.data.role)
-      window.sessionStorage.setItem('app.Group', res.data.group)
+      window.sessionStorage.setItem('app.Roles', JSON.stringify(res.data.role))
+      window.sessionStorage.setItem('app.Groups',JSON.stringify(res.data.group))
       window.sessionStorage.setItem('app.Menus', JSON.stringify(res.data.menu))
       window.sessionStorage.setItem('app.Links', JSON.stringify(res.data.link))
+      console.log('set data roi');
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token
       dispatch(_setHideLogin(true))
       dispatch(push('/dashboard'))
