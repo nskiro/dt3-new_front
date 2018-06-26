@@ -36,13 +36,13 @@ class MenuTop extends React.Component {
     selectedKeys: '',
     openKeys: [''],
     settingsOpened: this.props.settingsOpened,
-    menuData: []
+    menuData: [],
   }
 
   componentDidMount = () => {
-    let menuData = JSON.parse(window.sessionStorage.getItem('app.Menus'));
+    let menuData = JSON.parse(window.sessionStorage.getItem('app.Menus'))
 
-    this.setState({ menuData: menuData });
+    this.setState({ menuData: menuData })
     this.getActiveMenuItem(this.props, menuData)
   }
 
@@ -143,8 +143,8 @@ class MenuTop extends React.Component {
           onClick={
             this.props.isMobile
               ? () => {
-                dispatch(setLayoutState({ menuCollapsed: false }))
-              }
+                  dispatch(setLayoutState({ menuCollapsed: false }))
+                }
               : undefined
           }
         >
@@ -153,11 +153,11 @@ class MenuTop extends React.Component {
         </Link>
       </Menu.Item>
     ) : (
-          <Menu.Item key={key} disabled={disabled}>
-            <span className="menuTop__item-title">{title}</span>
-            {icon && <span className={icon + ' menuTop__icon'} />}
-          </Menu.Item>
-        )
+      <Menu.Item key={key} disabled={disabled}>
+        <span className="menuTop__item-title">{title}</span>
+        {icon && <span className={icon + ' menuTop__icon'} />}
+      </Menu.Item>
+    )
   }
 
   componentWillMount() {
@@ -173,9 +173,11 @@ class MenuTop extends React.Component {
       },
       () => {
         if (!newProps.isMobile) {
-          let menus = JSON.parse(window.sessionStorage.getItem('app.Menus'));
-          console.log('menus =>' + JSON.stringify(menus));
-          if (!menus) { menus = [] }
+          let menus = JSON.parse(window.sessionStorage.getItem('app.Menus'))
+          console.log('menus =>' + JSON.stringify(menus))
+          if (!menus) {
+            menus = []
+          }
           this.getActiveMenuItem(newProps, menus)
         }
       },
