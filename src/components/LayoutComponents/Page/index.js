@@ -41,15 +41,13 @@ class Page extends React.Component {
   }
 
   static defaultProps = {
-    roles: []  ,
+    roles: [],
     pathName: null,
     isNotFound: false,
     onMounted: null,
     isLoading: false,
     dispatch: () => {},
   }
-
-
 
   isFirstContent = true
   _onMounted = null

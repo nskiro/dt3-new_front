@@ -102,10 +102,10 @@ export async function login(username, password, dispatch) {
     if (res.data) {
       window.sessionStorage.setItem('app.Authorization', res.data.token)
       window.sessionStorage.setItem('app.Roles', JSON.stringify(res.data.role))
-      window.sessionStorage.setItem('app.Groups',JSON.stringify(res.data.group))
+      window.sessionStorage.setItem('app.Groups', JSON.stringify(res.data.group))
       window.sessionStorage.setItem('app.Menus', JSON.stringify(res.data.menu))
       window.sessionStorage.setItem('app.Links', JSON.stringify(res.data.link))
-      console.log('set data roi');
+      console.log('set data roi')
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token
       dispatch(_setHideLogin(true))
       dispatch(push('/dashboard'))
