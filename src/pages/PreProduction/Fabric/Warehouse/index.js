@@ -27,7 +27,6 @@ const tab_size = 'small'
 class ViewWarehouse extends Component {
   static defaultProps = {
     pathName: 'Fabric Warehouse',
-    roles: ['Kế Toán'],
   }
   render() {
     const props = this.props

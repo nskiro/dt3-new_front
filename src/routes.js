@@ -4,6 +4,7 @@ import { ConnectedSwitch } from 'reactRouterConnected'
 import Loadable from 'react-loadable'
 import Page from 'components/LayoutComponents/Page'
 import NotFoundPage from 'pages/NotFoundPage'
+import HomePage from 'pages/Dashboard'
 
 const loadable = loader =>
   Loadable({
@@ -38,16 +39,14 @@ class Routes extends React.Component {
   componentDidMount() {
     let loadableRoutes = {}
     loadableRoutes['/login'] = { component: loadable(() => import('pages/LoginPage')) }
-    loadableRoutes['/dashboard'] = { component: loadable(() => import('pages/Dashboard')) }
-
-    let data = JSON.parse(window.sessionStorage.getItem('app.Links'))
-    if (!data) {
-      data = []
-    }
-    for (let i = 0; i < data.length; i++) {
-      let link = data[i]
-      let c = loadable(() => import(`${link.com_view}`))
-      loadableRoutes[`${link.name}`] = { component: c }
+    let data = window.sessionStorage.getItem('app.User')
+    if (data) {
+      data = JSON.parse(data)
+      for (let i = 0; i < data.link.length; i++) {
+        let link = data.link[i]
+        let c = loadable(() => import(`${link.com_view}`))
+        loadableRoutes[`${link.name}`] = { component: c }
+      }
     }
     this.setState({ loadableRoutes: loadableRoutes })
 
@@ -69,6 +68,7 @@ class Routes extends React.Component {
 
     return (
       <ConnectedSwitch>
+        <Route exact path={'/'} component={HomePage} />
         {Object.keys(loadableRoutes).map(path => {
           const { exact, component, ...props } = loadableRoutes[path]
           props.exact = exact === void 0 || exact || false // set true as default

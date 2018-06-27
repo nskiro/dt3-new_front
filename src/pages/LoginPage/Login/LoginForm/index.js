@@ -13,7 +13,9 @@ const mapStateToProps = (state, props) => ({
 @Form.create()
 class LoginForm extends React.Component {
   static defaultProps = {}
-
+  state = {
+    loading: false,
+  }
   // $FlowFixMe
   onSubmit = isSubmitForm => event => {
     event.preventDefault()
@@ -21,6 +23,7 @@ class LoginForm extends React.Component {
     if (!isSubmitForm) {
       form.validateFields((error, values) => {
         if (!error) {
+          this.setState({ loading: true })
           dispatch(submit(values))
         }
       })
@@ -63,9 +66,9 @@ class LoginForm extends React.Component {
               style={{ width: '100%' }}
               size="large"
               htmlType="submit"
-              loading={isSubmitForm}
+              loading={this.state.loading}
             >
-              Login
+              {this.state.loading ? 'Loading...! Please wait' : 'Login'}
             </Button>
           </div>
         </Form>

@@ -17,12 +17,13 @@ const Divider = Menu.Divider
 //console.log('menuData ==>' + JSON.stringify(menuData))
 
 const mapStateToProps = ({ app, routing }, props) => {
-  const { layoutState } = app
+  const { layoutState, userState } = app
   return {
     pathname: routing.location.pathname,
     collapsed: layoutState.menuCollapsed,
     theme: layoutState.themeLight ? 'light' : 'dark',
     settingsOpened: layoutState.settingsOpened,
+    menuData: userState.menu,
   }
 }
 
@@ -36,14 +37,11 @@ class MenuTop extends React.Component {
     selectedKeys: '',
     openKeys: [''],
     settingsOpened: this.props.settingsOpened,
-    menuData: [],
+    menuData: this.props.menuData,
   }
 
   componentDidMount = () => {
-    let menuData = JSON.parse(window.sessionStorage.getItem('app.Menus'))
-
-    this.setState({ menuData: menuData })
-    this.getActiveMenuItem(this.props, menuData)
+    this.getActiveMenuItem(this.props, this.props.menuData)
   }
 
   handleClick = e => {
@@ -97,7 +95,6 @@ class MenuTop extends React.Component {
     if (initems) {
       items = initems
     }
-    console.log('items =>' + JSON.stringify(items))
     const { selectedKeys, pathname } = this.state
     let { collapsed } = props
     let [activeMenuItem, ...path] = this.getPath(items, !selectedKeys ? pathname : selectedKeys)
@@ -170,11 +167,11 @@ class MenuTop extends React.Component {
         pathname: newProps.pathname,
         theme: newProps.theme,
         settingsOpened: newProps.settingsOpened,
+        menuData: newProps.menuData,
       },
       () => {
         if (!newProps.isMobile) {
-          let menus = JSON.parse(window.sessionStorage.getItem('app.Menus'))
-          console.log('menus =>' + JSON.stringify(menus))
+          let menus = this.props.menuData
           if (!menus) {
             menus = []
           }
