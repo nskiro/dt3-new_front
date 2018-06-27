@@ -201,7 +201,7 @@ class WarehouseImportForm extends Component {
               </Col>
             </Row>
             <Row className="show-grid">
-              <Col md={4} sm={6} xs={6} style={{ textAlign: 'left' }}>
+              <Col md={6} sm={6} xs={6} style={{ textAlign: 'left' }}>
                 <FormItem {...formItemLayout} label="IM DATE">
                   {getFieldDecorator('inputdate_no', {
                     rules: [
@@ -215,7 +215,7 @@ class WarehouseImportForm extends Component {
                   })(<DatePicker format={dateFormat} disabled />)}
                 </FormItem>
               </Col>
-              <Col md={4} sm={6} xs={6} style={{ textAlign: 'left' }}>
+              <Col md={6} sm={6} xs={6} style={{ textAlign: 'left' }}>
                 <FormItem {...formItemLayout} label="SUPPLIER">
                   {getFieldDecorator('provider_name', {
                     rules: [{ required: true, message: 'Vui lòng chọn nhà cung cấp!' }],
@@ -230,7 +230,7 @@ class WarehouseImportForm extends Component {
             </Row>
 
             <Row className="show-grid">
-              <Col md={4} sm={6} xs={4}>
+              <Col md={6} sm={6} xs={6}>
                 <FormItem {...formItemLayout} label="STK">
                   {getFieldDecorator(
                     'declare_no',
@@ -239,7 +239,7 @@ class WarehouseImportForm extends Component {
                   )(<Input placeholder="số tờ khai" />)}
                 </FormItem>
               </Col>
-              <Col md={4} sm={6} xs={4}>
+              <Col md={6} sm={6} xs={6}>
                 <FormItem {...formItemLayout} label="STK DATE">
                   {getFieldDecorator(
                     'declare_date',
@@ -250,7 +250,7 @@ class WarehouseImportForm extends Component {
               </Col>
             </Row>
             <Row className="show-grid">
-              <Col md={4} sm={6} xs={4}>
+              <Col md={6} sm={6} xs={6}>
                 <FormItem {...formItemLayout} label="INVOICE #">
                   {getFieldDecorator(
                     'invoice_no',
@@ -261,14 +261,14 @@ class WarehouseImportForm extends Component {
               </Col>
             </Row>
             <Row className="show-grid">
-              <Col md={4} sm={6} xs={6}>
+              <Col md={6} sm={6} xs={6}>
                 <Button icon="plus-circle" size={button_size} onClick={this.addNewRow}>
                   NEW ROW{' '}
                 </Button>
               </Col>
             </Row>
             <Row className="show-grid">
-              <Col md={8} sm={12} xs={8}>
+              <Col md={11} sm={11} xs={11}>
                 <ReactDataGrid
                   enableCellSelect={true}
                   resizable={true}
@@ -303,7 +303,7 @@ class WarehouseImport extends Component {
       modalvisible: false,
 
       data_providers: [],
-      data_providers_size: 'default',
+      data_providers_size: 'small',
       selected_warehouse_import: this.selectedWarehouseImportDefault(),
       mod: 'view',
     }
@@ -455,7 +455,7 @@ class WarehouseImport extends Component {
       })
       .catch(err => {
         console.log(err)
-        this.setState({ data_providers: [], data_providers_size: 0 })
+        this.setState({ data_providers: [] })
       })
   }
 
@@ -561,20 +561,20 @@ class WarehouseImport extends Component {
       this.setState({ selected_warehouse_import: row })
     }
   }
-
-  onCheckTranlog = e => {
-    axios
-      .post('api/fabric/import/checktranlog', {})
-      .then(res => {
-        console.log(res.data)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }
-
+  /*
+    onCheckTranlog = e => {
+      axios
+        .post('api/fabric/import/checktranlog', {})
+        .then(res => {
+          console.log(res.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  */
   render() {
-    const WrappedWarehouseImportForm = Form.create()(WarehouseImportForm)
+    const WrappedWarehouseImportForm = Form.create()(WarehouseImportForm);
     const { getFieldDecorator } = this.props.form
 
     const columns = [

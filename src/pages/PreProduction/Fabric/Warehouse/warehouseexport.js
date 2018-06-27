@@ -228,7 +228,7 @@ class WarehouseExportForm extends Component {
               </Col>
             </Row>
             <Row className="show-grid">
-              <Col md={4} sm={6} xs={6} style={{ textAlign: 'left' }}>
+              <Col md={6} sm={6} xs={6} style={{ textAlign: 'left' }}>
                 <FormItem {...formItemLayout} label="EX DATE">
                   {getFieldDecorator(
                     'inputdate_no',
@@ -254,7 +254,7 @@ class WarehouseExportForm extends Component {
               </Col>
             </Row>
             <Row className="show-grid">
-              <Col md={10} sm={12} xs={10}>
+              <Col md={11} sm={11} xs={11}>
                 <ReactDataGrid
                   enableCellSelect={true}
                   resizable={true}

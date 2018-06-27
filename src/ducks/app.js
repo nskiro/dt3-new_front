@@ -36,8 +36,7 @@ export const resetHideLogin = () => (dispatch, getState) => {
 
 export const initAuth = roles => (dispatch, getState) => {
   // Use Axios there to get User Data by Auth Token with Bearer Method Authentication
-
-  const userRole = window.sessionStorage.getItem('app.Roles')
+  const userRole = JSON.parse(window.sessionStorage.getItem('app.Roles'));
   const state = getState()
 
   /*
@@ -61,15 +60,29 @@ export const initAuth = roles => (dispatch, getState) => {
         },
       }),
     )
-    //if (!roles.find(role => role === userRole)) {
-    if (!(state.routing.location.pathname === '/dashboard')) {
-      dispatch(push('/dashboard'))
+    console.log("userRole ===> " + JSON.stringify(userRole));
+    if (userRole && userRole.length > 0) {
+      if (!(state.routing.location.pathname === '/dashboard')) {
+        dispatch(push('/dashboard'))
+      }
+      return Promise.resolve(true)
+    } else {
+      return Promise.resolve(false)
     }
-    return Promise.resolve(false)
-    // }
-    // return Promise.resolve(true)
   }
 
+  if (userRole) {
+    let userinfo = JSON.parse(window.sessionStorage.getItem('app.User'));
+    return setUser(userinfo, userRole);
+  } else {
+    const location = state.routing.location;
+    const from = location.pathname + location.search;
+    dispatch(_setFrom(from));
+    dispatch(push('/login'));
+    return Promise.reject();
+  }
+
+  /*
   switch (userRole) {
     case userRole:
       return setUser(userRole)
@@ -79,21 +92,22 @@ export const initAuth = roles => (dispatch, getState) => {
       dispatch(_setFrom(from))
       dispatch(push('/login'))
       return Promise.reject()
-    /*
-    case 'administrator':
-      return setUser(users.administrator, userRole)
-
-    case 'agent':
-      return setUser(users.agent, userRole)
-
-    default:
-      const location = state.routing.location
-      const from = location.pathname + location.search
-      dispatch(_setFrom(from))
-      dispatch(push('/login'))
-      return Promise.reject()
       */
-  }
+  /*
+  case 'administrator':
+    return setUser(users.administrator, userRole)
+
+  case 'agent':
+    return setUser(users.agent, userRole)
+
+  default:
+    const location = state.routing.location
+    const from = location.pathname + location.search
+    dispatch(_setFrom(from))
+    dispatch(push('/login'))
+    return Promise.reject()
+    
+}*/
 }
 
 export async function login(username, password, dispatch) {
@@ -105,7 +119,13 @@ export async function login(username, password, dispatch) {
       window.sessionStorage.setItem('app.Groups', JSON.stringify(res.data.group))
       window.sessionStorage.setItem('app.Menus', JSON.stringify(res.data.menu))
       window.sessionStorage.setItem('app.Links', JSON.stringify(res.data.link))
-      console.log('set data roi')
+      let user = {
+        fullname: res.data.fullname,
+        username: res.data.username,
+        email: res.data.username + "@ducthanh.com.vn",
+        role: res.data.role
+      }
+      window.sessionStorage.setItem('app.User', JSON.stringify(user));
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token
       dispatch(_setHideLogin(true))
       dispatch(push('/dashboard'))
@@ -129,12 +149,14 @@ export const logout = () => (dispatch, getState) => {
       },
     }),
   )
-  window.sessionStorage.removeItem('app.Authorization')
-  window.sessionStorage.removeItem('app.Role')
-  window.sessionStorage.removeItem('app.Group')
-  window.sessionStorage.removeItem('app.Menus')
-  window.sessionStorage.removeItem('app.Links')
-  dispatch(push('/login'))
+  window.sessionStorage.removeItem('app.Authorization');
+  window.sessionStorage.removeItem('app.Roles');
+  window.sessionStorage.removeItem('app.Groups');
+  window.sessionStorage.removeItem('app.Menus');
+  window.sessionStorage.removeItem('app.Links');
+  window.sessionStorage.removeItem('app.User');
+
+  dispatch(push('/login'));
 }
 
 const initialState = {

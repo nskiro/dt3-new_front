@@ -6,11 +6,14 @@ import EBImage from '../../images/OMNI.jpg'
 class DashboardAlphaPage extends React.Component {
   static defaultProps = {
     pathName: 'Dashboard Alpha',
-    roles: JSON.parse(window.sessionStorage.getItem('app.Roles')),
+    roles: []
   }
+
+
+
   render() {
-    console.log('roles =>' + JSON.stringify(this.defaultProps))
-    const props = this.props
+    let roles = JSON.parse(window.sessionStorage.getItem('app.Roles'));
+    const props = { ...this.props, roles: [...roles] };
     return (
       <Page {...props}>
         <Helmet title="Dashboard Alpha" />
