@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "AAGA,cAAc;AAEd,AACI,oBADgB,CAChB,EAAE,CAAC;EACC,UAAU,ECEH,OAAO;EDDd,OAAO,EAAE,EAAE;CAKd;;AARL,AACI,oBADgB,CAChB,EAAE,AAGE,OAAQ,CAAC;EACL,OAAO,EAAE,CAAC;EACV,UAAU,ECFP,OAAO;CDGb",
+    "sources": [
+        "carousel.scss",
+        "../../../../_mixins.scss"
+    ],
+    "names": [],
+    "file": "carousel.css"
+}

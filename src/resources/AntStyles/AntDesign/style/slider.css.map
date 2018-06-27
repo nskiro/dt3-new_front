@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "AAIA,wBAAwB;AAExB,AAAA,sBAAsB,CAAC;EACrB,aAAa,EAAE,IAAI;CACpB",
+    "sources": [
+        "slider.scss",
+        "../../../_mixins.scss"
+    ],
+    "names": [],
+    "file": "slider.css"
+}

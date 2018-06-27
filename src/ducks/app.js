@@ -130,8 +130,8 @@ export const logout = () => (dispatch, getState) => {
     }),
   )
   window.sessionStorage.removeItem('app.Authorization')
-  window.sessionStorage.removeItem('app.Role')
-  window.sessionStorage.removeItem('app.Group')
+  window.sessionStorage.removeItem('app.Roles')
+  window.sessionStorage.removeItem('app.Groups')
   window.sessionStorage.removeItem('app.Menus')
   window.sessionStorage.removeItem('app.Links')
   dispatch(push('/login'))
