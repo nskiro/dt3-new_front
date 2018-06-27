@@ -10,7 +10,6 @@ class DashboardAlphaPage extends React.Component {
   render() {
     //console.log('roles =>' + JSON.stringify(this.defaultProps))
     const props = this.props
-    console.log(props)
     return (
       <Page {...props}>
         <Helmet title="Dashboard Alpha" />

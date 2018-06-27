@@ -47,7 +47,6 @@ export const initAuth = () => (dispatch, getState) => {
         },
       }),
     )
-    dispatch(push('/'))
     return Promise.resolve(true)
   }
   const location = state.routing.location
