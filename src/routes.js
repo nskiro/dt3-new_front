@@ -15,14 +15,14 @@ const loadable = loader =>
 
 const loadableRoutes = {
   '/login': {
-    component: loadable(() => import('pages/LoginPage'))
+    component: loadable(() => import('pages/LoginPage')),
   },
   '/fabric': {
-    component: loadable(() => import('pages/Fabric'))
+    component: loadable(() => import('pages/Fabric')),
   },
-  '/f2':{
-    component: loadable(() => import('pages/Fabric/test3'))
-  }
+  '/f2': {
+    component: loadable(() => import('pages/Fabric/test3')),
+  },
 }
 
 class Routes extends React.Component {

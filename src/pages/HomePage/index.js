@@ -3,12 +3,12 @@ import Page from 'components/LayoutComponents/Page'
 
 class HomePage extends React.Component {
   static defaultProps = {
-    roles: ["init"],
+    roles: ['init'],
   }
 
   render() {
     const props = this.props
-    return( 
+    return (
       <Page {...props}>
         <h1>abc</h1>
       </Page>
