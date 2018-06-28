@@ -43,10 +43,19 @@ class Routes extends React.Component {
     if (data) {
       data = JSON.parse(data)
       for (let i = 0; i < data.link.length; i++) {
-        let link = data.link[i]
+        let link = data.link[i];
 
-        let c = loadable(() => import(`${link.com_view}`))
-        loadableRoutes[`${link.name}`] = { component: c }
+        try {
+          if (link.com_view) {
+            let c = loadable(() => import(`${link.com_view}`))
+            loadableRoutes[`${link.name}`] = { component: c }
+          } else {
+            console.log('menu name =' +link.name + "==>com_view =F" + link.com_view);
+          }
+        } catch (ex) {
+          console.log('can not load component =>' + `${link.com_view}`);
+        }
+
       }
     }
     this.setState({ loadableRoutes: loadableRoutes })
@@ -57,7 +66,7 @@ class Routes extends React.Component {
           try {
             loadableRoutes[path].component.preload()
           } catch (ex) {
-            console.log('can not load component ' + loadableRoutes[path])
+            console.log('can not load component ' + JSON.stringify(loadableRoutes[path]))
           }
         }),
       500, // load after 5 sec
