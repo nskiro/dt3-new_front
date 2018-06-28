@@ -9,10 +9,9 @@ class DashboardAlphaPage extends React.Component {
     roles: []
   }
 
-
-
   render() {
     let roles = JSON.parse(window.sessionStorage.getItem('app.Roles'));
+    if(!roles){roles=[];}
     const props = { ...this.props, roles: [...roles] };
     return (
       <Page {...props}>

@@ -84,17 +84,13 @@ class Page extends React.Component {
     }
     source = axios.CancelToken.source()
     axios.defaults.cancelToken = source.token
-    const { onMounted, roles, dispatch } = this.props
-    if (roles.length > 0) {
-      this._onMounted = () => {
-        return dispatch(initAuth(roles)).then(response => {
-          if (response && onMounted) {
-            return onMounted()
-          }
-        })
-      }
-    } else {
-      this._onMounted = onMounted
+    const { onMounted, dispatch } = this.props
+    this._onMounted = () => {
+      return dispatch(initAuth()).then(response => {
+        if (response && onMounted) {
+          return onMounted()
+        }
+      })
     }
     if (this._onMounted) {
       dispatch(setLoading(true))

@@ -34,101 +34,36 @@ export const resetHideLogin = () => (dispatch, getState) => {
   return Promise.resolve()
 }
 
-export const initAuth = roles => (dispatch, getState) => {
+export const initAuth = () => (dispatch, getState) => {
   // Use Axios there to get User Data by Auth Token with Bearer Method Authentication
-  const userRole = JSON.parse(window.sessionStorage.getItem('app.Roles'));
+
+  let user = window.sessionStorage.getItem('app.User')
   const state = getState()
-
-  /*
-  const users = {
-    administrator: {
-      email: 'admin@mediatec.org',
-      role: 'administrator',
-    },
-    agent: {
-      email: 'agent@mediatec.org',
-      role: 'agent',
-    },
-  }
-  */
-
-  const setUser = userState => {
+  if (user) {
     dispatch(
       setUserState({
         userState: {
-          ...userState,
+          ...JSON.parse(user),
         },
       }),
     )
-    console.log("userRole ===> " + JSON.stringify(userRole));
-    if (userRole && userRole.length > 0) {
-      if (!(state.routing.location.pathname === '/dashboard')) {
-        dispatch(push('/dashboard'))
-      }
-      return Promise.resolve(true)
-    } else {
-      return Promise.resolve(false)
-    }
+    return Promise.resolve(true)
   }
-
-  if (userRole) {
-    let userinfo = JSON.parse(window.sessionStorage.getItem('app.User'));
-    return setUser(userinfo, userRole);
-  } else {
-    const location = state.routing.location;
-    const from = location.pathname + location.search;
-    dispatch(_setFrom(from));
-    dispatch(push('/login'));
-    return Promise.reject();
-  }
-
-  /*
-  switch (userRole) {
-    case userRole:
-      return setUser(userRole)
-    default:
-      const location = state.routing.location
-      const from = location.pathname + location.search
-      dispatch(_setFrom(from))
-      dispatch(push('/login'))
-      return Promise.reject()
-      */
-  /*
-  case 'administrator':
-    return setUser(users.administrator, userRole)
-
-  case 'agent':
-    return setUser(users.agent, userRole)
-
-  default:
-    const location = state.routing.location
-    const from = location.pathname + location.search
-    dispatch(_setFrom(from))
-    dispatch(push('/login'))
-    return Promise.reject()
-    
-}*/
+  const location = state.routing.location
+  const from = location.pathname + location.search
+  dispatch(_setFrom(from))
+  dispatch(push('/login'))
+  return Promise.reject()
 }
 
 export async function login(username, password, dispatch) {
   try {
     const res = await axios.post('/user/login', { username: username, password: password })
     if (res.data) {
-      window.sessionStorage.setItem('app.Authorization', res.data.token)
-      window.sessionStorage.setItem('app.Roles', JSON.stringify(res.data.role))
-      window.sessionStorage.setItem('app.Groups', JSON.stringify(res.data.group))
-      window.sessionStorage.setItem('app.Menus', JSON.stringify(res.data.menu))
-      window.sessionStorage.setItem('app.Links', JSON.stringify(res.data.link))
-      let user = {
-        fullname: res.data.fullname,
-        username: res.data.username,
-        email: res.data.username + "@ducthanh.com.vn",
-        role: res.data.role
-      }
-      window.sessionStorage.setItem('app.User', JSON.stringify(user));
+      window.sessionStorage.setItem('app.User', JSON.stringify(res.data))
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token
       dispatch(_setHideLogin(true))
-      dispatch(push('/dashboard'))
+      dispatch(push('/'))
       return true
     } else {
       dispatch(push('/login'))
@@ -136,7 +71,7 @@ export async function login(username, password, dispatch) {
       return false
     }
   } catch (err) {
-    alert(err.response.data)
+    console.log(err)
   }
 }
 
@@ -144,19 +79,25 @@ export const logout = () => (dispatch, getState) => {
   dispatch(
     setUserState({
       userState: {
-        email: '',
-        role: '',
+        _id: null,
+        username: '',
+        fullname: '',
+        dept: '',
+        roles: [],
+        group: [],
+        create_date: null,
+        update_date: null,
+        last_login: null,
+        record_status: '',
+        token: '',
+        menu: [],
+        link: [],
       },
     }),
   )
-  window.sessionStorage.removeItem('app.Authorization');
-  window.sessionStorage.removeItem('app.Roles');
-  window.sessionStorage.removeItem('app.Groups');
-  window.sessionStorage.removeItem('app.Menus');
-  window.sessionStorage.removeItem('app.Links');
-  window.sessionStorage.removeItem('app.User');
-
-  dispatch(push('/login'));
+  window.sessionStorage.setItem('app.User', '')
+  window.localStorage.removeItem('app.layoutState')
+  dispatch(push('/login'))
 }
 
 const initialState = {
@@ -184,8 +125,21 @@ const initialState = {
 
   // USER STATE
   userState: {
-    email: '',
-    role: '',
+    _id: null,
+    username: '',
+    fullname: '',
+    dept: '',
+    roles: [],
+    group: [],
+    create_date: null,
+    update_date: null,
+    last_login: null,
+    record_status: '',
+    token: '',
+    menu: window.sessionStorage.getItem('app.User')
+      ? JSON.parse(window.sessionStorage.getItem('app.User')).menu
+      : [],
+    link: [],
   },
 }
 

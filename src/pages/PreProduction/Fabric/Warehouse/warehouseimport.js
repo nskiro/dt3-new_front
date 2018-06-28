@@ -78,7 +78,7 @@ class WarehouseImportForm extends Component {
     this.setState({ rows })
   }
 
-  loadProviders = v => {
+  loadProviders = () => {
     axios
       .get('api/fabric/provider/get', { params: {} })
       .then(res => {
@@ -162,10 +162,11 @@ class WarehouseImportForm extends Component {
         this.setState({ columns: default_cols })
       })
   }
-  componentDidMount = async () => {
+  componentDidMount = () => {
     this.loadProviders()
     this.loadFabricTypes()
   }
+  
   render() {
     const { visible, onCancel, onCreate } = this.props
     const { getFieldDecorator } = this.props.form
@@ -550,7 +551,7 @@ class WarehouseImport extends Component {
     return null
   }
 
-  componentDidMount = async () => {
+  componentDidMount = () => {
     this.loadSearchProviders()
   }
 
@@ -574,7 +575,7 @@ class WarehouseImport extends Component {
     }
   */
   render() {
-    const WrappedWarehouseImportForm = Form.create()(WarehouseImportForm);
+    const WrappedWarehouseImportForm = Form.create()(WarehouseImportForm)
     const { getFieldDecorator } = this.props.form
 
     const columns = [

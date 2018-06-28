@@ -25,6 +25,9 @@ const WrappedWarehouseFabricColor = Form.create()(WarehouseFabricColor)
 
 const tab_size = 'small'
 class ViewWarehouse extends Component {
+  static defaultProps = {
+    pathName: 'Fabric Warehouse',
+  }
   render() {
     const props = this.props
     return (

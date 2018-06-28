@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "AAIA,wBAAwB;AAExB,AAAA,WAAW,CAAC;EACV,UAAU,EAAE,KAAK;EACjB,UAAU,EAAE,WAAW;CACxB;;AAED,AAAA,kBAAkB,CAAC;EACjB,OAAO,EAAE,CAAC;CACX;;AAED,AAAA,kBAAkB,CAAC;EACjB,OAAO,EAAE,CAAC;EACV,UAAU,EAAE,WAAW;CACxB;;AAED,AAAA,aAAa,CAAC;EACZ,UAAU,EAAE,WAAW;CACxB;;AAED,AAAA,iBAAiB,CAAC;EAChB,UAAU,EAAE,OAAO;CACpB",
+    "sources": [
+        "layout.scss",
+        "../../../_mixins.scss"
+    ],
+    "names": [],
+    "file": "layout.css"
+}

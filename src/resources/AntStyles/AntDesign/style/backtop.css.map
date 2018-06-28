@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "AAIA,yBAAyB;AAEzB,AAAA,aAAa,CAAC;EACZ,KAAK,ECqCG,OAAyC;EDpCjD,MAAM,ECoCE,OAAyC;CDnClD;;AAED,AAAA,qBAAqB,CAAC;EACpB,aAAa,EAAE,GAAG;CACnB",
+    "sources": [
+        "backtop.scss",
+        "../../../_mixins.scss"
+    ],
+    "names": [],
+    "file": "backtop.css"
+}

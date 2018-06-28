@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "AAIA,uBAAuB;AAEvB,AAAA,gBAAgB,CAAC;EACf,WAAW,EAAE,OAAO;CACrB",
+    "sources": [
+        "badge.scss",
+        "../../../_mixins.scss"
+    ],
+    "names": [],
+    "file": "badge.css"
+}

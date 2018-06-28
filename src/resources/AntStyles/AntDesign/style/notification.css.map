@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "AAIA,8BAA8B;AAE9B,AAAA,iBAAiB,CAAC;EAChB,SAAS,EAAE,kBAAkB;CAC9B",
+    "sources": [
+        "notification.scss",
+        "../../../_mixins.scss"
+    ],
+    "names": [],
+    "file": "notification.css"
+}
