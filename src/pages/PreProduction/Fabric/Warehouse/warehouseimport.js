@@ -166,7 +166,7 @@ class WarehouseImportForm extends Component {
     this.loadProviders()
     this.loadFabricTypes()
   }
-  
+
   render() {
     const { visible, onCancel, onCreate } = this.props
     const { getFieldDecorator } = this.props.form

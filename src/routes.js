@@ -43,21 +43,23 @@ class Routes extends React.Component {
     if (data) {
       data = JSON.parse(data)
       for (let i = 0; i < data.link.length; i++) {
-        let link = data.link[i];
+        let link = data.link[i]
 
         let c = loadable(() => import(`${link.com_view}`))
         loadableRoutes[`${link.name}`] = { component: c }
-
       }
     }
     this.setState({ loadableRoutes: loadableRoutes })
 
     this.timeoutId = setTimeout(
-      () => Object.keys(loadableRoutes).forEach(path => {
-        try {
-          loadableRoutes[path].component.preload();
-        } catch (ex) { console.log('can not load component ' + loadableRoutes[path]); }
-      }),
+      () =>
+        Object.keys(loadableRoutes).forEach(path => {
+          try {
+            loadableRoutes[path].component.preload()
+          } catch (ex) {
+            console.log('can not load component ' + loadableRoutes[path])
+          }
+        }),
       500, // load after 5 sec
     )
   }
