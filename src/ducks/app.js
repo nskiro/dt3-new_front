@@ -1,7 +1,20 @@
-import { createAction, createReducer } from 'redux-act'
-import { push } from 'react-router-redux'
-import { pendingTask, begin, end } from 'react-redux-spinner'
-import { notification } from 'antd'
+import {
+  createAction,
+  createReducer
+} from 'redux-act'
+import {
+  push
+} from 'react-router-redux'
+import {
+  pendingTask,
+  begin,
+  end
+} from 'react-redux-spinner'
+import {
+  notification
+} from 'antd'
+import axios from '../axiosInst'
+import _ from 'lodash'
 
 const REDUCER = 'app'
 const NS = `@@${REDUCER}/`
@@ -32,104 +45,73 @@ export const resetHideLogin = () => (dispatch, getState) => {
   return Promise.resolve()
 }
 
-export const initAuth = roles => (dispatch, getState) => {
+export const initAuth = roles => async (dispatch, getState) => {
   // Use Axios there to get User Data by Auth Token with Bearer Method Authentication
-
-  const userRole = window.localStorage.getItem('app.Role')
   const state = getState()
 
-  const users = {
-    administrator: {
-      email: 'admin@mediatec.org',
-      role: 'administrator',
-    },
-    agent: {
-      email: 'agent@mediatec.org',
-      role: 'agent',
-    },
-  }
-
-  const setUser = userState => {
+  const res = await axios.get('/user/getUserInfo')
+  if (res.data) {
     dispatch(
       setUserState({
         userState: {
-          ...userState,
+          ...res.data,
         },
       }),
     )
-    if (!roles.find(role => role === userRole)) {
-      if (!(state.routing.location.pathname === '/dashboard/alpha')) {
-        dispatch(push('/dashboard/alpha'))
+    const compareRole = _.intersection(roles, res.data.role)
+    if (compareRole.length === 0) {
+      if (!(state.routing.location.pathname === '/')) {
+        dispatch(push('/'))
       }
       return Promise.resolve(false)
     }
     return Promise.resolve(true)
   }
-
-  switch (userRole) {
-    case 'administrator':
-      return setUser(users.administrator, userRole)
-
-    case 'agent':
-      return setUser(users.agent, userRole)
-
-    default:
-      const location = state.routing.location
-      const from = location.pathname + location.search
-      dispatch(_setFrom(from))
-      dispatch(push('/login'))
-      return Promise.reject()
-  }
-}
-
-export function login(username, password, dispatch) {
-  // Use Axios there to get User Auth Token with Basic Method Authentication
-
-  if (username === 'admin@mediatec.org' && password === '123123') {
-    window.localStorage.setItem('app.Authorization', '')
-    window.localStorage.setItem('app.Role', 'administrator')
-    dispatch(_setHideLogin(true))
-    dispatch(push('/dashboard/alpha'))
-    notification.open({
-      type: 'success',
-      message: 'You have successfully logged in!',
-      description:
-        'Welcome to the Clean UI Admin Template. The Clean UI Admin Template is a complimentary template that empowers developers to make perfect looking and useful apps!',
-    })
-    return true
-  }
-
-  if (username === 'agent@mediatec.org' && password === '123123') {
-    window.localStorage.setItem('app.Authorization', '')
-    window.localStorage.setItem('app.Role', 'agent')
-    dispatch(_setHideLogin(true))
-    dispatch(push('/dashboard/alpha'))
-    notification.open({
-      type: 'success',
-      message: 'You have successfully logged in!',
-      description:
-        'Welcome to the Clean UI Admin Template. The Clean UI Admin Template is a complimentary template that empowers developers to make perfect looking and useful apps!',
-    })
-    return true
-  }
-
+  const location = state.routing.location
+  const from = location.pathname + location.search
+  dispatch(_setFrom(from))
   dispatch(push('/login'))
-  dispatch(_setFrom(''))
-
-  return false
+  return Promise.reject()
 }
 
+export async function login(username, password, dispatch) {
+  // Use Axios there to get User Auth Token with Basic Method Authentication
+  try {
+    const res = await axios.post('/user/login', {
+      username: username,
+      password: password
+    })
+    if (res.data) {
+      window.localStorage.setItem('app.Authorization', 'Bearer ' + res.data)
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data
+      dispatch(_setHideLogin(true))
+      dispatch(push('/'))
+      return true
+    }
+    dispatch(push('/login'))
+    dispatch(_setFrom(''))
+
+    return false
+  } catch (err) {
+    console.log(err)
+  }
+}
 export const logout = () => (dispatch, getState) => {
   dispatch(
     setUserState({
       userState: {
-        email: '',
-        role: '',
-      },
+        _id: '',
+        username: '',
+        fullname: '',
+        dept: '',
+        role: [],
+        create_date: null,
+        update_date: null,
+        last_login: null
+      }
     }),
   )
-  window.localStorage.setItem('app.Authorization', '')
-  window.localStorage.setItem('app.Role', '')
+  window.localStorage.removeItem('app.Authorization', '')
   dispatch(push('/login'))
 }
 
@@ -158,45 +140,80 @@ const initialState = {
 
   // USER STATE
   userState: {
-    email: '',
-    role: '',
-  },
+    _id: '',
+    username: '',
+    fullname: '',
+    dept: '',
+    role: [],
+    create_date: null,
+    update_date: null,
+    last_login: null
+  }
 }
 
-export default createReducer(
-  {
-    [_setFrom]: (state, from) => ({ ...state, from }),
-    [_setLoading]: (state, isLoading) => ({ ...state, isLoading }),
-    [_setHideLogin]: (state, isHideLogin) => ({ ...state, isHideLogin }),
-    [setUpdatingContent]: (state, isUpdatingContent) => ({ ...state, isUpdatingContent }),
-    [setUserState]: (state, { userState }) => ({ ...state, userState }),
+export default createReducer({
+    [_setFrom]: (state, from) => ({ ...state,
+      from
+    }),
+    [_setLoading]: (state, isLoading) => ({ ...state,
+      isLoading
+    }),
+    [_setHideLogin]: (state, isHideLogin) => ({ ...state,
+      isHideLogin
+    }),
+    [setUpdatingContent]: (state, isUpdatingContent) => ({ ...state,
+      isUpdatingContent
+    }),
+    [setUserState]: (state, {
+      userState
+    }) => ({ ...state,
+      userState
+    }),
     [setLayoutState]: (state, param) => {
-      const layoutState = { ...state.layoutState, ...param }
-      const newState = { ...state, layoutState }
+      const layoutState = { ...state.layoutState,
+        ...param
+      }
+      const newState = { ...state,
+        layoutState
+      }
       window.localStorage.setItem('app.layoutState', JSON.stringify(newState.layoutState))
       return newState
     },
     [setActiveDialog]: (state, activeDialog) => {
-      const result = { ...state, activeDialog }
+      const result = { ...state,
+        activeDialog
+      }
       if (activeDialog !== '') {
         const id = activeDialog
-        result.dialogForms = { ...state.dialogForms, [id]: true }
+        result.dialogForms = { ...state.dialogForms,
+          [id]: true
+        }
       }
       return result
     },
     [deleteDialogForm]: (state, id) => {
-      const dialogForms = { ...state.dialogForms }
+      const dialogForms = { ...state.dialogForms
+      }
       delete dialogForms[id]
-      return { ...state, dialogForms }
+      return { ...state,
+        dialogForms
+      }
     },
     [addSubmitForm]: (state, id) => {
-      const submitForms = { ...state.submitForms, [id]: true }
-      return { ...state, submitForms }
+      const submitForms = { ...state.submitForms,
+        [id]: true
+      }
+      return { ...state,
+        submitForms
+      }
     },
     [deleteSubmitForm]: (state, id) => {
-      const submitForms = { ...state.submitForms }
+      const submitForms = { ...state.submitForms
+      }
       delete submitForms[id]
-      return { ...state, submitForms }
+      return { ...state,
+        submitForms
+      }
     },
   },
   initialState,

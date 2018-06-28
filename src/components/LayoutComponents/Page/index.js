@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { initAuth, setLoading, setUpdatingContent, resetHideLogin } from 'ducks/app'
 import axios from 'axios'
-import NotFoundPage from 'pages/DefaultPages/NotFoundPage'
+import NotFoundPage from 'pages/NotFoundPage'
 
 let source = null
 
