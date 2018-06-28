@@ -43,19 +43,18 @@ class Routes extends React.Component {
     if (data) {
       data = JSON.parse(data)
       for (let i = 0; i < data.link.length; i++) {
-        let link = data.link[i];
+        let link = data.link[i]
 
         try {
           if (link.com_view) {
             let c = loadable(() => import(`${link.com_view}`))
             loadableRoutes[`${link.name}`] = { component: c }
           } else {
-            console.log('menu name =' +link.name + "==>com_view =F" + link.com_view);
+            console.log('menu name =' + link.name + '==>com_view =F' + link.com_view)
           }
         } catch (ex) {
-          console.log('can not load component =>' + `${link.com_view}`);
+          console.log('can not load component =>' + `${link.com_view}`)
         }
-
       }
     }
     this.setState({ loadableRoutes: loadableRoutes })
