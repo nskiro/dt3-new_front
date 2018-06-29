@@ -15,19 +15,23 @@ import {
 } from 'antd'
 import ReactDataGrid from 'react-data-grid'
 
-import RowRenderer from './rowrenderer'
-import DateFormatter from './dateformatter'
+import RowRenderer from '../rowrenderer'
+import DateFormatter from '../dateformatter'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import _ from 'lodash'
-import axios from '../../../../axiosInst'
-
+import axios from  '../../../../../axiosInst'
+//css
+import '../views.css'
 //const RadioGroup = Radio.Group;
 const Option = Select.Option
 
 const FormItem = Form.Item
 //const Option = Select.Option;
 //const Panel = Collapse.Panel;
+
+
+
 const TabPane = Tabs.TabPane
 const { Editors } = require('react-data-grid-addons')
 const { ExcelFile, ExcelSheet } = ExcelFileSheet

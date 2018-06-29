@@ -6,19 +6,20 @@ import PropTypes from 'prop-types'
 import ReactDataGrid from 'react-data-grid'
 //import update from 'immutability-helper';
 
-import RowRenderer from './rowrenderer'
-import DateFormatter from './dateformatter'
+import RowRenderer from '../rowrenderer'
+import DateFormatter from '../dateformatter'
 
 //import moment from 'moment';
-import axios from '../../../../axiosInst'
+import axios from  '../../../../../axiosInst'//'../../../../../axiosInst'
 //css
-import './views.css'
+import '../views.css'//'./views.css'
 
 const FormItem = Form.Item
 const Panel = Collapse.Panel
 const { DateLongFormatter } = DateFormatter
 const button_size = 'small'
-class FabricTypeForm extends Component {
+
+class FabricColorForm extends Component {
   constructor(props) {
     super(props)
   }
@@ -27,7 +28,7 @@ class FabricTypeForm extends Component {
     const { getFieldDecorator } = form
     return (
       <Modal
-        title="TYPE"
+        title="COLOR"
         visible={visible}
         onOk={onCreate}
         maskClosable={false}
@@ -43,13 +44,12 @@ class FabricTypeForm extends Component {
                   )}
                 </FormItem>
               </Col>
-
               <Col md={5} sm={8} xs={5}>
-                <FormItem label={'TYPE'}>
-                  {getFieldDecorator('fabrictype_name', {
-                    rules: [{ required: true, message: 'Vui lòng nhập loại vải!' }],
-                    initialValue: this.props.data.fabrictype_code,
-                  })(<Input name="fabrictype_name" placeholder="loại vải" />)}
+                <FormItem label={'COLOR'}>
+                  {getFieldDecorator('fabriccolor_code', {
+                    rules: [{ required: true, message: 'Vui lòng nhập tên màu vải!' }],
+                    initialValue: this.props.data.fabriccolor_code,
+                  })(<Input name="fabriccolor_code" placeholder="tên màu vải" />)}
                 </FormItem>
               </Col>
             </Row>
@@ -60,41 +60,43 @@ class FabricTypeForm extends Component {
   }
 }
 
-FabricTypeForm.propTypes = {
+FabricColorForm.propTypes = {
   data: PropTypes.object,
 }
-FabricTypeForm.defaultProps = {}
+FabricColorForm.defaultProps = {}
 
-class WarehouseFabricType extends Component {
+class WarehouseFabricColor extends Component {
   constructor(props) {
     super(props)
     this.state = {
       expand: false,
       modalvisible: false,
-      data_fabrictypes: [],
-      selected_fabrictype: { fabrictype_code: '', fabrictype_name: '' },
+      data_fabriccolors: [],
+      selected_fabriccolor: { fabriccolor_code: '', fabriccolor_name: '' },
     }
   }
 
   handleSearch = e => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
-      if (values.fabrictype_name) {
-        this.loadFabricTypes(values)
+      // console.log('Received values of form: ', values);
+      if (values.fabriccolor_name) {
+        this.loadFabricColors(values)
       } else {
-        this.loadFabricTypes({})
+        this.loadFabricColors({})
       }
     })
   }
 
   handleReset = () => {
     this.props.form.resetFields()
-    this.loadFabricTypes({})
+    this.loadFabricColors({})
   }
 
   onRefeshGrid = () => {
     this.handleReset()
   }
+
   toggle = () => {
     const { expand } = this.state
     this.setState({ expand: !expand })
@@ -103,15 +105,16 @@ class WarehouseFabricType extends Component {
   //Modal
   showModal = e => {
     if (e) {
+      // console.log(e.target.value);
       let mod = e.target.value
       if (mod === 'new') {
         this.setState({
           modalvisible: true,
-          selected_fabrictype: { provider_code: undefined, provider_name: undefined },
+          selected_fabriccolor: { fabriccolor_code: undefined, fabriccolor_name: undefined },
         })
       } else if (mod === 'edit') {
-        let fabrictype = this.state.selected_fabrictype
-        if (fabrictype.fabrictype_code) {
+        let fcolor = this.state.selected_fabriccolor
+        if (fcolor.fabriccolor_name) {
           this.setState({
             modalvisible: true,
           })
@@ -125,55 +128,55 @@ class WarehouseFabricType extends Component {
     })
   }
 
-  loadFabricTypes = v => {
+  loadFabricColors = v => {
     axios
-      .get('api/fabric/type/get', { params: v })
+      .get('api/fabric/color/get', { params: v })
       .then(res => {
         let data = res.data
         // update data
-        this.setState({ data_fabrictypes: data })
+        this.setState({ data_fabriccolors: data })
       })
       .catch(err => {
         console.log(err)
-        this.setState({ data_fabrictypes: [] })
+        this.setState({ data_fabriccolors: [] })
       })
   }
 
-  onRowFabricTypeClick = e => {
+  onRowFabricColorClick = e => {
     let index = e
-    if (index >= 0 && index < this.state.data_fabrictypes.length) {
-      let ftype = this.state.data_fabrictypes[index]
-      this.setState({ selected_fabrictype: ftype })
+    if (index >= 0 && index < this.state.data_fabriccolors.length) {
+      let ftype = this.state.data_fabriccolors[index]
+      this.setState({ selected_fabriccolor: ftype })
     }
   }
 
   componentDidMount = () => {
-    this.loadFabricTypes({})
+    this.loadFabricColors({})
   }
 
   handleCreate = e => {
     const form = this.formRef.props.form
-
     form.validateFields((err, values) => {
-      // console.log(values);
-      // console.log(err);
       if (err) {
         return
       }
-      // console.log('Received values of form a: ', values);
-      //call goi service add
+      if (!values.fabriccolor_code) {
+        return
+      }
+
       let data = {
         _id: values.id,
-        fabrictype_code: values.fabrictype_name,
-        fabrictype_name: values.fabrictype_name,
+        fabriccolor_code: values.fabriccolor_code,
+        fabriccolor_name: values.fabriccolor_code,
       }
       // console.log(data);
       if (values.id) {
         console.log('call update')
         axios
-          .post(`api/fabric/type/update/${values.id}`, data)
+          .post(`api/fabric/color/update/${values.id}`, data)
           .then(res => {
-            this.loadFabricTypes({})
+            //console.log(res.data);
+            this.loadFabricColors({})
           })
           .catch(err => {
             console.log(err)
@@ -181,9 +184,10 @@ class WarehouseFabricType extends Component {
       } else {
         console.log('call add')
         axios
-          .post('api/fabric/type/add', data)
+          .post('api/fabric/color/add', data)
           .then(res => {
-            this.loadFabricTypes({})
+            // console.log(res.data);
+            this.loadFabricColors({})
           })
           .catch(err => {
             console.log(err)
@@ -200,32 +204,32 @@ class WarehouseFabricType extends Component {
   //end modal
 
   rowGetter = i => {
-    if (i >= 0 && i < this.state.data_fabrictypes.length) {
-      return this.state.data_fabrictypes[i]
+    if (i >= 0 && i < this.state.data_fabriccolors.length) {
+      return this.state.data_fabriccolors[i]
     }
     return null
   }
 
   render() {
-    const WrappedFabricTypeForm = Form.create()(FabricTypeForm)
+    const WrappedFabricColorForm = Form.create()(FabricColorForm)
     const { getFieldDecorator } = this.props.form
     const columns = [
       // {key: '_id', name: 'id', hidd: false },
-      { key: 'fabrictype_name', name: 'TYPE' },
+      { key: 'fabriccolor_code', name: 'COLOR' },
       { key: 'create_date', name: 'CREATE DATE', formatter: DateLongFormatter },
       { key: 'update_date', name: 'UPDATE DATE', formatter: DateLongFormatter },
     ]
     return (
       <div>
         <Collapse className="ant-advanced-search-panel-collapse">
-          <Panel header="Tìm kiếm" key="1">
+          <Panel header="SEARCH" key="1">
             <Form className="ant-advanced-search-panel " onSubmit={this.handleSearch}>
               <Grid>
                 <Row className="show-grid">
                   <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
-                    <FormItem label={'TYPE'}>
-                      {getFieldDecorator('fabrictype_name', {})(
-                        <Input placeholder="tên loại vải" />,
+                    <FormItem label={'COLOR'}>
+                      {getFieldDecorator('fabriccolor_name', {})(
+                        <Input placeholder="tên màu vải" />,
                       )}
                     </FormItem>
                   </Col>
@@ -247,6 +251,7 @@ class WarehouseFabricType extends Component {
             </Form>
           </Panel>
         </Collapse>
+
         <div className="ant-advanced-toolbar">
           <Button
             icon="plus"
@@ -278,22 +283,21 @@ class WarehouseFabricType extends Component {
             REFESH
           </Button>
         </div>
-        <WrappedFabricTypeForm
+        <WrappedFabricColorForm
           wrappedComponentRef={this.saveFormRef}
           visible={this.state.modalvisible}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
-          data={this.state.selected_fabrictype}
+          data={this.state.selected_fabriccolor}
         />
-
         <ReactDataGrid
           enableCellSelect={true}
           resizable={true}
           columns={columns}
           rowGetter={this.rowGetter}
-          rowsCount={this.state.data_fabrictypes.length}
+          rowsCount={this.state.data_fabriccolors.length}
           minHeight={390}
-          onRowClick={this.onRowFabricTypeClick}
+          onRowClick={this.onRowFabricColorClick}
           rowRenderer={RowRenderer}
         />
       </div>
@@ -301,4 +305,4 @@ class WarehouseFabricType extends Component {
   }
 }
 
-export default WarehouseFabricType
+export default WarehouseFabricColor

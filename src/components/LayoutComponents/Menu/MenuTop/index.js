@@ -179,7 +179,7 @@ class MenuTop extends React.Component {
 
   render() {
     const { selectedKeys, openKeys, theme, menuData } = this.state
-    const menuItems = this.generateMenuPartitions(menuData)
+    const menuItems = this.generateMenuPartitions(menuData);
     //console.log('menuItems =>' + JSON.stringify(menuData));
     return (
       <div className="menuTop">

@@ -6,15 +6,16 @@ import { Select, Input, Button, Form, Modal, Collapse, DatePicker } from 'antd'
 import ReactDataGrid from 'react-data-grid'
 import update from 'immutability-helper'
 
-import RowRenderer from './rowrenderer'
-import DateFormatter from './dateformatter'
+import RowRenderer from '../rowrenderer'
+import DateFormatter from '../dateformatter'
 
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
-import axios from '../../../../axiosInst'
+//import moment from 'moment';
+import axios from  '../../../../../axiosInst'
 //css
-import './views.css'
+import '../views.css'
 
 const { Editors } = require('react-data-grid-addons')
 const { AutoComplete: AutoCompleteEditor } = Editors

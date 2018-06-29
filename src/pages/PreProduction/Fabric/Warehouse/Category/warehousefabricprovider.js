@@ -6,13 +6,13 @@ import PropTypes from 'prop-types'
 import ReactDataGrid from 'react-data-grid'
 //import update from 'immutability-helper';
 
-import RowRenderer from './rowrenderer'
-import DateFormatter from './dateformatter'
+import RowRenderer from '../rowrenderer'
+import DateFormatter from '../dateformatter'
 
 //import moment from 'moment';
-import axios from '../../../../axiosInst'
+import axios from  '../../../../../axiosInst'
 //css
-import './views.css'
+import '../views.css'
 
 const FormItem = Form.Item
 const Panel = Collapse.Panel
