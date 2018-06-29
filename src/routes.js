@@ -5,6 +5,7 @@ import Loadable from 'react-loadable'
 import Page from 'components/LayoutComponents/Page'
 import NotFoundPage from 'pages/NotFoundPage'
 import HomePage from 'pages/Dashboard'
+import Login from 'pages/LoginPage'
 
 const loadable = loader =>
   Loadable({
@@ -12,22 +13,7 @@ const loadable = loader =>
     delay: false,
     loading: () => null,
   })
-/*
-const loadableRoutes = {
-  //Login Page
-  '/login': {
-    component: loadable(() => import('pages/LoginPage')),
-  },
-  // Dashboards
-  '/dashboard': {
-    component: loadable(() => import('pages/Dashboard')),
-  },
 
-  '/fabric': {
-    component: loadable(() => import('pages/PreProduction/Fabric/Warehouse')),
-  },
-}
-*/
 
 class Routes extends React.Component {
   timeoutId = null
@@ -36,9 +22,15 @@ class Routes extends React.Component {
     loadableRoutes: {},
   }
 
-  componentDidMount() {
-    let loadableRoutes = {}
-    loadableRoutes['/login'] = { component: loadable(() => import('pages/LoginPage')) }
+
+  componentWillUnmount() {
+    if (this.timeoutId) {
+      clearTimeout(this.timeoutId)
+    }
+  }
+
+  render() {
+    let loadableRoutes = {};//this.state.loadableRoutes
     let data = window.sessionStorage.getItem('app.User')
     if (data) {
       data = JSON.parse(data)
@@ -50,41 +42,18 @@ class Routes extends React.Component {
             let c = loadable(() => import(`${link.com_view}`))
             loadableRoutes[`${link.name}`] = { component: c }
           } else {
-            console.log('menu name =' + link.name + '==>com_view =F' + link.com_view)
+            console.log('menu name =' + link.name + '==>com_view =' + link.com_view)
           }
         } catch (ex) {
           console.log('can not load component =>' + `${link.com_view}`)
         }
       }
     }
-    this.setState({ loadableRoutes: loadableRoutes })
-
-    this.timeoutId = setTimeout(
-      () =>
-        Object.keys(loadableRoutes).forEach(path => {
-          try {
-            loadableRoutes[path].component.preload()
-          } catch (ex) {
-            console.log('can not load component ' + JSON.stringify(loadableRoutes[path]))
-          }
-        }),
-      500, // load after 5 sec
-    )
-  }
-
-  componentWillUnmount() {
-    if (this.timeoutId) {
-      clearTimeout(this.timeoutId)
-    }
-  }
-
-  render() {
-    let loadableRoutes = this.state.loadableRoutes
-    //console.log('loadableRoutes 1=>' + JSON.stringify(loadableRoutes));
 
     return (
       <ConnectedSwitch>
         <Route exact path={'/'} component={HomePage} />
+        <Route exact path={'/login'} component={Login} />
         {Object.keys(loadableRoutes).map(path => {
           const { exact, component, ...props } = loadableRoutes[path]
           props.exact = exact === void 0 || exact || false // set true as default

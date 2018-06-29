@@ -44,7 +44,7 @@ class WarehouseImportForm extends Component {
     super(props, context)
     this.state = {
       importdate: new Date(),
-      provider_selected: 'default',
+      provider_selected: 'small',
       rows: this.props.data.details,
       columns: [],
     }
