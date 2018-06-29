@@ -14,14 +14,12 @@ const loadable = loader =>
     loading: () => null,
   })
 
-
 class Routes extends React.Component {
   timeoutId = null
   state = {
     links: [],
     loadableRoutes: {},
   }
-
 
   componentWillUnmount() {
     if (this.timeoutId) {
@@ -30,7 +28,7 @@ class Routes extends React.Component {
   }
 
   render() {
-    let loadableRoutes = {};//this.state.loadableRoutes
+    let loadableRoutes = {} //this.state.loadableRoutes
     let data = window.sessionStorage.getItem('app.User')
     if (data) {
       data = JSON.parse(data)
