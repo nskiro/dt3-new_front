@@ -10,7 +10,7 @@ import RowRenderer from '../rowrenderer'
 import DateFormatter from '../dateformatter'
 
 //import moment from 'moment';
-import axios from  '../../../../../axiosInst'
+import axios from '../../../../../axiosInst'
 //css
 import '../views.css'
 

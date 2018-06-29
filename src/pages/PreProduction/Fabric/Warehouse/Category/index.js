@@ -28,9 +28,40 @@ class ViewWarehouseCategory extends Component {
         <section className="card">
           <div className="card-body">
             <Tabs defaultActiveKey="4">
-              <TabPane tab={<span> <Icon type="select" />SUPPLIER </span>} size={tab_size} key="4"><WrappedWarehouseFabricProvider /></TabPane>
-              <TabPane tab={<span><Icon type="wallet" />TYPE</span>} size={tab_size} key="5"><WrappedWarehouseFabricType /></TabPane>
-              <TabPane tab={<span><Icon type="appstore" />COLOR</span>} size={tab_size} key="6"><WrappedWarehouseFabricColor /></TabPane>
+              <TabPane
+                tab={
+                  <span>
+                    {' '}
+                    <Icon type="select" />SUPPLIER{' '}
+                  </span>
+                }
+                size={tab_size}
+                key="4"
+              >
+                <WrappedWarehouseFabricProvider />
+              </TabPane>
+              <TabPane
+                tab={
+                  <span>
+                    <Icon type="wallet" />TYPE
+                  </span>
+                }
+                size={tab_size}
+                key="5"
+              >
+                <WrappedWarehouseFabricType />
+              </TabPane>
+              <TabPane
+                tab={
+                  <span>
+                    <Icon type="appstore" />COLOR
+                  </span>
+                }
+                size={tab_size}
+                key="6"
+              >
+                <WrappedWarehouseFabricColor />
+              </TabPane>
             </Tabs>
           </div>
         </section>

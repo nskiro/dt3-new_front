@@ -13,9 +13,9 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 
 //import moment from 'moment';
-import axios from  '../../../../../axiosInst'//'../../../../../axiosInst'
+import axios from '../../../../../axiosInst' //'../../../../../axiosInst'
 //css
-import '../views.css'//'./views.css'
+import '../views.css' //'./views.css'
 
 const { Editors } = require('react-data-grid-addons')
 const { AutoComplete: AutoCompleteEditor } = Editors

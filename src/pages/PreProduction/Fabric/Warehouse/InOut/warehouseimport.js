@@ -13,7 +13,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 
 //import moment from 'moment';
-import axios from  '../../../../../axiosInst'
+import axios from '../../../../../axiosInst'
 //css
 import '../views.css'
 

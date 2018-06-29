@@ -10,9 +10,9 @@ import RowRenderer from '../rowrenderer'
 import DateFormatter from '../dateformatter'
 
 //import moment from 'moment';
-import axios from  '../../../../../axiosInst'//'../../../../../axiosInst'
+import axios from '../../../../../axiosInst' //'../../../../../axiosInst'
 //css
-import '../views.css'//'./views.css'
+import '../views.css' //'./views.css'
 
 const FormItem = Form.Item
 const Panel = Collapse.Panel
