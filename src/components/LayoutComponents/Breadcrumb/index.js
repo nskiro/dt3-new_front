@@ -1,10 +1,18 @@
 // @flow
 import React from 'react'
+import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
-import { menuData } from '../Menu/MenuLeft'
 import { reduce } from 'lodash'
 import './style.scss'
 
+const mapStateToProps = ({ app, routing }, props) => {
+  const { userState } = app
+  return {
+    menuData: userState.menu,
+  }
+}
+
+@connect(mapStateToProps)
 @withRouter
 class Breadcrumb extends React.Component {
   state = {
@@ -67,13 +75,13 @@ class Breadcrumb extends React.Component {
 
   componentWillReceiveProps(newProps) {
     this.setState({
-      breadcrumb: this.getBreadcrumb(newProps, menuData),
+      breadcrumb: this.getBreadcrumb(newProps, this.props.menuData),
     })
   }
 
   componentDidMount() {
     this.setState({
-      breadcrumb: this.getBreadcrumb(this.props, menuData),
+      breadcrumb: this.getBreadcrumb(this.props, this.props.menuData),
     })
   }
 
