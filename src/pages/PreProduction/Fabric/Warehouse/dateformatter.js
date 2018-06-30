@@ -9,7 +9,7 @@ const formatDate_Shorttype = 'MM/DD/YYYY'
 class DateLongFormatter extends Component {
   render() {
     if (!this.props.value) {
-      return (<div></div>)
+      return <div />
     }
     const dateformat = moment(this.props.value).format(formatDate_Longtype)
     return (
@@ -33,7 +33,7 @@ DateLongFormatter.defaultProps = {
 class DateShortFormatter extends Component {
   render() {
     if (!this.props.value) {
-      return (<div></div>)
+      return <div />
     }
     const dateformat = moment(this.props.value).format(formatDate_Shorttype) // + '%';
     return (

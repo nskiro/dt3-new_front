@@ -24,7 +24,13 @@ class ProviderForm extends Component {
     const { visible, onCancel, onCreate, form } = this.props
     const { getFieldDecorator } = form
     return (
-      <Modal title="SUPPILER" visible={visible} onOk={onCreate} maskClosable={false} onCancel={onCancel}>
+      <Modal
+        title="SUPPILER"
+        visible={visible}
+        onOk={onCreate}
+        maskClosable={false}
+        onCancel={onCancel}
+      >
         <Form>
           <Grid>
             <Row className="show-grid">
@@ -59,7 +65,7 @@ ProviderForm.defaultProps = {}
 
 class WarehouseFabricProvider extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       expand: false,
       modalvisible: false,
@@ -137,7 +143,9 @@ class WarehouseFabricProvider extends Component {
         provider_name: values.provider_name,
       }
 
-      if (!data.provider_name) { data.provider_name = data.provider_code; }
+      if (!data.provider_name) {
+        data.provider_name = data.provider_code
+      }
       if (values.id) {
         console.log('call update')
         axios
@@ -220,8 +228,19 @@ class WarehouseFabricProvider extends Component {
                     </FormItem>
                   </Col>
                   <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
-                    <Button icon="search" size={button_size} type="primary" htmlType="submit"> SEARCH</Button>
-                    <Button icon="sync" size={button_size} style={{ marginLeft: 8 }} onClick={this.handleReset}> CLEAR</Button>
+                    <Button icon="search" size={button_size} type="primary" htmlType="submit">
+                      {' '}
+                      SEARCH
+                    </Button>
+                    <Button
+                      icon="sync"
+                      size={button_size}
+                      style={{ marginLeft: 8 }}
+                      onClick={this.handleReset}
+                    >
+                      {' '}
+                      CLEAR
+                    </Button>
                   </Col>
                 </Row>
               </Grid>
@@ -229,9 +248,36 @@ class WarehouseFabricProvider extends Component {
           </Panel>
         </Collapse>
         <div className="ant-advanced-toolbar">
-          <Button icon="plus" size={button_size} type="primary" value="new" className="ant-advanced-toolbar-item" onClick={this.showModal} >NEW</Button>
-          <Button icon="edit" size={button_size} type="primary" value="edit" className="ant-advanced-toolbar-item" onClick={this.showModal}>EDIT</Button>
-          <Button icon="sync" size={button_size} type="primary" className="ant-advanced-toolbar-item" onClick={this.onRefeshGrid}> REFESH </Button>
+          <Button
+            icon="plus"
+            size={button_size}
+            type="primary"
+            value="new"
+            className="ant-advanced-toolbar-item"
+            onClick={this.showModal}
+          >
+            NEW
+          </Button>
+          <Button
+            icon="edit"
+            size={button_size}
+            type="primary"
+            value="edit"
+            className="ant-advanced-toolbar-item"
+            onClick={this.showModal}
+          >
+            EDIT
+          </Button>
+          <Button
+            icon="sync"
+            size={button_size}
+            type="primary"
+            className="ant-advanced-toolbar-item"
+            onClick={this.onRefeshGrid}
+          >
+            {' '}
+            REFESH{' '}
+          </Button>
         </div>
         <WrappedProviderForm
           wrappedComponentRef={this.saveFormRef}

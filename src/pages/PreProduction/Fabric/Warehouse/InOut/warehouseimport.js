@@ -42,18 +42,18 @@ const default_cols = [
 
 class WarehouseImportForm extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       importdate: new Date(),
       provider_selected: 'small',
       rows: !this.props.data.details ? [] : this.props.data.details,
       columns: [],
     }
-    console.log('props => ' + JSON.stringify(this.props.data));
+    console.log('props => ' + JSON.stringify(this.props.data))
   }
 
-  componentWillReceiveProps = (nextProps) => {
-    this.setState({ rows: !nextProps.data.details ? [] : nextProps.data.details });
+  componentWillReceiveProps = nextProps => {
+    this.setState({ rows: !nextProps.data.details ? [] : nextProps.data.details })
   }
 
   createNewRow = () => {
@@ -85,26 +85,26 @@ class WarehouseImportForm extends Component {
   }
 
   loadProviders = () => {
-    axios.get('api/fabric/provider/get', { params: {} }).then(res => {
-      let data = res.data
-      let children = []
-      let children_uni = []
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].provider_code && children_uni.indexOf(data[i].provider_code) === -1) {
-          children.push(<Option key={data[i].provider_code}>{data[i].provider_code}</Option>)
-          children_uni.push(data[i].provider_code)
+    axios
+      .get('api/fabric/provider/get', { params: {} })
+      .then(res => {
+        let data = res.data
+        let children = []
+        let children_uni = []
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].provider_code && children_uni.indexOf(data[i].provider_code) === -1) {
+            children.push(<Option key={data[i].provider_code}>{data[i].provider_code}</Option>)
+            children_uni.push(data[i].provider_code)
+          }
         }
-      }
-      this.setState({ data_providers: children })
-    })
+        this.setState({ data_providers: children })
+      })
       .catch(err => {
         this.setState({ data_providers: [] })
-        alert('Lấy danh sácch Supplier thất bại.\n-Nguyên nhân do: ' + err);
+        alert('Lấy danh sácch Supplier thất bại.\n-Nguyên nhân do: ' + err)
         console.log(err)
       })
-
   }
-
 
   loadFabricTypes = () => {
     axios
@@ -125,10 +125,9 @@ class WarehouseImportForm extends Component {
         console.log(err)
         this.setState({ columns: default_cols })
       })
-
   }
 
-  loadFabricColors = (ftypes) => {
+  loadFabricColors = ftypes => {
     axios
       .get('api/fabric/color/get', { params: {} })
       .then(res => {
@@ -143,8 +142,20 @@ class WarehouseImportForm extends Component {
         }
         let cols = [
           { key: 'orderid', name: 'ORDER #', editable: true, width: 100 },
-          { key: 'fabric_type', name: 'TYPE', editable: true, resizable: true, editor: <AutoCompleteEditor options={ftypes} />, },
-          { key: 'fabric_color', name: 'COLOR', editable: true, resizable: true, editor: <AutoCompleteEditor options={colors_grid} />, },
+          {
+            key: 'fabric_type',
+            name: 'TYPE',
+            editable: true,
+            resizable: true,
+            editor: <AutoCompleteEditor options={ftypes} />,
+          },
+          {
+            key: 'fabric_color',
+            name: 'COLOR',
+            editable: true,
+            resizable: true,
+            editor: <AutoCompleteEditor options={colors_grid} />,
+          },
           { key: 'met', name: 'MET', editable: true },
           { key: 'roll', name: 'ROLL', editable: true },
           { key: 'note', name: 'NOTE', editable: true },
@@ -154,13 +165,11 @@ class WarehouseImportForm extends Component {
       .catch(err => {
         this.setState({ columns: default_cols })
       })
-
   }
   componentDidMount = () => {
     this.loadProviders()
     this.loadFabricTypes()
   }
-
 
   render() {
     const { visible, onCancel, onCreate } = this.props
@@ -171,8 +180,15 @@ class WarehouseImportForm extends Component {
       wrapperCol: { xs: { span: 24 }, sm: { span: 16 } },
     }
     return (
-      <Modal title={this.props.data.title} visible={visible} onOk={onCreate} maskClosable={false}
-        onCancel={onCancel} width={900} style={{ top: 5 }}>
+      <Modal
+        title={this.props.data.title}
+        visible={visible}
+        onOk={onCreate}
+        maskClosable={false}
+        onCancel={onCancel}
+        width={900}
+        style={{ top: 5 }}
+      >
         <Form className="ant-advanced-search-panel">
           <Grid>
             <Row className="show-grid">
@@ -188,7 +204,13 @@ class WarehouseImportForm extends Component {
               <Col md={6} sm={6} xs={6} style={{ textAlign: 'left' }}>
                 <FormItem {...formItemLayout} label="IM DATE">
                   {getFieldDecorator('inputdate_no', {
-                    rules: [{ type: 'object', required: true, message: 'Vui lòng chọn thời gian nhập kho !', },],
+                    rules: [
+                      {
+                        type: 'object',
+                        required: true,
+                        message: 'Vui lòng chọn thời gian nhập kho !',
+                      },
+                    ],
                     initialValue: moment(this.props.data.inputdate_no),
                   })(<DatePicker format={dateFormat} disabled />)}
                 </FormItem>
@@ -240,7 +262,10 @@ class WarehouseImportForm extends Component {
             </Row>
             <Row className="show-grid">
               <Col md={6} sm={6} xs={6}>
-                <Button icon="plus-circle" size={button_size} onClick={this.addNewRow}> NEW ROW{' '}</Button>
+                <Button icon="plus-circle" size={button_size} onClick={this.addNewRow}>
+                  {' '}
+                  NEW ROW{' '}
+                </Button>
               </Col>
             </Row>
             <Row className="show-grid">
@@ -268,12 +293,11 @@ WarehouseImportForm.propTypes = {
 }
 WarehouseImportForm.defaultProps = {}
 
-
 const WrappedWarehouseImportForm = Form.create()(WarehouseImportForm)
 
 class WarehouseImport extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       expand: false,
       current_date: new Date(),
@@ -568,7 +592,10 @@ class WarehouseImport extends Component {
                     </FormItem>
                     <FormItem label={'SUPPLIER'}>
                       {getFieldDecorator('provider_name', {})(
-                        <Select placeholder="Chọn nhà cung cấp" size={this.state.data_providers_size}>
+                        <Select
+                          placeholder="Chọn nhà cung cấp"
+                          size={this.state.data_providers_size}
+                        >
                           {this.state.data_providers}
                         </Select>,
                       )}
@@ -588,8 +615,17 @@ class WarehouseImport extends Component {
                 </Row>
                 <Row className="show-grid">
                   <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
-                    <Button icon="search" size={button_size} type="primary" htmlType="submit">SEARCH</Button>
-                    <Button icon="sync" size={button_size} style={{ marginLeft: 8 }} onClick={this.handleReset}>CLEAR</Button>
+                    <Button icon="search" size={button_size} type="primary" htmlType="submit">
+                      SEARCH
+                    </Button>
+                    <Button
+                      icon="sync"
+                      size={button_size}
+                      style={{ marginLeft: 8 }}
+                      onClick={this.handleReset}
+                    >
+                      CLEAR
+                    </Button>
                   </Col>
                 </Row>
               </Grid>
@@ -598,8 +634,26 @@ class WarehouseImport extends Component {
         </Collapse>
 
         <div className="ant-advanced-toolbar">
-          <Button type="primary" size={button_size} icon="plus-circle" value="new" className="ant-advanced-toolbar-item" onClick={this.showModal}>NEW </Button>
-          <Button type="primary" size={button_size} icon="info-circle" value="view" className="ant-advanced-toolbar-item" onClick={this.showModal} >DETAIL</Button>
+          <Button
+            type="primary"
+            size={button_size}
+            icon="plus-circle"
+            value="new"
+            className="ant-advanced-toolbar-item"
+            onClick={this.showModal}
+          >
+            NEW{' '}
+          </Button>
+          <Button
+            type="primary"
+            size={button_size}
+            icon="info-circle"
+            value="view"
+            className="ant-advanced-toolbar-item"
+            onClick={this.showModal}
+          >
+            DETAIL
+          </Button>
         </div>
         <WrappedWarehouseImportForm
           wrappedComponentRef={this.saveFormRef}

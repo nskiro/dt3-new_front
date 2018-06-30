@@ -45,7 +45,7 @@ class Routes extends React.Component {
             console.log('menu name =' + link.name + '==>com_view =' + link.com_view)
           }
         } catch (ex) {
-          console.log('can not load component =>' + link.com_view);
+          console.log('can not load component =>' + link.com_view)
         }
       }
     }

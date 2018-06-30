@@ -227,8 +227,18 @@ class WarehouseFabricType extends Component {
                     </FormItem>
                   </Col>
                   <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
-                    <Button icon="search" size={button_size} type="primary" htmlType="submit"> SEARCH </Button>
-                    <Button icon="sync" size={button_size} style={{ marginLeft: 8 }} onClick={this.handleReset} >CLEAR</Button>
+                    <Button icon="search" size={button_size} type="primary" htmlType="submit">
+                      {' '}
+                      SEARCH{' '}
+                    </Button>
+                    <Button
+                      icon="sync"
+                      size={button_size}
+                      style={{ marginLeft: 8 }}
+                      onClick={this.handleReset}
+                    >
+                      CLEAR
+                    </Button>
                   </Col>
                 </Row>
               </Grid>
@@ -236,9 +246,35 @@ class WarehouseFabricType extends Component {
           </Panel>
         </Collapse>
         <div className="ant-advanced-toolbar">
-          <Button icon="plus" size={button_size} type="primary" value="new" className="ant-advanced-toolbar-item" onClick={this.showModal}>NEW</Button>
-          <Button icon="edit" size={button_size} type="primary" value="edit" className="ant-advanced-toolbar-item" onClick={this.showModal}>EDIT</Button>
-          <Button icon="sync" size={button_size} type="primary" className="ant-advanced-toolbar-item" onClick={this.onRefeshGrid} >REFESH</Button>
+          <Button
+            icon="plus"
+            size={button_size}
+            type="primary"
+            value="new"
+            className="ant-advanced-toolbar-item"
+            onClick={this.showModal}
+          >
+            NEW
+          </Button>
+          <Button
+            icon="edit"
+            size={button_size}
+            type="primary"
+            value="edit"
+            className="ant-advanced-toolbar-item"
+            onClick={this.showModal}
+          >
+            EDIT
+          </Button>
+          <Button
+            icon="sync"
+            size={button_size}
+            type="primary"
+            className="ant-advanced-toolbar-item"
+            onClick={this.onRefeshGrid}
+          >
+            REFESH
+          </Button>
         </div>
         <WrappedFabricTypeForm
           wrappedComponentRef={this.saveFormRef}

@@ -20,12 +20,17 @@ const { DateLongFormatter } = DateFormatter
 const button_size = 'small'
 
 class FabricColorForm extends Component {
-
   render() {
     const { visible, onCancel, onCreate, form } = this.props
     const { getFieldDecorator } = form
     return (
-      <Modal title="COLOR" visible={visible} onOk={onCreate} maskClosable={false} onCancel={onCancel} >
+      <Modal
+        title="COLOR"
+        visible={visible}
+        onOk={onCreate}
+        maskClosable={false}
+        onCancel={onCancel}
+      >
         <Form>
           <Grid>
             <Row className="show-grid">
@@ -56,7 +61,7 @@ const WrappedFabricColorForm = Form.create()(FabricColorForm)
 
 class WarehouseFabricColor extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       expand: false,
       modalvisible: false,

@@ -28,8 +28,30 @@ class ViewWarehouseInOut extends Component {
         <section className="card">
           <div className="card-body">
             <Tabs defaultActiveKey="1">
-              <TabPane tab={<span>{' '} <Icon type="arrow-down" />IMPORT</span>} size={tab_size} key="1" ><WrappedWarehouseImport /></TabPane>
-              <TabPane tab={<span> {' '} <Icon type="arrow-up" />EXPORT{' '}</span>} size={tab_size} key="2" ><WrappedWarehouseExport /></TabPane>
+              <TabPane
+                tab={
+                  <span>
+                    {' '}
+                    <Icon type="arrow-down" />IMPORT
+                  </span>
+                }
+                size={tab_size}
+                key="1"
+              >
+                <WrappedWarehouseImport />
+              </TabPane>
+              <TabPane
+                tab={
+                  <span>
+                    {' '}
+                    <Icon type="arrow-up" />EXPORT{' '}
+                  </span>
+                }
+                size={tab_size}
+                key="2"
+              >
+                <WrappedWarehouseExport />
+              </TabPane>
             </Tabs>
           </div>
         </section>
