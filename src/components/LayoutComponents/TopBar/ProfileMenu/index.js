@@ -36,28 +36,15 @@ class ProfileMenu extends React.Component {
       <Menu selectable={false}>
         <Menu.Item>
           <div className="rfq__widget__system-status__item">
-            <strong>Hello, {userState.role}</strong>
+            <strong>Hello, {userState.fullname}</strong>
             <div>
-              <strong>Billing Plan:</strong> Professional
-              <br />
-            </div>
-
-            <div>
-              <strong>Role:</strong> {userState.role}
+              Dept: {userState.dept.name}
             </div>
           </div>
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item>
-          <div className="rfq__widget__system-status__item">
-            <strong>Email:</strong> {userState.email}
-            <br />
-            <strong>Phone:</strong> +1-800-MEDIATEC
-          </div>
-        </Menu.Item>
-        <Menu.Divider />
-        <Menu.Item>
-          <a href="javascript: void(0);">
+          <a href="#/profile">
             <i className="topbar__dropdownMenuIcon icmn-user" /> Edit Profile
           </a>
         </Menu.Item>
@@ -77,7 +64,7 @@ class ProfileMenu extends React.Component {
           placement="bottomRight"
           onVisibleChange={this.addCount}
         >
-          <a className="ant-dropdown-link" href="/">
+          <a className="ant-dropdown-link" href="#">
             <Avatar className="topbar__avatar" shape="square" size="large" icon="user" />
           </a>
         </Dropdown>

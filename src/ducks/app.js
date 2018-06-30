@@ -82,7 +82,13 @@ export const logout = () => (dispatch, getState) => {
         _id: null,
         username: '',
         fullname: '',
-        dept: '',
+        dept: {
+          name: '',
+          avatar: {
+            data: '',
+            mimetype: ''
+          }
+        },
         roles: [],
         group: [],
         create_date: null,
@@ -128,7 +134,13 @@ const initialState = {
     _id: null,
     username: '',
     fullname: '',
-    dept: '',
+    dept: {
+      name: '',
+      avatar: {
+        data: '',
+        mimetype: ''
+      }
+    },
     roles: [],
     group: [],
     create_date: null,
