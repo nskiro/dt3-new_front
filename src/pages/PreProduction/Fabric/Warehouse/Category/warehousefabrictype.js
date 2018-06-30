@@ -19,9 +19,6 @@ const Panel = Collapse.Panel
 const { DateLongFormatter } = DateFormatter
 const button_size = 'small'
 class FabricTypeForm extends Component {
-  constructor(props) {
-    super(props)
-  }
   render() {
     const { visible, onCancel, onCreate, form } = this.props
     const { getFieldDecorator } = form
@@ -44,7 +41,7 @@ class FabricTypeForm extends Component {
                 </FormItem>
               </Col>
 
-              <Col md={5} sm={8} xs={5}>
+              <Col md={12} sm={12} xs={12}>
                 <FormItem label={'TYPE'}>
                   {getFieldDecorator('fabrictype_name', {
                     rules: [{ required: true, message: 'Vui lòng nhập loại vải!' }],
@@ -66,15 +63,15 @@ FabricTypeForm.propTypes = {
 FabricTypeForm.defaultProps = {}
 
 class WarehouseFabricType extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      expand: false,
-      modalvisible: false,
-      data_fabrictypes: [],
-      selected_fabrictype: { fabrictype_code: '', fabrictype_name: '' },
-    }
+  // constructor(props) {
+  // super(props)
+  state = {
+    expand: false,
+    modalvisible: false,
+    data_fabrictypes: [],
+    selected_fabrictype: { fabrictype_code: '', fabrictype_name: '' },
   }
+  // }
 
   handleSearch = e => {
     e.preventDefault()
@@ -231,7 +228,8 @@ class WarehouseFabricType extends Component {
                   </Col>
                   <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
                     <Button icon="search" size={button_size} type="primary" htmlType="submit">
-                      SEARCH
+                      {' '}
+                      SEARCH{' '}
                     </Button>
                     <Button
                       icon="sync"

@@ -46,14 +46,18 @@ const default_cols = [
 ]
 
 class WarehouseExportForm extends Component {
-  constructor(props, context) {
-    super(props, context)
+  constructor(props) {
+    super(props)
     this.state = {
       exportdate: new Date(),
       provider_selected: 'small',
-      rows: this.props.data.details,
+      rows: !this.props.data.details ? [] : this.props.data.details,
       columns: [],
     }
+  }
+
+  componentWillReceiveProps = nextProps => {
+    this.setState({ rows: !nextProps.data.details ? [] : nextProps.data.details })
   }
 
   createNewRow = () => {
@@ -188,10 +192,11 @@ class WarehouseExportForm extends Component {
         this.setState({ columns: default_cols })
       })
   }
-  componentDidMount = async () => {
+  componentDidMount = () => {
     this.loadProviders()
     this.loadFabricTypes()
   }
+
   render() {
     const { visible, onCancel, onCreate } = this.props
     const { getFieldDecorator } = this.props.form
@@ -200,12 +205,6 @@ class WarehouseExportForm extends Component {
       labelCol: { xs: { span: 24 }, sm: { span: 8 } },
       wrapperCol: { xs: { span: 24 }, sm: { span: 16 } },
     }
-
-    /*
-        const tailFormItemLayout = {
-            wrapperCol: { xs: { span: 24, offset: 0, }, sm: { span: 16, offset: 8, }, },
-        };
-        */
 
     return (
       <Modal
@@ -250,7 +249,8 @@ class WarehouseExportForm extends Component {
             <Row className="show-grid">
               <Col md={10} sm={10} xs={10}>
                 <Button icon="plus" size={button_size} onClick={this.addNewRow}>
-                  New row
+                  {' '}
+                  New row{' '}
                 </Button>
               </Col>
             </Row>
@@ -279,6 +279,8 @@ WarehouseExportForm.propTypes = {
 }
 WarehouseExportForm.defaultProps = {}
 
+const WrappedWarehouseExportForm = Form.create()(WarehouseExportForm)
+
 class WarehouseExport extends Component {
   constructor(props) {
     super(props)
@@ -297,7 +299,6 @@ class WarehouseExport extends Component {
   handleSearch = e => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
-      //console.log('Received values of form: ', values);
       if (values.from_date) {
         values.from_date = values.from_date.format('YYYY-MM-DD')
       }
@@ -312,7 +313,6 @@ class WarehouseExport extends Component {
 
   handleReset = () => {
     this.props.form.resetFields()
-    // this.loadFabricWarehouses({});
   }
 
   onRefeshGrid = () => {
@@ -328,6 +328,7 @@ class WarehouseExport extends Component {
   showModal = e => {
     if (e) {
       let mod = e.target.value
+
       if (mod === 'new') {
         this.setState({
           modalvisible: true,
@@ -401,8 +402,6 @@ class WarehouseExport extends Component {
       .get('api/fabric/export/get', { params: v })
       .then(res => {
         let data = res.data
-        // update data
-        //console.log(data);
         this.setState({ warehouse_import_data: data })
       })
       .catch(err => {
@@ -450,8 +449,6 @@ class WarehouseExport extends Component {
         axios
           .post('api/fabric/export/add', { data: data, detail: data_collect.data })
           .then(res => {
-            //console.log(res.data);
-            //this.loadFabricWarehouses({});
             form.resetFields()
             this.setState({ modalvisible: false })
           })
@@ -462,15 +459,20 @@ class WarehouseExport extends Component {
               let msg = dt_error.error + '\n\n'
               for (let k = 0; k < dt_error.data.length; k++) {
                 let r = dt_error.data[k]
+                // msg += ' - ' + r.fabric_type + ' - ' + r.fabric_color + ': met = ' + r.met + ', roll = ' + r.roll + '\n'
                 msg +=
                   ' - ' +
                   r.fabric_type +
                   ' - ' +
                   r.fabric_color +
-                  ': met = ' +
+                  ': met/inventory = ' +
                   r.met +
-                  ', roll = ' +
+                  '/' +
+                  r.met_inventory +
+                  ', roll/inventory = ' +
                   r.roll +
+                  '/' +
+                  r.roll_inventory +
                   '\n'
               }
               alert(msg)
@@ -498,11 +500,9 @@ class WarehouseExport extends Component {
       let row_selected = this.state.warehouse_import_data[index]
       this.setState({ data_export_selected: row_selected })
     }
-    // console.log('selected =>' + JSON.stringify(this.state.data_export_selected));
   }
 
   render() {
-    const WrappedWarehouseExportForm = Form.create()(WarehouseExportForm)
     const { getFieldDecorator } = this.props.form
     const columns = [
       { key: 'inputdate_no', name: 'EX DATE', formatter: DateShortFormatter },

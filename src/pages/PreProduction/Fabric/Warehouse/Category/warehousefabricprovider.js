@@ -20,12 +20,6 @@ const { DateLongFormatter, DateShortFormatter } = DateFormatter
 const button_size = 'small'
 
 class ProviderForm extends Component {
-  constructor(props) {
-    super(props)
-  }
-  onChangeProviderCode = v => {
-    this.setState({ provider_code: v })
-  }
   render() {
     const { visible, onCancel, onCreate, form } = this.props
     const { getFieldDecorator } = form
@@ -48,12 +42,12 @@ class ProviderForm extends Component {
                 </FormItem>
               </Col>
 
-              <Col md={5} sm={8} xs={5}>
+              <Col md={12} sm={12} xs={12}>
                 <FormItem label={'SUPPLIER'}>
                   {getFieldDecorator('provider_code', {
                     rules: [{ required: true, message: 'Vui lòng nhập tên nhà cung cấp!' }],
                     initialValue: this.props.data.provider_code,
-                  })(<Input onChange={this.onChangeProviderCode} placeholder="nhà cung cấp" />)}
+                  })(<Input placeholder="nhà cung cấp" />)}
                 </FormItem>
               </Col>
             </Row>
@@ -86,7 +80,6 @@ class WarehouseFabricProvider extends Component {
   handleSearch = e => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
-      // console.log('Received values of form: ', values);
       if (values.provider_code) {
         this.loadSearchProviders(values)
       } else {
@@ -148,6 +141,10 @@ class WarehouseFabricProvider extends Component {
         _id: values.id,
         provider_code: values.provider_code,
         provider_name: values.provider_name,
+      }
+
+      if (!data.provider_name) {
+        data.provider_name = data.provider_code
       }
       if (values.id) {
         console.log('call update')
@@ -225,13 +222,14 @@ class WarehouseFabricProvider extends Component {
             <Form className="ant-advanced-search-panel " onSubmit={this.handleSearch}>
               <Grid>
                 <Row className="show-grid">
-                  <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
+                  <Col md={12} sm={12} xs={12} style={{ textAlign: 'left' }}>
                     <FormItem label={'SUPPLIER'}>
                       {getFieldDecorator('provider_code', {})(<Input placeholder="nhà cung cấp" />)}
                     </FormItem>
                   </Col>
                   <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
                     <Button icon="search" size={button_size} type="primary" htmlType="submit">
+                      {' '}
                       SEARCH
                     </Button>
                     <Button
@@ -240,6 +238,7 @@ class WarehouseFabricProvider extends Component {
                       style={{ marginLeft: 8 }}
                       onClick={this.handleReset}
                     >
+                      {' '}
                       CLEAR
                     </Button>
                   </Col>
@@ -276,7 +275,8 @@ class WarehouseFabricProvider extends Component {
             className="ant-advanced-toolbar-item"
             onClick={this.onRefeshGrid}
           >
-            REFESH
+            {' '}
+            REFESH{' '}
           </Button>
         </div>
         <WrappedProviderForm

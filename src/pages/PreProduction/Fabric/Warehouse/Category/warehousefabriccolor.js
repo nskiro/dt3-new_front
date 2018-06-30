@@ -20,9 +20,6 @@ const { DateLongFormatter } = DateFormatter
 const button_size = 'small'
 
 class FabricColorForm extends Component {
-  constructor(props) {
-    super(props)
-  }
   render() {
     const { visible, onCancel, onCreate, form } = this.props
     const { getFieldDecorator } = form
@@ -44,12 +41,12 @@ class FabricColorForm extends Component {
                   )}
                 </FormItem>
               </Col>
-              <Col md={5} sm={8} xs={5}>
+              <Col md={12} sm={12} xs={12}>
                 <FormItem label={'COLOR'}>
                   {getFieldDecorator('fabriccolor_code', {
                     rules: [{ required: true, message: 'Vui lòng nhập tên màu vải!' }],
                     initialValue: this.props.data.fabriccolor_code,
-                  })(<Input name="fabriccolor_code" placeholder="tên màu vải" />)}
+                  })(<Input placeholder="tên màu vải" />)}
                 </FormItem>
               </Col>
             </Row>
@@ -60,10 +57,7 @@ class FabricColorForm extends Component {
   }
 }
 
-FabricColorForm.propTypes = {
-  data: PropTypes.object,
-}
-FabricColorForm.defaultProps = {}
+const WrappedFabricColorForm = Form.create()(FabricColorForm)
 
 class WarehouseFabricColor extends Component {
   constructor(props) {
@@ -75,11 +69,9 @@ class WarehouseFabricColor extends Component {
       selected_fabriccolor: { fabriccolor_code: '', fabriccolor_name: '' },
     }
   }
-
   handleSearch = e => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
-      // console.log('Received values of form: ', values);
       if (values.fabriccolor_name) {
         this.loadFabricColors(values)
       } else {
@@ -211,7 +203,6 @@ class WarehouseFabricColor extends Component {
   }
 
   render() {
-    const WrappedFabricColorForm = Form.create()(FabricColorForm)
     const { getFieldDecorator } = this.props.form
     const columns = [
       // {key: '_id', name: 'id', hidd: false },

@@ -41,14 +41,19 @@ const default_cols = [
 ]
 
 class WarehouseImportForm extends Component {
-  constructor(props, context) {
-    super(props, context)
+  constructor(props) {
+    super(props)
     this.state = {
       importdate: new Date(),
       provider_selected: 'small',
-      rows: this.props.data.details,
+      rows: !this.props.data.details ? [] : this.props.data.details,
       columns: [],
     }
+    console.log('props => ' + JSON.stringify(this.props.data))
+  }
+
+  componentWillReceiveProps = nextProps => {
+    this.setState({ rows: !nextProps.data.details ? [] : nextProps.data.details })
   }
 
   createNewRow = () => {
@@ -92,14 +97,12 @@ class WarehouseImportForm extends Component {
             children_uni.push(data[i].provider_code)
           }
         }
-        this.setState({
-          data_providers: children,
-          provider_size: children.length,
-        })
+        this.setState({ data_providers: children })
       })
       .catch(err => {
+        this.setState({ data_providers: [] })
+        alert('Lấy danh sácch Supplier thất bại.\n-Nguyên nhân do: ' + err)
         console.log(err)
-        this.setState({ data_providers: [], provider_size: 0 })
       })
   }
 
@@ -176,11 +179,6 @@ class WarehouseImportForm extends Component {
       labelCol: { xs: { span: 24 }, sm: { span: 8 } },
       wrapperCol: { xs: { span: 24 }, sm: { span: 16 } },
     }
-    /*
-        const tailFormItemLayout = {
-            wrapperCol: { xs: { span: 24, offset: 0, }, sm: { span: 16, offset: 8, }, },
-        };
-        */
     return (
       <Modal
         title={this.props.data.title}
@@ -265,6 +263,7 @@ class WarehouseImportForm extends Component {
             <Row className="show-grid">
               <Col md={6} sm={6} xs={6}>
                 <Button icon="plus-circle" size={button_size} onClick={this.addNewRow}>
+                  {' '}
                   NEW ROW{' '}
                 </Button>
               </Col>
@@ -274,9 +273,9 @@ class WarehouseImportForm extends Component {
                 <ReactDataGrid
                   enableCellSelect={true}
                   resizable={true}
-                  columns={this.state.columns}
+                  columns={this.state.columns ? this.state.columns : []}
                   rowGetter={this.rowGetter}
-                  rowsCount={this.state.rows.length}
+                  rowsCount={this.state.rows ? this.state.rows.length : 0}
                   minHeight={200}
                   onGridRowsUpdated={this.handleGridRowsUpdated}
                 />
@@ -294,6 +293,8 @@ WarehouseImportForm.propTypes = {
 }
 WarehouseImportForm.defaultProps = {}
 
+const WrappedWarehouseImportForm = Form.create()(WarehouseImportForm)
+
 class WarehouseImport extends Component {
   constructor(props) {
     super(props)
@@ -306,10 +307,11 @@ class WarehouseImport extends Component {
 
       data_providers: [],
       data_providers_size: 'small',
-      selected_warehouse_import: this.selectedWarehouseImportDefault(),
+      selected_warehouse_import: {},
       mod: 'view',
     }
   }
+
   createNewRow = () => {
     return { orderid: '', fabric_type: '', fabric_color: '', met: '', roll: '', note: '' }
   }
@@ -445,9 +447,9 @@ class WarehouseImport extends Component {
         children.push(<Option key="A">{'ALL'}</Option>)
 
         for (let i = 0; i < data.length; i++) {
-          if (children_uni.indexOf(data[i].provider_name) === -1) {
+          if (children_uni.indexOf(data[i].provider_code) === -1) {
             children.push(<Option key={data[i].provider_code}>{data[i].provider_code}</Option>)
-            children_uni.push(data[i].provider_name)
+            children_uni.push(data[i].provider_code)
           }
         }
         this.setState({
@@ -503,7 +505,6 @@ class WarehouseImport extends Component {
       }
 
       if (values.id) {
-        console.log('call update ->' + this.state.mod)
         axios
           .post(`api/fabric/import/update/${values.id}`, { data: data, detail: data_collect.data })
           .then(res => {
@@ -563,20 +564,7 @@ class WarehouseImport extends Component {
       this.setState({ selected_warehouse_import: row })
     }
   }
-  /*
-    onCheckTranlog = e => {
-      axios
-        .post('api/fabric/import/checktranlog', {})
-        .then(res => {
-          console.log(res.data)
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    }
-  */
   render() {
-    const WrappedWarehouseImportForm = Form.create()(WarehouseImportForm)
     const { getFieldDecorator } = this.props.form
 
     const columns = [
@@ -654,7 +642,7 @@ class WarehouseImport extends Component {
             className="ant-advanced-toolbar-item"
             onClick={this.showModal}
           >
-            NEW
+            NEW{' '}
           </Button>
           <Button
             type="primary"
@@ -667,7 +655,6 @@ class WarehouseImport extends Component {
             DETAIL
           </Button>
         </div>
-
         <WrappedWarehouseImportForm
           wrappedComponentRef={this.saveFormRef}
           visible={this.state.modalvisible}
@@ -675,7 +662,6 @@ class WarehouseImport extends Component {
           onCreate={this.handleCreate}
           data={this.state.selected_warehouse_import}
         />
-
         <ReactDataGrid
           enableCellSelect={true}
           resizable={true}
