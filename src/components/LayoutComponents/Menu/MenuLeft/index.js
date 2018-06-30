@@ -19,7 +19,7 @@ const mapStateToProps = ({ app, routing }, props) => {
     collapsed: layoutState.menuCollapsed,
     theme: layoutState.themeLight ? 'light' : 'dark',
     settingsOpened: layoutState.settingsOpened,
-    menuData: userState.menu
+    menuData: userState.menu,
   }
 }
 
@@ -33,7 +33,7 @@ class MenuLeft extends React.Component {
     selectedKeys: '',
     openKeys: [''],
     settingsOpened: this.props.settingsOpened,
-    menuData: this.props.menuData
+    menuData: this.props.menuData,
   }
 
   handleClick = e => {
