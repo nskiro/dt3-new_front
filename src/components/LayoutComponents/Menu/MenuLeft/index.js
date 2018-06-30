@@ -5,21 +5,21 @@ import { Link, withRouter } from 'react-router-dom'
 import { reduce } from 'lodash'
 import { setLayoutState } from 'ducks/app'
 import { Scrollbars } from 'react-custom-scrollbars'
-import { default as menuData } from './menuData'
+import LogoEB from '../../../../images/Logo EB Wide.png'
 import 'rc-drawer-menu/assets/index.css'
 import './style.scss'
 
 const { Sider } = Layout
 const SubMenu = Menu.SubMenu
 const Divider = Menu.Divider
-
 const mapStateToProps = ({ app, routing }, props) => {
-  const { layoutState } = app
+  const { layoutState, userState } = app
   return {
     pathname: routing.location.pathname,
     collapsed: layoutState.menuCollapsed,
     theme: layoutState.themeLight ? 'light' : 'dark',
     settingsOpened: layoutState.settingsOpened,
+    menuData: userState.menu,
   }
 }
 
@@ -33,6 +33,7 @@ class MenuLeft extends React.Component {
     selectedKeys: '',
     openKeys: [''],
     settingsOpened: this.props.settingsOpened,
+    menuData: this.props.menuData,
   }
 
   handleClick = e => {
@@ -154,7 +155,7 @@ class MenuLeft extends React.Component {
   }
 
   componentDidMount() {
-    this.getActiveMenuItem(this.props, menuData)
+    this.getActiveMenuItem(this.props, this.props.menuData)
   }
 
   componentWillReceiveProps(newProps) {
@@ -167,7 +168,7 @@ class MenuLeft extends React.Component {
       },
       () => {
         if (!newProps.isMobile) {
-          this.getActiveMenuItem(newProps, menuData)
+          this.getActiveMenuItem(newProps, this.props.menuData)
         }
       },
     )
@@ -175,7 +176,7 @@ class MenuLeft extends React.Component {
 
   render() {
     const { collapsed, selectedKeys, openKeys, theme } = this.state
-    const { isMobile } = this.props
+    const { isMobile, menuData } = this.props
     const menuItems = this.generateMenuPartitions(menuData)
     const paramsMobile = {
       width: 256,
@@ -196,11 +197,11 @@ class MenuLeft extends React.Component {
         <div className="menuLeft__logo">
           {params.collapsed ? (
             <div className="menuLeft__logoContainer menuLeft__logoContainer--collapsed">
-              <img src="resources/images/logo-inverse-mobile.png" alt="" />
+              <img src={LogoEB} alt="" />
             </div>
           ) : (
             <div className="menuLeft__logoContainer">
-              <img src="resources/images/logo-inverse.png" alt="" />
+              <img src={LogoEB} alt="" />
             </div>
           )}
         </div>
@@ -217,12 +218,12 @@ class MenuLeft extends React.Component {
             mode="inline"
             className="menuLeft__navigation"
           >
-            <Menu.Item key={'settings'}>
+            {/* <Menu.Item key={'settings'}>
               <span className="menuLeft__item-title">Theme Settings</span>
               <span
                 className={'icmn icmn-cog menuLeft__icon utils__spin-delayed--pseudo-selector'}
               />
-            </Menu.Item>
+            </Menu.Item> */}
             {menuItems}
           </Menu>
         </Scrollbars>
@@ -231,4 +232,5 @@ class MenuLeft extends React.Component {
   }
 }
 
-export { MenuLeft, menuData }
+//export { MenuLeft, menuData }
+export { MenuLeft }
