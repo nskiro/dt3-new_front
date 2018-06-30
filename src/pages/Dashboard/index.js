@@ -5,7 +5,7 @@ import EBImage from '../../images/OMNI.jpg'
 
 class DashboardAlphaPage extends React.Component {
   static defaultProps = {
-    pathName: 'Dashboard Alpha'
+    pathName: 'Dashboard Alpha',
   }
 
   render() {

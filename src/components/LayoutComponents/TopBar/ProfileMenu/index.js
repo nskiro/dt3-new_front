@@ -37,9 +37,7 @@ class ProfileMenu extends React.Component {
         <Menu.Item>
           <div className="rfq__widget__system-status__item">
             <strong>Hello, {userState.fullname}</strong>
-            <div>
-              Dept: {userState.dept.name}
-            </div>
+            <div>Dept: {userState.dept.name}</div>
           </div>
         </Menu.Item>
         <Menu.Divider />

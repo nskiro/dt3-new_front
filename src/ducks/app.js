@@ -86,8 +86,8 @@ export const logout = () => (dispatch, getState) => {
           name: '',
           avatar: {
             data: '',
-            mimetype: ''
-          }
+            mimetype: '',
+          },
         },
         roles: [],
         group: [],
@@ -138,8 +138,8 @@ const initialState = {
       name: '',
       avatar: {
         data: '',
-        mimetype: ''
-      }
+        mimetype: '',
+      },
     },
     roles: [],
     group: [],
