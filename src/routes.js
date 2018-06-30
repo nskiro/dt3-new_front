@@ -37,7 +37,7 @@ class Routes extends React.Component {
 
         try {
           if (link.com_view) {
-            console.log('link.com_view =>' + link.com_view)
+            //console.log('link.com_view =>' + link.com_view)
             let c = loadable(() => import('pages/' + link.com_view))
             loadableRoutes[`${link.name}`] = { component: c }
             // loadableRoutes[`${link.name}`].component.preload()
@@ -45,7 +45,7 @@ class Routes extends React.Component {
             console.log('menu name =' + link.name + '==>com_view =' + link.com_view)
           }
         } catch (ex) {
-          console.log('can not load component =>' + `${link.com_view}`)
+          console.log('can not load component =>' + link.com_view);
         }
       }
     }

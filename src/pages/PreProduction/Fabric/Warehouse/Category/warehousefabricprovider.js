@@ -20,23 +20,11 @@ const { DateLongFormatter, DateShortFormatter } = DateFormatter
 const button_size = 'small'
 
 class ProviderForm extends Component {
-  constructor(props) {
-    super(props)
-  }
-  onChangeProviderCode = v => {
-    this.setState({ provider_code: v })
-  }
   render() {
     const { visible, onCancel, onCreate, form } = this.props
     const { getFieldDecorator } = form
     return (
-      <Modal
-        title="SUPPILER"
-        visible={visible}
-        onOk={onCreate}
-        maskClosable={false}
-        onCancel={onCancel}
-      >
+      <Modal title="SUPPILER" visible={visible} onOk={onCreate} maskClosable={false} onCancel={onCancel}>
         <Form>
           <Grid>
             <Row className="show-grid">
@@ -48,12 +36,12 @@ class ProviderForm extends Component {
                 </FormItem>
               </Col>
 
-              <Col md={5} sm={8} xs={5}>
+              <Col md={12} sm={12} xs={12}>
                 <FormItem label={'SUPPLIER'}>
                   {getFieldDecorator('provider_code', {
                     rules: [{ required: true, message: 'Vui lòng nhập tên nhà cung cấp!' }],
                     initialValue: this.props.data.provider_code,
-                  })(<Input onChange={this.onChangeProviderCode} placeholder="nhà cung cấp" />)}
+                  })(<Input placeholder="nhà cung cấp" />)}
                 </FormItem>
               </Col>
             </Row>
@@ -71,7 +59,7 @@ ProviderForm.defaultProps = {}
 
 class WarehouseFabricProvider extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       expand: false,
       modalvisible: false,
@@ -86,7 +74,6 @@ class WarehouseFabricProvider extends Component {
   handleSearch = e => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
-      // console.log('Received values of form: ', values);
       if (values.provider_code) {
         this.loadSearchProviders(values)
       } else {
@@ -149,6 +136,8 @@ class WarehouseFabricProvider extends Component {
         provider_code: values.provider_code,
         provider_name: values.provider_name,
       }
+
+      if (!data.provider_name) { data.provider_name = data.provider_code; }
       if (values.id) {
         console.log('call update')
         axios
@@ -225,23 +214,14 @@ class WarehouseFabricProvider extends Component {
             <Form className="ant-advanced-search-panel " onSubmit={this.handleSearch}>
               <Grid>
                 <Row className="show-grid">
-                  <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
+                  <Col md={12} sm={12} xs={12} style={{ textAlign: 'left' }}>
                     <FormItem label={'SUPPLIER'}>
                       {getFieldDecorator('provider_code', {})(<Input placeholder="nhà cung cấp" />)}
                     </FormItem>
                   </Col>
                   <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
-                    <Button icon="search" size={button_size} type="primary" htmlType="submit">
-                      SEARCH
-                    </Button>
-                    <Button
-                      icon="sync"
-                      size={button_size}
-                      style={{ marginLeft: 8 }}
-                      onClick={this.handleReset}
-                    >
-                      CLEAR
-                    </Button>
+                    <Button icon="search" size={button_size} type="primary" htmlType="submit"> SEARCH</Button>
+                    <Button icon="sync" size={button_size} style={{ marginLeft: 8 }} onClick={this.handleReset}> CLEAR</Button>
                   </Col>
                 </Row>
               </Grid>
@@ -249,35 +229,9 @@ class WarehouseFabricProvider extends Component {
           </Panel>
         </Collapse>
         <div className="ant-advanced-toolbar">
-          <Button
-            icon="plus"
-            size={button_size}
-            type="primary"
-            value="new"
-            className="ant-advanced-toolbar-item"
-            onClick={this.showModal}
-          >
-            NEW
-          </Button>
-          <Button
-            icon="edit"
-            size={button_size}
-            type="primary"
-            value="edit"
-            className="ant-advanced-toolbar-item"
-            onClick={this.showModal}
-          >
-            EDIT
-          </Button>
-          <Button
-            icon="sync"
-            size={button_size}
-            type="primary"
-            className="ant-advanced-toolbar-item"
-            onClick={this.onRefeshGrid}
-          >
-            REFESH
-          </Button>
+          <Button icon="plus" size={button_size} type="primary" value="new" className="ant-advanced-toolbar-item" onClick={this.showModal} >NEW</Button>
+          <Button icon="edit" size={button_size} type="primary" value="edit" className="ant-advanced-toolbar-item" onClick={this.showModal}>EDIT</Button>
+          <Button icon="sync" size={button_size} type="primary" className="ant-advanced-toolbar-item" onClick={this.onRefeshGrid}> REFESH </Button>
         </div>
         <WrappedProviderForm
           wrappedComponentRef={this.saveFormRef}

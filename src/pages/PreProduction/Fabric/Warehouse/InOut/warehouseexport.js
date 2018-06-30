@@ -46,14 +46,18 @@ const default_cols = [
 ]
 
 class WarehouseExportForm extends Component {
-  constructor(props, context) {
-    super(props, context)
+  constructor(props) {
+    super(props);
     this.state = {
       exportdate: new Date(),
       provider_selected: 'small',
-      rows: this.props.data.details,
+      rows: !this.props.data.details ? [] : this.props.data.details,
       columns: [],
     }
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    this.setState({ rows: !nextProps.data.details ? [] : nextProps.data.details })
   }
 
   createNewRow = () => {
@@ -119,6 +123,7 @@ class WarehouseExportForm extends Component {
         console.log(err)
         this.setState({ data_providers: [], provider_size: 0 })
       })
+
   }
 
   loadFabricTypes = () => {
@@ -140,6 +145,7 @@ class WarehouseExportForm extends Component {
         console.log(err)
         this.setState({ columns: default_cols })
       })
+
   }
 
   loadFabricColors = ftypes => {
@@ -157,20 +163,8 @@ class WarehouseExportForm extends Component {
         }
         let cols = [
           { key: 'orderid', name: 'ORDER #', resizable: true, editable: true, width: 100 },
-          {
-            key: 'fabric_type',
-            name: 'TYPE',
-            editable: true,
-            resizable: true,
-            editor: <AutoCompleteEditor options={ftypes} />,
-          },
-          {
-            key: 'fabric_color',
-            name: 'COLOR',
-            editable: true,
-            resizable: true,
-            editor: <AutoCompleteEditor options={colors_grid} />,
-          },
+          { key: 'fabric_type', name: 'TYPE', editable: true, resizable: true, editor: <AutoCompleteEditor options={ftypes} />, },
+          { key: 'fabric_color', name: 'COLOR', editable: true, resizable: true, editor: <AutoCompleteEditor options={colors_grid} />, },
           { key: 'met', name: 'MET', resizable: true, editable: true },
           { key: 'roll', name: 'ROLL', resizable: true, editable: true },
           { key: 'po_no', name: 'PO', resizable: true, editable: true },
@@ -188,10 +182,11 @@ class WarehouseExportForm extends Component {
         this.setState({ columns: default_cols })
       })
   }
-  componentDidMount = async () => {
+  componentDidMount = () => {
     this.loadProviders()
     this.loadFabricTypes()
   }
+
   render() {
     const { visible, onCancel, onCreate } = this.props
     const { getFieldDecorator } = this.props.form
@@ -201,22 +196,8 @@ class WarehouseExportForm extends Component {
       wrapperCol: { xs: { span: 24 }, sm: { span: 16 } },
     }
 
-    /*
-        const tailFormItemLayout = {
-            wrapperCol: { xs: { span: 24, offset: 0, }, sm: { span: 16, offset: 8, }, },
-        };
-        */
-
     return (
-      <Modal
-        title={this.props.data.title}
-        visible={visible}
-        onOk={onCreate}
-        maskClosable={false}
-        onCancel={onCancel}
-        width={1024}
-        style={{ top: 5 }}
-      >
+      <Modal title={this.props.data.title} visible={visible} onOk={onCreate} maskClosable={false} onCancel={onCancel} width={1024} style={{ top: 5 }}>
         <Form className="ant-advanced-search-panel">
           <Grid>
             <Row className="show-grid">
@@ -234,24 +215,14 @@ class WarehouseExportForm extends Component {
                   {getFieldDecorator(
                     'inputdate_no',
                     { initialValue: moment(this.props.data.inputdate_no) },
-                    {
-                      rules: [
-                        {
-                          type: 'object',
-                          required: true,
-                          message: 'Vui lòng chọn thời gian xuất kho !',
-                        },
-                      ],
-                    },
+                    { rules: [{ type: 'object', required: true, message: 'Vui lòng chọn thời gian xuất kho !', },], },
                   )(<DatePicker format={dateFormat} disabled />)}
                 </FormItem>
               </Col>
             </Row>
             <Row className="show-grid">
               <Col md={10} sm={10} xs={10}>
-                <Button icon="plus" size={button_size} onClick={this.addNewRow}>
-                  New row
-                </Button>
+                <Button icon="plus" size={button_size} onClick={this.addNewRow}> New row </Button>
               </Col>
             </Row>
             <Row className="show-grid">
@@ -279,6 +250,9 @@ WarehouseExportForm.propTypes = {
 }
 WarehouseExportForm.defaultProps = {}
 
+
+const WrappedWarehouseExportForm = Form.create()(WarehouseExportForm)
+
 class WarehouseExport extends Component {
   constructor(props) {
     super(props)
@@ -297,7 +271,6 @@ class WarehouseExport extends Component {
   handleSearch = e => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
-      //console.log('Received values of form: ', values);
       if (values.from_date) {
         values.from_date = values.from_date.format('YYYY-MM-DD')
       }
@@ -312,7 +285,6 @@ class WarehouseExport extends Component {
 
   handleReset = () => {
     this.props.form.resetFields()
-    // this.loadFabricWarehouses({});
   }
 
   onRefeshGrid = () => {
@@ -328,6 +300,7 @@ class WarehouseExport extends Component {
   showModal = e => {
     if (e) {
       let mod = e.target.value
+
       if (mod === 'new') {
         this.setState({
           modalvisible: true,
@@ -401,8 +374,6 @@ class WarehouseExport extends Component {
       .get('api/fabric/export/get', { params: v })
       .then(res => {
         let data = res.data
-        // update data
-        //console.log(data);
         this.setState({ warehouse_import_data: data })
       })
       .catch(err => {
@@ -450,8 +421,6 @@ class WarehouseExport extends Component {
         axios
           .post('api/fabric/export/add', { data: data, detail: data_collect.data })
           .then(res => {
-            //console.log(res.data);
-            //this.loadFabricWarehouses({});
             form.resetFields()
             this.setState({ modalvisible: false })
           })
@@ -462,16 +431,8 @@ class WarehouseExport extends Component {
               let msg = dt_error.error + '\n\n'
               for (let k = 0; k < dt_error.data.length; k++) {
                 let r = dt_error.data[k]
-                msg +=
-                  ' - ' +
-                  r.fabric_type +
-                  ' - ' +
-                  r.fabric_color +
-                  ': met = ' +
-                  r.met +
-                  ', roll = ' +
-                  r.roll +
-                  '\n'
+               // msg += ' - ' + r.fabric_type + ' - ' + r.fabric_color + ': met = ' + r.met + ', roll = ' + r.roll + '\n'
+               msg += ' - ' + r.fabric_type + ' - ' + r.fabric_color + ": met/inventory = " + r.met + "/" + r.met_inventory + ", roll/inventory = " + r.roll + "/" + r.roll_inventory + "\n";
               }
               alert(msg)
             }
@@ -498,11 +459,9 @@ class WarehouseExport extends Component {
       let row_selected = this.state.warehouse_import_data[index]
       this.setState({ data_export_selected: row_selected })
     }
-    // console.log('selected =>' + JSON.stringify(this.state.data_export_selected));
   }
 
   render() {
-    const WrappedWarehouseExportForm = Form.create()(WarehouseExportForm)
     const { getFieldDecorator } = this.props.form
     const columns = [
       { key: 'inputdate_no', name: 'EX DATE', formatter: DateShortFormatter },
@@ -546,17 +505,8 @@ class WarehouseExport extends Component {
 
                 <Row className="show-grid">
                   <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
-                    <Button icon="search" size={button_size} type="primary" htmlType="submit">
-                      SEARCH
-                    </Button>
-                    <Button
-                      icon="sync"
-                      size={button_size}
-                      style={{ marginLeft: 8 }}
-                      onClick={this.handleReset}
-                    >
-                      CLEAR
-                    </Button>
+                    <Button icon="search" size={button_size} type="primary" htmlType="submit">SEARCH</Button>
+                    <Button icon="sync" size={button_size} style={{ marginLeft: 8 }} onClick={this.handleReset}>CLEAR</Button>
                   </Col>
                 </Row>
               </Grid>
@@ -565,26 +515,8 @@ class WarehouseExport extends Component {
         </Collapse>
 
         <div className="ant-advanced-toolbar">
-          <Button
-            icon="plus"
-            size={button_size}
-            type="primary"
-            value="new"
-            className="ant-advanced-toolbar-item"
-            onClick={this.showModal}
-          >
-            NEW
-          </Button>
-          <Button
-            icon="edit"
-            size={button_size}
-            type="primary"
-            value="detail"
-            className="ant-advanced-toolbar-item"
-            onClick={this.showModal}
-          >
-            DETAIL
-          </Button>
+          <Button icon="plus" size={button_size} type="primary" value="new" className="ant-advanced-toolbar-item" onClick={this.showModal}>NEW</Button>
+          <Button icon="edit" size={button_size} type="primary" value="detail" className="ant-advanced-toolbar-item" onClick={this.showModal}>DETAIL</Button>
         </div>
 
         <WrappedWarehouseExportForm
