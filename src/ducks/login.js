@@ -17,14 +17,15 @@ export const submit = ({ username, password }: { username: string, password: str
   //   dispatch(app.deleteSubmitForm(REDUCER))
   //   message.error('Invalid username or password')
   // }
-  app.login(username, password, dispatch)
-  .then((value) => {
-    dispatch(app.deleteSubmitForm(REDUCER))
-  })
-  .catch((err) => {
-    dispatch(app.deleteSubmitForm(REDUCER))
-    alert(err)
-  })
+  app
+    .login(username, password, dispatch)
+    .then(value => {
+      dispatch(app.deleteSubmitForm(REDUCER))
+    })
+    .catch(err => {
+      dispatch(app.deleteSubmitForm(REDUCER))
+      alert(err)
+    })
 }
 
 const initialState = {}
