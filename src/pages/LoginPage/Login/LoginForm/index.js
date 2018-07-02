@@ -66,9 +66,9 @@ class LoginForm extends React.Component {
               style={{ width: '100%' }}
               size="large"
               htmlType="submit"
-              loading={this.state.loading}
+              loading={this.props.isSubmitForm}
             >
-              {this.state.loading ? 'Loading...! Please wait' : 'Login'}
+              {this.props.isSubmitForm ? 'Loading...! Please wait' : 'Login'}
             </Button>
           </div>
         </Form>

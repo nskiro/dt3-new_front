@@ -85,7 +85,7 @@ button, input, select, textarea {
 
   // main container
   &__content {
-    padding: rem(30);
+    padding: rem(30) rem(10);
 
     @media (max-width: $md-max-width) {
       padding: rem(30) rem(20);

@@ -64,14 +64,14 @@ export async function login(username, password, dispatch) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token
       dispatch(_setHideLogin(true))
       dispatch(push('/'))
-      return true
+      return Promise.resolve(true)
     } else {
       dispatch(push('/login'))
       dispatch(_setFrom(''))
-      return false
+      return Promise.resolve(false)
     }
   } catch (err) {
-    console.log(err)
+    return Promise.reject(err.response.data)
   }
 }
 

@@ -13,7 +13,11 @@ class ProfilePage extends Component {
     return (
       <Page {...props}>
         <Helmet title="Your Profile" />
-        <ProfileForm />
+        <section className="card">
+          <div className="card-body">
+            <ProfileForm />
+          </div>
+        </section>
       </Page>
     )
   }
