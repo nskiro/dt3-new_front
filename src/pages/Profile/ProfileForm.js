@@ -28,7 +28,8 @@ const mapDispatchToProps = (dispatch, props) => ({
 )
 @Form.create()
 class ProfileForm extends Component {
-  changePassword = () => {
+  changePassword = e => {
+    e.preventDefault()
     this.personalInfoForm.validateFields((err, value) => {
       if (!err) {
         axios
@@ -42,7 +43,8 @@ class ProfileForm extends Component {
       }
     })
   }
-  updateDeptNote = () => {
+  updateDeptNote = e => {
+    e.preventDefault()
     this.deptInfoForm.validateFields((err, value) => {
       if (!err) {
         axios
