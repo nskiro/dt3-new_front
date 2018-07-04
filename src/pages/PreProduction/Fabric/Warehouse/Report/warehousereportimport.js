@@ -59,7 +59,6 @@ class WarehouseReportImport extends Component {
         console.log(err)
         this.setState({ data_providers: [] })
       })
-
   }
   loadFabricColors = () => {
     axios
@@ -78,13 +77,11 @@ class WarehouseReportImport extends Component {
             }
           }
         }
-        this.setState({data_colors: data_uni})
-
+        this.setState({ data_colors: data_uni })
       })
       .catch(err => {
         this.setState({ data_colors: [] })
       })
-
   }
 
   loadFabricTypes = () => {
@@ -301,9 +298,13 @@ class WarehouseReportImport extends Component {
     const { data_import, data_types, data_providers } = this.state
     const import_columns = [
       {
-        key: 'inputdate_no', dataIndex: 'inputdate_no', title: 'DATE', name: 'DATE', render: (text, record) => (
+        key: 'inputdate_no',
+        dataIndex: 'inputdate_no',
+        title: 'DATE',
+        name: 'DATE',
+        render: (text, record) => (
           <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_LONG_DATE)}</span>
-        )
+        ),
       },
       { key: 'invoice_no', dataIndex: 'invoice_no', title: 'INVOICE #', name: 'INVOICE #' },
       { key: 'orderid', dataIndex: 'orderid', title: 'ORDER #', name: 'ORDER #' },
@@ -314,9 +315,13 @@ class WarehouseReportImport extends Component {
       { key: 'roll', dataIndex: 'roll', title: 'ROLL', name: 'ROLL' },
       { key: 'declare_no', dataIndex: 'declare_no', title: 'STK', name: 'STK' },
       {
-        key: 'declare_date', dataIndex: 'declare_date', title: 'STK DATE', name: 'STK DATE', render: (text, record) => (
+        key: 'declare_date',
+        dataIndex: 'declare_date',
+        title: 'STK DATE',
+        name: 'STK DATE',
+        render: (text, record) => (
           <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_SHORT_DATE)}</span>
-        )
+        ),
       },
     ]
 
@@ -344,7 +349,9 @@ class WarehouseReportImport extends Component {
                   )}
                 </FormItem>
                 <FormItem label={'TO DATE'}>
-                  {getFieldDecorator('to_date', {})(<DatePicker size={size} format={FORMAT_SHORT_DATE} />)}
+                  {getFieldDecorator('to_date', {})(
+                    <DatePicker size={size} format={FORMAT_SHORT_DATE} />,
+                  )}
                 </FormItem>
               </Col>
             </Row>
@@ -355,7 +362,8 @@ class WarehouseReportImport extends Component {
                     <AutoComplete
                       placeholder="nhà cung cấp"
                       dataSource={this.state.data_providers}
-                      filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                      filterOption={(inputValue, option) =>
+                        option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
                       }
                     />,
                   )}
@@ -365,7 +373,8 @@ class WarehouseReportImport extends Component {
                     <AutoComplete
                       placeholder="loại vải"
                       dataSource={this.state.data_types}
-                      filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                      filterOption={(inputValue, option) =>
+                        option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
                       }
                     />,
                   )}
@@ -425,13 +434,15 @@ class WarehouseReportImport extends Component {
               rowKey={'_id'}
               columns={import_columns}
               dataSource={data_import}
-              rowClassName={(record, index) => { return index % 2 === 0 ? 'even-row' : 'old-row' }}
+              rowClassName={(record, index) => {
+                return index % 2 === 0 ? 'even-row' : 'old-row'
+              }}
               onRow={record => {
                 return {
                   onClick: () => {
                     //this.setState({ selected_fabrictype: record })
                   },
-                  onMouseEnter: () => { },
+                  onMouseEnter: () => {},
                 }
               }}
               size="small"

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Grid, Row, Col } from 'react-bootstrap'
-import { Input, Button, Form, Modal, Collapse,Table } from 'antd'
+import { Input, Button, Form, Modal, Collapse, Table } from 'antd'
 import PropTypes from 'prop-types'
 
 import ReactDataGrid from 'react-data-grid'
@@ -9,7 +9,7 @@ import ReactDataGrid from 'react-data-grid'
 import RowRenderer from '../rowrenderer'
 import DateFormatter from '../dateformatter'
 
-import moment from 'moment';
+import moment from 'moment'
 import axios from '../../../../../axiosInst'
 //css
 import '../views.css'
@@ -18,7 +18,7 @@ const FormItem = Form.Item
 const Panel = Collapse.Panel
 const { DateLongFormatter, DateShortFormatter } = DateFormatter
 const button_size = 'small'
-const FORMAT_LONG_DATE='MM/DD/YYYY HH:mm:ss'
+const FORMAT_LONG_DATE = 'MM/DD/YYYY HH:mm:ss'
 
 class ProviderForm extends Component {
   render() {
@@ -213,12 +213,24 @@ class WarehouseFabricProvider extends Component {
     const columns = [
       // {key: '_id', name: 'id', hidd: false },
       { key: 'provider_code', dataIndex: 'provider_code', title: 'SUPPLIER', name: 'SUPPLIER' },
-      { key: 'create_date', dataIndex: 'create_date', title: 'CREATE DATE',name: 'CREATE DATE', render: (text, record) => (
-        <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_LONG_DATE)}</span>
-      ) },
-      { key: 'update_date', dataIndex: 'update_date', title: 'UPDATE DATE', name: 'UPDATE DATE', render: (text, record) => (
-        <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_LONG_DATE)}</span>
-      ) },
+      {
+        key: 'create_date',
+        dataIndex: 'create_date',
+        title: 'CREATE DATE',
+        name: 'CREATE DATE',
+        render: (text, record) => (
+          <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_LONG_DATE)}</span>
+        ),
+      },
+      {
+        key: 'update_date',
+        dataIndex: 'update_date',
+        title: 'UPDATE DATE',
+        name: 'UPDATE DATE',
+        render: (text, record) => (
+          <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_LONG_DATE)}</span>
+        ),
+      },
     ]
     return (
       <div>
@@ -296,7 +308,9 @@ class WarehouseFabricProvider extends Component {
           rowKey={'_id'}
           columns={columns}
           dataSource={this.state.data_providers}
-          rowClassName={ (record, index) => { return index%2===0?'even-row':'old-row' }   }   
+          rowClassName={(record, index) => {
+            return index % 2 === 0 ? 'even-row' : 'old-row'
+          }}
           onRow={record => {
             return {
               onClick: () => {
@@ -308,7 +322,6 @@ class WarehouseFabricProvider extends Component {
           size="small"
           bordered
         />
-       
       </div>
     )
   }

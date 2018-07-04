@@ -503,14 +503,22 @@ class WarehouseExport extends Component {
     const { getFieldDecorator } = this.props.form
     const columns = [
       {
-        key: 'inputdate_no', dataIndex: 'inputdate_no', title: 'EX DATE', name: 'EX DATE', render: (text, record) => (
+        key: 'inputdate_no',
+        dataIndex: 'inputdate_no',
+        title: 'EX DATE',
+        name: 'EX DATE',
+        render: (text, record) => (
           <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_SHORT_DATE)}</span>
-        )
+        ),
       },
       {
-        key: 'create_date', dataIndex: 'create_date', title: 'CREATE DATE', name: 'CREATE DATE', render: (text, record) => (
+        key: 'create_date',
+        dataIndex: 'create_date',
+        title: 'CREATE DATE',
+        name: 'CREATE DATE',
+        render: (text, record) => (
           <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_LONG_DATE)}</span>
-        )
+        ),
       },
     ]
     return (
@@ -522,12 +530,16 @@ class WarehouseExport extends Component {
                 <Row className="show-grid">
                   <Col md={4} sm={6} xs={6} style={{ textAlign: 'left' }}>
                     <FormItem label="FROM EX DATE ">
-                      {getFieldDecorator('from_date', {}, {})(<DatePicker format={FORMAT_SHORT_DATE} />)}
+                      {getFieldDecorator('from_date', {}, {})(
+                        <DatePicker format={FORMAT_SHORT_DATE} />,
+                      )}
                     </FormItem>
                   </Col>
                   <Col md={4} sm={6} xs={6} style={{ textAlign: 'left' }}>
                     <FormItem label="TO EX DATE ">
-                      {getFieldDecorator('to_date', {}, {})(<DatePicker format={FORMAT_SHORT_DATE} />)}
+                      {getFieldDecorator('to_date', {}, {})(
+                        <DatePicker format={FORMAT_SHORT_DATE} />,
+                      )}
                     </FormItem>
                   </Col>
                 </Row>
@@ -604,19 +616,20 @@ class WarehouseExport extends Component {
           rowKey={'_id'}
           columns={columns}
           dataSource={this.state.warehouse_import_data}
-          rowClassName={(record, index) => { return index % 2 === 0 ? 'even-row' : 'old-row' }}
+          rowClassName={(record, index) => {
+            return index % 2 === 0 ? 'even-row' : 'old-row'
+          }}
           onRow={record => {
             return {
               onClick: () => {
                 this.setState({ data_export_selected: record })
               },
-              onMouseEnter: () => { },
+              onMouseEnter: () => {},
             }
           }}
           size="small"
           bordered
         />
-
       </div>
     )
   }

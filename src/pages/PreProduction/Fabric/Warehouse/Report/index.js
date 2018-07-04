@@ -26,9 +26,43 @@ class ViewWarehouseReport extends Component {
         <section className="card">
           <div className="card-body">
             <Tabs defaultActiveKey="1" size={tab_size}>
-              <TabPane tab={<span> {' '} <Icon type="arrow-down" />IMPORT</span>} size={tab_size} key="1" ><WapperImports /></TabPane>
-              <TabPane tab={<span>{' '} <Icon type="arrow-up" />EXPORT </span>} size={tab_size} key="2" ><WapperExports /></TabPane>
-              <TabPane tab={<span> {' '} <Icon type="table" />INVENTORY{' '} </span>} size={tab_size} key="3" >{' '}<WapperInventory /></TabPane>
+              <TabPane
+                tab={
+                  <span>
+                    {' '}
+                    <Icon type="arrow-down" />IMPORT
+                  </span>
+                }
+                size={tab_size}
+                key="1"
+              >
+                <WapperImports />
+              </TabPane>
+              <TabPane
+                tab={
+                  <span>
+                    {' '}
+                    <Icon type="arrow-up" />EXPORT{' '}
+                  </span>
+                }
+                size={tab_size}
+                key="2"
+              >
+                <WapperExports />
+              </TabPane>
+              <TabPane
+                tab={
+                  <span>
+                    {' '}
+                    <Icon type="table" />INVENTORY{' '}
+                  </span>
+                }
+                size={tab_size}
+                key="3"
+              >
+                {' '}
+                <WapperInventory />
+              </TabPane>
             </Tabs>
           </div>
         </section>

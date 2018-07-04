@@ -29,7 +29,7 @@ class FormTransDetail extends Component {
       data_trans: [],
       data_search: {},
       fabric_color: '',
-      fabric_type: ''
+      fabric_type: '',
     }
   }
   onSearchDetailTrans = e => {
@@ -58,7 +58,7 @@ class FormTransDetail extends Component {
         .get('api/fabric/warehouse/getinventorytrans', { params: values })
         .then(res => {
           this.setState({ data_trans: res.data })
-          console.log('values search data_trans: =>' + JSON.stringify(res.data));
+          console.log('values search data_trans: =>' + JSON.stringify(res.data))
         })
         .catch(err => {
           console.log(err)
@@ -194,9 +194,13 @@ class FormTransDetail extends Component {
     return dataset
   }
 
-  componentWillReceiveProps = (nextprops) => {
+  componentWillReceiveProps = nextprops => {
     if (nextprops.data) {
-      this.setState({ fabric_color: nextprops.data.fabric_color, fabric_type: nextprops.data.fabric_type,data_trans:[] })
+      this.setState({
+        fabric_color: nextprops.data.fabric_color,
+        fabric_type: nextprops.data.fabric_type,
+        data_trans: [],
+      })
     }
     // console.log('nextprops =>'+ JSON.stringify(nextprops) );
   }
@@ -209,54 +213,86 @@ class FormTransDetail extends Component {
     const { data_trans } = this.state
     const transDetailDataset = this.inventoryTransDetailDataset()
     const inventory_trans_colums = [
-      { key: 'stt', dataIndex: 'stt', title: 'STT', name: 'STT', width: 60, resizable: true, fixed: 'left' },
+      {
+        key: 'stt',
+        dataIndex: 'stt',
+        title: 'STT',
+        name: 'STT',
+        width: 60,
+        resizable: true,
+        fixed: 'left',
+      },
       { key: 'invoice_no', dataIndex: 'invoice_no', title: 'STK', name: 'STK', fixed: 'left' },
       {
-        key: 'im_inputdate_no', dataIndex: 'im_inputdate_no', title: 'IM DATE',
+        key: 'im_inputdate_no',
+        dataIndex: 'im_inputdate_no',
+        title: 'IM DATE',
         name: 'IM DATE',
         resizable: true,
         render: (text, record, index) => {
           return (
-            <span>{text === null|| text===undefined ? '' : moment(new Date(text)).format(FORMAT_LONG_DATE)}</span>
+            <span>
+              {text === null || text === undefined
+                ? ''
+                : moment(new Date(text)).format(FORMAT_LONG_DATE)}
+            </span>
           )
-        }
+        },
       },
       {
-        key: 'ex_inputdate_no', dataIndex: 'ex_inputdate_no', title: 'EX DATE',
+        key: 'ex_inputdate_no',
+        dataIndex: 'ex_inputdate_no',
+        title: 'EX DATE',
         name: 'EX DATE',
         resizable: true,
         render: (text, record, index) => {
           console.log('Text=>' + text)
           return (
-            <span>{text === null|| text===undefined ? '' : moment(new Date(text)).format(FORMAT_LONG_DATE)}</span>
+            <span>
+              {text === null || text === undefined
+                ? ''
+                : moment(new Date(text)).format(FORMAT_LONG_DATE)}
+            </span>
           )
-        }
+        },
       },
-      { key: 'im_met', dataIndex: 'im_met', title: 'IM MET', name: 'IM MET', resizable: true, },
-      { key: 'ex_met', dataIndex: 'ex_met', title: 'EX MET', name: 'EX MET', resizable: true, },
-      { key: 'met', dataIndex: 'met', title: 'MET', name: 'MET', resizable: true, },
-      { key: 'im_roll', dataIndex: 'im_roll', title: 'IM ROLL', name: 'IM ROLL', resizable: true, },
-      { key: 'ex_roll', dataIndex: 'ex_roll', title: 'EX ROLL', name: 'EX ROLL', resizable: true, },
-      { key: 'roll', dataIndex: 'roll', title: 'ROLL', name: 'ROLL', resizable: true, },
-      { key: 'orderid', dataIndex: 'orderid', title: 'ORDER#', name: 'ORDER#', resizable: true, },
-      { key: 'po_no', dataIndex: 'po_no', title: 'PO#', name: 'PO#', resizable: true, },
-      { key: 'line_no', dataIndex: 'line_no', title: 'LINE#', name: 'LINE#', resizable: true, },
-      { key: 'sku', dataIndex: 'sku', title: 'SKU', name: 'SKU', resizable: true, },
-      { key: 'des', dataIndex: 'des', title: 'DESCRIPTION', name: 'DESCRIPTION', resizable: true, },
-      { key: 'qty', dataIndex: 'qty', title: 'QTY', name: 'QTY', resizable: true, },
-      { key: 'yield', dataIndex: 'yield', title: 'YIELD', name: 'YIELD', resizable: true, },
-      { key: 'fab_qty', dataIndex: 'fab_qty', title: 'FAB_QTY', name: 'FAB_QTY', resizable: true, },
+      { key: 'im_met', dataIndex: 'im_met', title: 'IM MET', name: 'IM MET', resizable: true },
+      { key: 'ex_met', dataIndex: 'ex_met', title: 'EX MET', name: 'EX MET', resizable: true },
+      { key: 'met', dataIndex: 'met', title: 'MET', name: 'MET', resizable: true },
+      { key: 'im_roll', dataIndex: 'im_roll', title: 'IM ROLL', name: 'IM ROLL', resizable: true },
+      { key: 'ex_roll', dataIndex: 'ex_roll', title: 'EX ROLL', name: 'EX ROLL', resizable: true },
+      { key: 'roll', dataIndex: 'roll', title: 'ROLL', name: 'ROLL', resizable: true },
+      { key: 'orderid', dataIndex: 'orderid', title: 'ORDER#', name: 'ORDER#', resizable: true },
+      { key: 'po_no', dataIndex: 'po_no', title: 'PO#', name: 'PO#', resizable: true },
+      { key: 'line_no', dataIndex: 'line_no', title: 'LINE#', name: 'LINE#', resizable: true },
+      { key: 'sku', dataIndex: 'sku', title: 'SKU', name: 'SKU', resizable: true },
+      { key: 'des', dataIndex: 'des', title: 'DESCRIPTION', name: 'DESCRIPTION', resizable: true },
+      { key: 'qty', dataIndex: 'qty', title: 'QTY', name: 'QTY', resizable: true },
+      { key: 'yield', dataIndex: 'yield', title: 'YIELD', name: 'YIELD', resizable: true },
+      { key: 'fab_qty', dataIndex: 'fab_qty', title: 'FAB_QTY', name: 'FAB_QTY', resizable: true },
       { key: 'note', dataIndex: 'note', title: 'NOTE', name: 'NOTE', resizable: true },
     ]
 
     return (
-      <Modal title="VIEW DETAIL" visible={visible} onOk={onCreate} maskClosable={false} onCancel={onCancel} width={1000} style={{ top: 5 }}>
+      <Modal
+        title="VIEW DETAIL"
+        visible={visible}
+        onOk={onCreate}
+        maskClosable={false}
+        onCancel={onCancel}
+        width={1000}
+        style={{ top: 5 }}
+      >
         <div>
           <Form className="ant-advanced-search-panel ">
             <Grid>
               <Row className="show-grid">
                 <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
-                  <div> <b> TYPE:</b> {fabric_type}{' '}</div></Col>
+                  <div>
+                    {' '}
+                    <b> TYPE:</b> {fabric_type}{' '}
+                  </div>
+                </Col>
                 <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
                   <div>
                     <b> COLOR:</b> {fabric_color}{' '}
@@ -332,7 +368,9 @@ class FormTransDetail extends Component {
             rowKey={'_id'}
             columns={inventory_trans_colums}
             dataSource={data_trans}
-            rowClassName={(record, index) => { return index % 2 === 0 ? 'even-row' : 'old-row' }}
+            rowClassName={(record, index) => {
+              return index % 2 === 0 ? 'even-row' : 'old-row'
+            }}
             size="small"
             scroll={{ x: 1300 }}
             bordered
@@ -358,7 +396,6 @@ class WarehouseReportInvent extends Component {
 
       s_fabric_type: [],
       s_fabric_color: [],
-
     }
   }
   handleSearchInventory = e => {
@@ -466,7 +503,6 @@ class WarehouseReportInvent extends Component {
   }
   */
   loadFabricColors = () => {
-
     axios
       .get('api/fabric/color/get', { params: {} })
       .then(res => {
@@ -486,11 +522,9 @@ class WarehouseReportInvent extends Component {
       .catch(err => {
         this.setState({ data_colors: [] })
       })
-
   }
 
   loadFabricTypes = () => {
-
     console.log('loadFabricTypes')
     axios
       .get('api/fabric/type/get', { params: {} })
@@ -512,7 +546,6 @@ class WarehouseReportInvent extends Component {
         console.log(err)
         this.setState({ data_types: [] })
       })
-
   }
 
   componentDidMount = () => {
@@ -557,8 +590,20 @@ class WarehouseReportInvent extends Component {
 
     const inventory_colums = [
       { key: 'stt', dataIndex: 'stt', title: 'STT', name: 'STT', resizable: true, width: 60 },
-      { key: 'fabric_type', dataIndex: 'fabric_type', title: 'TYPE', resizable: true, name: 'TYPE' },
-      { key: 'fabric_color', dataIndex: 'fabric_color', title: 'COLOR', resizable: true, name: 'COLOR' },
+      {
+        key: 'fabric_type',
+        dataIndex: 'fabric_type',
+        title: 'TYPE',
+        resizable: true,
+        name: 'TYPE',
+      },
+      {
+        key: 'fabric_color',
+        dataIndex: 'fabric_color',
+        title: 'COLOR',
+        resizable: true,
+        name: 'COLOR',
+      },
       { key: 'met', dataIndex: 'met', title: 'INV MET', resizable: true, name: 'INV MET' },
       { key: 'roll', dataIndex: 'roll', title: 'INV ROLL', resizable: true, name: 'INV ROLL' },
     ]
@@ -581,11 +626,7 @@ class WarehouseReportInvent extends Component {
               <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
                 <FormItem label={'TYPE '}>
                   {getFieldDecorator('fabric_type', {})(
-                    <Select
-                      mode="tags"
-                      style={{ width: '100%' }}
-                      tokenSeparators={[',']}
-                    >
+                    <Select mode="tags" style={{ width: '100%' }} tokenSeparators={[',']}>
                       {this.state.data_types}
                     </Select>,
                   )}
@@ -594,11 +635,7 @@ class WarehouseReportInvent extends Component {
               <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
                 <FormItem label={'COLOR '}>
                   {getFieldDecorator('fabric_color', {})(
-                    <Select
-                      mode="tags"
-                      style={{ width: '100%' }}
-                      tokenSeparators={[',']}
-                    >
+                    <Select mode="tags" style={{ width: '100%' }} tokenSeparators={[',']}>
                       {this.state.data_colors}
                     </Select>,
                   )}
@@ -624,8 +661,7 @@ class WarehouseReportInvent extends Component {
         </Form>
         {this.state.show_grid_result === true ? (
           <div>
-
-            <div >
+            <div>
               <ExcelFile
                 element={
                   <Button icon="export" size={button_size} type="primary">
@@ -654,13 +690,15 @@ class WarehouseReportInvent extends Component {
               rowKey={'_id'}
               columns={inventory_colums}
               dataSource={data_inventory}
-              rowClassName={(record, index) => { return index % 2 === 0 ? 'even-row' : 'old-row' }}
+              rowClassName={(record, index) => {
+                return index % 2 === 0 ? 'even-row' : 'old-row'
+              }}
               onRow={record => {
                 return {
                   onClick: () => {
                     this.setState({ data_inventory_selected: record })
                   },
-                  onMouseEnter: () => { },
+                  onMouseEnter: () => {},
                 }
               }}
               size="small"

@@ -563,30 +563,44 @@ class WarehouseImport extends Component {
   }
 
   onShowSizeChange = (current, pageSize) => {
-    console.log(current, pageSize);
+    console.log(current, pageSize)
   }
-
 
   render() {
     const { getFieldDecorator } = this.props.form
     const { warehouse_import_data } = this.state
     const columns = [
       {
-        key: 'inputdate_no', dataIndex: 'inputdate_no', title: 'DATE', name: 'DATE', render: (text, record) => (
+        key: 'inputdate_no',
+        dataIndex: 'inputdate_no',
+        title: 'DATE',
+        name: 'DATE',
+        render: (text, record) => (
           <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_LONG_DATE)}</span>
-        )
+        ),
       },
       { key: 'provider_name', dataIndex: 'provider_name', title: 'SUPPLIER', name: 'SUPPLIER' },
       { key: 'declare_no', dataIndex: 'declare_no', title: 'STK', name: 'STK' },
       {
-        key: 'declare_date', dataIndex: 'declare_date', title: 'STK DATE', name: 'STK DATE', render: (text, record) => (
+        key: 'declare_date',
+        dataIndex: 'declare_date',
+        title: 'STK DATE',
+        name: 'STK DATE',
+        render: (text, record) => (
           <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_SHORT_DATE)}</span>
-        )
+        ),
       },
       { key: 'invoice_no', dataIndex: 'invoice_no', title: 'INVOICE #', name: 'INVOICE #' },
     ]
 
-    const pagination = <Pagination showSizeChanger onShowSizeChange={this.onShowSizeChange} defaultCurrent={1} total={warehouse_import_data.length} />
+    const pagination = (
+      <Pagination
+        showSizeChanger
+        onShowSizeChange={this.onShowSizeChange}
+        defaultCurrent={1}
+        total={warehouse_import_data.length}
+      />
+    )
 
     return (
       <div>
@@ -682,13 +696,15 @@ class WarehouseImport extends Component {
           rowKey={'_id'}
           columns={columns}
           dataSource={this.state.warehouse_import_data}
-          rowClassName={(record, index) => { return index % 2 === 0 ? 'even-row' : 'old-row' }}
+          rowClassName={(record, index) => {
+            return index % 2 === 0 ? 'even-row' : 'old-row'
+          }}
           onRow={record => {
             return {
               onClick: () => {
                 this.setState({ selected_warehouse_import: record })
               },
-              onMouseEnter: () => { },
+              onMouseEnter: () => {},
             }
           }}
           size="small"
