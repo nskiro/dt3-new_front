@@ -13,9 +13,7 @@ class UploadPDFPage extends Component {
       <Page {...props}>
         <Helmet title="Upload PDF Report" />
         <section className="card">
-          <div className="card-body">
-            Form upload
-          </div>
+          <div className="card-body">Form upload</div>
         </section>
       </Page>
     )
