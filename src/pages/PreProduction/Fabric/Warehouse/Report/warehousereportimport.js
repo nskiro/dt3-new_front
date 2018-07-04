@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Grid, Row, Col } from 'react-bootstrap'
 import ExcelFileSheet from 'react-data-export'
-import { AutoComplete, InputNumber, Form, Button, DatePicker, Select } from 'antd'
+import { AutoComplete, InputNumber, Form, Button, DatePicker, Select, Table } from 'antd'
 import ReactDataGrid from 'react-data-grid'
 
 import RowRenderer from '../rowrenderer'
@@ -13,23 +13,10 @@ import '../views.css'
 const Option = Select.Option
 const FormItem = Form.Item
 const { ExcelFile, ExcelSheet } = ExcelFileSheet
-const { DateShortFormatter } = DateFormatter
 
-const dateFormat = 'MM/DD/YYYY'
+const FORMAT_SHORT_DATE = 'MM/DD/YYYY'
+const FORMAT_LONG_DATE = 'MM/DD/YYYY HH:mm:ss'
 const button_size = 'small'
-
-const import_columns = [
-  { key: 'inputdate_no', name: 'DATE', formatter: DateShortFormatter },
-  { key: 'invoice_no', name: 'INVOICE #' },
-  { key: 'orderid', name: 'ORDER #' },
-  { key: 'provider_name', name: 'SUPPLIER' },
-  { key: 'fabric_type', name: 'CODE' },
-  { key: 'fabric_color', name: 'COLOR' },
-  { key: 'met', name: 'MET' },
-  { key: 'roll', name: 'ROLL' },
-  { key: 'declare_no', name: 'STK' },
-  { key: 'declare_date', name: 'STK DATE', formatter: DateShortFormatter },
-]
 
 class WarehouseReportImport extends Component {
   constructor(props) {
@@ -37,6 +24,7 @@ class WarehouseReportImport extends Component {
     this.state = {
       data_import: [],
       data_providers: [],
+      data_types: [],
       show_grid_result: false,
       si_data: {
         si_from_date: undefined,
@@ -47,60 +35,56 @@ class WarehouseReportImport extends Component {
         si_type: undefined,
         si_color: undefined,
       },
-
-      fprovider_mouted: false,
-      fcolor_mouted: false,
-      ftype_mouted: false,
     }
   }
 
   loadProviders = v => {
-    if (this.state.fprovider_mouted) {
-      axios
-        .get('api/fabric/provider/get', { params: {} })
-        .then(res => {
-          let data = res.data
-          let children = []
-          let children_uni = []
-          for (let i = 0; i < data.length; i++) {
-            if (data[i].provider_code && children_uni.indexOf(data[i].provider_code) === -1) {
-              children.push(<Option key={data[i].provider_code}>{data[i].provider_code}</Option>)
-              children_uni.push(data[i].provider_code)
-            }
+    axios
+      .get('api/fabric/provider/get', { params: {} })
+      .then(res => {
+        let data = res.data
+        let children = []
+        let children_uni = []
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].provider_code && children_uni.indexOf(data[i].provider_code) === -1) {
+            children.push(<Option key={data[i].provider_code}>{data[i].provider_code}</Option>)
+            children_uni.push(data[i].provider_code)
           }
-          this.setState({
-            data_providers: children_uni,
-          })
+        }
+        this.setState({
+          data_providers: children_uni,
         })
-        .catch(err => {
-          console.log(err)
-          this.setState({ data_providers: [] })
-        })
-    }
+      })
+      .catch(err => {
+        console.log(err)
+        this.setState({ data_providers: [] })
+      })
+
   }
   loadFabricColors = () => {
-    if (this.state.fcolor_mouted) {
-      axios
-        .get('api/fabric/color/get', { params: {} })
-        .then(res => {
-          let colors = res.data
-          let colors_grid = []
-          let data_uni = []
-          for (let i = 0; i < colors.length; i++) {
-            if (colors[i].fabriccolor_name) {
-              if (data_uni.indexOf(colors[i].fabriccolor_name) === -1) {
-                colors_grid.push(
-                  <Option key={colors[i].fabriccolor_name}> {colors[i].fabriccolor_name}</Option>,
-                )
-                data_uni.push(colors[i].fabriccolor_name)
-              }
+    axios
+      .get('api/fabric/color/get', { params: {} })
+      .then(res => {
+        let colors = res.data
+        let colors_grid = []
+        let data_uni = []
+        for (let i = 0; i < colors.length; i++) {
+          if (colors[i].fabriccolor_name) {
+            if (data_uni.indexOf(colors[i].fabriccolor_name) === -1) {
+              colors_grid.push(
+                <Option key={colors[i].fabriccolor_name}> {colors[i].fabriccolor_name}</Option>,
+              )
+              data_uni.push(colors[i].fabriccolor_name)
             }
           }
-        })
-        .catch(err => {
-          this.setState({ data_colors: [] })
-        })
-    }
+        }
+        this.setState({data_colors: data_uni})
+
+      })
+      .catch(err => {
+        this.setState({ data_colors: [] })
+      })
+
   }
 
   loadFabricTypes = () => {
@@ -121,6 +105,7 @@ class WarehouseReportImport extends Component {
           }
         }
         this.setState({ data_types: data_uni })
+        //console.log('data_types =>'+ JSON.stringify(data_uni));
         this.loadFabricColors(data_uni)
       })
       .catch(err => {
@@ -145,12 +130,12 @@ class WarehouseReportImport extends Component {
       //console.log('Received values of form: ', values)
       let si_from_date = ''
       if (values.from_date) {
-        si_from_date = values.from_date.format(dateFormat)
+        si_from_date = values.from_date.format(FORMAT_SHORT_DATE)
       }
 
       let si_to_date = ''
       if (values.to_date) {
-        si_to_date = values.to_date.format(dateFormat)
+        si_to_date = values.to_date.format(FORMAT_SHORT_DATE)
       }
 
       let si_from_order = ''
@@ -312,6 +297,29 @@ class WarehouseReportImport extends Component {
     const { getFieldDecorator } = this.props.form
     const dataset = this.importDataset()
     const { size } = 'small'
+
+    const { data_import, data_types, data_providers } = this.state
+    const import_columns = [
+      {
+        key: 'inputdate_no', dataIndex: 'inputdate_no', title: 'DATE', name: 'DATE', render: (text, record) => (
+          <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_LONG_DATE)}</span>
+        )
+      },
+      { key: 'invoice_no', dataIndex: 'invoice_no', title: 'INVOICE #', name: 'INVOICE #' },
+      { key: 'orderid', dataIndex: 'orderid', title: 'ORDER #', name: 'ORDER #' },
+      { key: 'provider_name', dataIndex: 'provider_name', title: 'SUPPLIER', name: 'SUPPLIER' },
+      { key: 'fabric_type', dataIndex: 'fabric_type', title: 'CODE', name: 'CODE' },
+      { key: 'fabric_color', dataIndex: 'fabric_color', title: 'COLOR', name: 'COLOR' },
+      { key: 'met', dataIndex: 'met', title: 'MET', name: 'MET' },
+      { key: 'roll', dataIndex: 'roll', title: 'ROLL', name: 'ROLL' },
+      { key: 'declare_no', dataIndex: 'declare_no', title: 'STK', name: 'STK' },
+      {
+        key: 'declare_date', dataIndex: 'declare_date', title: 'STK DATE', name: 'STK DATE', render: (text, record) => (
+          <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_SHORT_DATE)}</span>
+        )
+      },
+    ]
+
     return (
       <div>
         <Form className="ant-advanced-search-panel " onSubmit={this.handleSearchImport}>
@@ -332,11 +340,11 @@ class WarehouseReportImport extends Component {
               <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
                 <FormItem label={'FROM DATE'}>
                   {getFieldDecorator('from_date', {})(
-                    <DatePicker size={size} format={dateFormat} />,
+                    <DatePicker size={size} format={FORMAT_SHORT_DATE} />,
                   )}
                 </FormItem>
                 <FormItem label={'TO DATE'}>
-                  {getFieldDecorator('to_date', {})(<DatePicker size={size} format={dateFormat} />)}
+                  {getFieldDecorator('to_date', {})(<DatePicker size={size} format={FORMAT_SHORT_DATE} />)}
                 </FormItem>
               </Col>
             </Row>
@@ -347,8 +355,7 @@ class WarehouseReportImport extends Component {
                     <AutoComplete
                       placeholder="nhà cung cấp"
                       dataSource={this.state.data_providers}
-                      filterOption={(inputValue, option) =>
-                        option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                      filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
                       }
                     />,
                   )}
@@ -358,8 +365,7 @@ class WarehouseReportImport extends Component {
                     <AutoComplete
                       placeholder="loại vải"
                       dataSource={this.state.data_types}
-                      filterOption={(inputValue, option) =>
-                        option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                      filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
                       }
                     />,
                   )}
@@ -414,14 +420,22 @@ class WarehouseReportImport extends Component {
                 <ExcelSheet dataSet={dataset} name="Imports" />
               </ExcelFile>
             </div>
-            <ReactDataGrid
-              enableCellSelect={true}
-              resizable={true}
+            <Table
+              style={{ marginTop: '5px' }}
+              rowKey={'_id'}
               columns={import_columns}
-              rowGetter={this.rowImportGetter}
-              rowsCount={this.state.data_import.length}
-              minHeight={290}
-              rowRenderer={RowRenderer}
+              dataSource={data_import}
+              rowClassName={(record, index) => { return index % 2 === 0 ? 'even-row' : 'old-row' }}
+              onRow={record => {
+                return {
+                  onClick: () => {
+                    //this.setState({ selected_fabrictype: record })
+                  },
+                  onMouseEnter: () => { },
+                }
+              }}
+              size="small"
+              bordered
             />
           </div>
         ) : null}

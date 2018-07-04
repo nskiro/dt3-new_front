@@ -2,11 +2,10 @@ import React, { Component } from 'react'
 import { Grid, Row, Col } from 'react-bootstrap'
 import ExcelFileSheet from 'react-data-export'
 
-import { Input, Form, Modal, Button, DatePicker, Select, Icon } from 'antd'
+import { Input, Form, Modal, Button, DatePicker, Select, Table, Icon } from 'antd'
 import ReactDataGrid from 'react-data-grid'
 
 import RowRenderer from '../rowrenderer'
-import DateFormatter from '../dateformatter'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import _ from 'lodash'
@@ -17,54 +16,11 @@ const Option = Select.Option
 
 const FormItem = Form.Item
 
-const { Editors } = require('react-data-grid-addons')
 const { ExcelFile, ExcelSheet } = ExcelFileSheet
-const { DateLongFormatter } = DateFormatter
 
-const dateFormat = 'MM/DD/YYYY'
+const FORMAT_SHORT_DATE = 'MM/DD/YYYY'
+const FORMAT_LONG_DATE = 'MM/DD/YYYY HH:mm:ss'
 const button_size = 'small'
-
-const inventory_colums = [
-  { key: 'stt', name: 'STT', resizable: true, width: 60 },
-  { key: 'fabric_type', resizable: true, name: 'TYPE' },
-  { key: 'fabric_color', resizable: true, name: 'COLOR' },
-  { key: 'met', resizable: true, name: 'INV MET' },
-  { key: 'roll', resizable: true, name: 'INV ROLL' },
-]
-
-const inventory_trans_colums = [
-  { key: 'stt', name: 'STT', resizable: true, width: 60 },
-  { key: 'invoice_no', name: 'STK', resizable: true, width: 120 },
-  {
-    key: 'im_inputdate_no',
-    name: 'IM DATE',
-    resizable: true,
-    formatter: DateLongFormatter,
-    width: 150,
-  },
-  {
-    key: 'ex_inputdate_no',
-    name: 'EX DATE',
-    resizable: true,
-    formatter: DateLongFormatter,
-    width: 150,
-  },
-  { key: 'im_met', name: 'IM MET', resizable: true, width: 100 },
-  { key: 'ex_met', name: 'EX MET', resizable: true, width: 100 },
-  { key: 'met', name: 'MET', resizable: true, width: 100 },
-  { key: 'im_roll', name: 'IM ROLL', resizable: true, width: 100 },
-  { key: 'ex_roll', name: 'EX ROLL', resizable: true, width: 100 },
-  { key: 'roll', name: 'ROLL', resizable: true, width: 100 },
-  { key: 'orderid', name: 'ORDER#', resizable: true, width: 100 },
-  { key: 'po_no', name: 'PO#', resizable: true, width: 100 },
-  { key: 'line_no', name: 'LINE#', resizable: true, width: 100 },
-  { key: 'sku', name: 'SKU', resizable: true, width: 100 },
-  { key: 'des', name: 'DESCRIPTION', resizable: true, width: 100 },
-  { key: 'qty', name: 'QTY', resizable: true, width: 100 },
-  { key: 'yield', name: 'YIELD', resizable: true, width: 100 },
-  { key: 'fab_qty', name: 'FAB_QTY', resizable: true, width: 100 },
-  { key: 'note', name: 'NOTE', resizable: true, width: 200 },
-]
 
 class FormTransDetail extends Component {
   constructor(props) {
@@ -72,26 +28,20 @@ class FormTransDetail extends Component {
     this.state = {
       data_trans: [],
       data_search: {},
+      fabric_color: '',
+      fabric_type: ''
     }
   }
-
-  rowInventoryTransGetter = i => {
-    if (i >= 0 && i < this.state.data_trans.length) {
-      return this.state.data_trans[i]
-    }
-    return null
-  }
-
   onSearchDetailTrans = e => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
       let data_search = {}
       if (values.fromdate) {
-        data_search.from_date = values.fromdate.format(dateFormat)
+        data_search.from_date = values.fromdate.format(FORMAT_SHORT_DATE)
         values.fromdate = values.fromdate.format('YYYY-MM-DD')
       }
       if (values.todate) {
-        data_search.to_date = values.todate.format(dateFormat)
+        data_search.to_date = values.todate.format(FORMAT_SHORT_DATE)
         let todate = moment(values.todate).add(1, 'days')
         values.todate = todate.format('YYYY-MM-DD')
       }
@@ -108,6 +58,7 @@ class FormTransDetail extends Component {
         .get('api/fabric/warehouse/getinventorytrans', { params: values })
         .then(res => {
           this.setState({ data_trans: res.data })
+          console.log('values search data_trans: =>' + JSON.stringify(res.data));
         })
         .catch(err => {
           console.log(err)
@@ -201,14 +152,14 @@ class FormTransDetail extends Component {
       row.push(r.stt)
       row.push(r.invoice_no)
       if (r.im_inputdate_no) {
-        let im_date = moment(r.im_inputdate_no).format(dateFormat)
+        let im_date = moment(r.im_inputdate_no).format(FORMAT_SHORT_DATE)
         row.push(im_date)
       } else {
         row.push('')
       }
 
       if (r.ex_inputdate_no) {
-        let ex_date = moment(r.ex_inputdate_no).format(dateFormat)
+        let ex_date = moment(r.ex_inputdate_no).format(FORMAT_SHORT_DATE)
         row.push(ex_date)
       } else {
         row.push('')
@@ -243,35 +194,69 @@ class FormTransDetail extends Component {
     return dataset
   }
 
+  componentWillReceiveProps = (nextprops) => {
+    if (nextprops.data) {
+      this.setState({ fabric_color: nextprops.data.fabric_color, fabric_type: nextprops.data.fabric_type,data_trans:[] })
+    }
+    // console.log('nextprops =>'+ JSON.stringify(nextprops) );
+  }
+
   render() {
     const { visible, onCancel, onCreate } = this.props
     const { getFieldDecorator } = this.props.form
-    let fabric_type = ''
-    let fabric_color = ''
-    if (this.props.data.data !== undefined) {
-      fabric_type = this.props.data.data.fabric_type
-      fabric_color = this.props.data.data.fabric_color
-    }
+    const { fabric_type, fabric_color } = this.state
+
+    const { data_trans } = this.state
     const transDetailDataset = this.inventoryTransDetailDataset()
+    const inventory_trans_colums = [
+      { key: 'stt', dataIndex: 'stt', title: 'STT', name: 'STT', width: 60, resizable: true, fixed: 'left' },
+      { key: 'invoice_no', dataIndex: 'invoice_no', title: 'STK', name: 'STK', fixed: 'left' },
+      {
+        key: 'im_inputdate_no', dataIndex: 'im_inputdate_no', title: 'IM DATE',
+        name: 'IM DATE',
+        resizable: true,
+        render: (text, record, index) => {
+          return (
+            <span>{text === null|| text===undefined ? '' : moment(new Date(text)).format(FORMAT_LONG_DATE)}</span>
+          )
+        }
+      },
+      {
+        key: 'ex_inputdate_no', dataIndex: 'ex_inputdate_no', title: 'EX DATE',
+        name: 'EX DATE',
+        resizable: true,
+        render: (text, record, index) => {
+          console.log('Text=>' + text)
+          return (
+            <span>{text === null|| text===undefined ? '' : moment(new Date(text)).format(FORMAT_LONG_DATE)}</span>
+          )
+        }
+      },
+      { key: 'im_met', dataIndex: 'im_met', title: 'IM MET', name: 'IM MET', resizable: true, },
+      { key: 'ex_met', dataIndex: 'ex_met', title: 'EX MET', name: 'EX MET', resizable: true, },
+      { key: 'met', dataIndex: 'met', title: 'MET', name: 'MET', resizable: true, },
+      { key: 'im_roll', dataIndex: 'im_roll', title: 'IM ROLL', name: 'IM ROLL', resizable: true, },
+      { key: 'ex_roll', dataIndex: 'ex_roll', title: 'EX ROLL', name: 'EX ROLL', resizable: true, },
+      { key: 'roll', dataIndex: 'roll', title: 'ROLL', name: 'ROLL', resizable: true, },
+      { key: 'orderid', dataIndex: 'orderid', title: 'ORDER#', name: 'ORDER#', resizable: true, },
+      { key: 'po_no', dataIndex: 'po_no', title: 'PO#', name: 'PO#', resizable: true, },
+      { key: 'line_no', dataIndex: 'line_no', title: 'LINE#', name: 'LINE#', resizable: true, },
+      { key: 'sku', dataIndex: 'sku', title: 'SKU', name: 'SKU', resizable: true, },
+      { key: 'des', dataIndex: 'des', title: 'DESCRIPTION', name: 'DESCRIPTION', resizable: true, },
+      { key: 'qty', dataIndex: 'qty', title: 'QTY', name: 'QTY', resizable: true, },
+      { key: 'yield', dataIndex: 'yield', title: 'YIELD', name: 'YIELD', resizable: true, },
+      { key: 'fab_qty', dataIndex: 'fab_qty', title: 'FAB_QTY', name: 'FAB_QTY', resizable: true, },
+      { key: 'note', dataIndex: 'note', title: 'NOTE', name: 'NOTE', resizable: true },
+    ]
+
     return (
-      <Modal
-        title="VIEW DETAIL"
-        visible={visible}
-        onOk={onCreate}
-        maskClosable={false}
-        onCancel={onCancel}
-        width={1000}
-        style={{ top: 5 }}
-      >
+      <Modal title="VIEW DETAIL" visible={visible} onOk={onCreate} maskClosable={false} onCancel={onCancel} width={1000} style={{ top: 5 }}>
         <div>
           <Form className="ant-advanced-search-panel ">
             <Grid>
               <Row className="show-grid">
                 <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
-                  <div>
-                    <b> TYPE:</b> {fabric_type}{' '}
-                  </div>
-                </Col>
+                  <div> <b> TYPE:</b> {fabric_type}{' '}</div></Col>
                 <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
                   <div>
                     <b> COLOR:</b> {fabric_color}{' '}
@@ -296,12 +281,12 @@ class FormTransDetail extends Component {
               <Row className="show-grid">
                 <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
                   <FormItem label="FROM DATE">
-                    {getFieldDecorator('fromdate', {})(<DatePicker format={dateFormat} />)}
+                    {getFieldDecorator('fromdate', {})(<DatePicker format={FORMAT_SHORT_DATE} />)}
                   </FormItem>
                 </Col>
                 <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
                   <FormItem label="TO DATE">
-                    {getFieldDecorator('todate', {})(<DatePicker format={dateFormat} />)}
+                    {getFieldDecorator('todate', {})(<DatePicker format={FORMAT_SHORT_DATE} />)}
                   </FormItem>
                 </Col>
               </Row>
@@ -341,24 +326,24 @@ class FormTransDetail extends Component {
               <ExcelSheet dataSet={transDetailDataset} name="Inventory Detail" />
             </ExcelFile>
           </div>
-          <ReactDataGrid
-            enableCellSelect={true}
-            resizable={true}
+
+          <Table
+            style={{ marginTop: '5px' }}
+            rowKey={'_id'}
             columns={inventory_trans_colums}
-            rowGetter={this.rowInventoryTransGetter}
-            rowsCount={this.state.data_trans.length}
-            minHeight={300}
-            rowRenderer={RowRenderer}
+            dataSource={data_trans}
+            rowClassName={(record, index) => { return index % 2 === 0 ? 'even-row' : 'old-row' }}
+            size="small"
+            scroll={{ x: 1300 }}
+            bordered
           />
         </div>
       </Modal>
     )
   }
 }
-FormTransDetail.propTypes = {
-  data: PropTypes.object,
-}
-FormTransDetail.defaultProps = {}
+
+const WapperFormTransDetail = Form.create()(FormTransDetail)
 
 class WarehouseReportInvent extends Component {
   constructor(props) {
@@ -374,8 +359,6 @@ class WarehouseReportInvent extends Component {
       s_fabric_type: [],
       s_fabric_color: [],
 
-      fcolor_mouted: false,
-      ftype_mouted: false,
     }
   }
   handleSearchInventory = e => {
@@ -406,13 +389,6 @@ class WarehouseReportInvent extends Component {
     //console.log('handleInventoryReset -> clicked')
     this.props.form.resetFields()
     this.setState({ show_grid_result: false })
-  }
-  handleColorChange = value => {
-    console.log('selected' + JSON.stringify(value))
-  }
-
-  handleTypeChange = value => {
-    console.log(`selected ${value}`)
   }
 
   inventoryDataset = () => {
@@ -481,72 +457,69 @@ class WarehouseReportInvent extends Component {
     return dataset
   }
 
+  /*
   rowInventoryGetter = i => {
     if (i >= 0 && i < this.state.data_inventory.length) {
       return this.state.data_inventory[i]
     }
     return null
   }
-
+  */
   loadFabricColors = () => {
-    if (this.state.fcolor_mouted) {
-      axios
-        .get('api/fabric/color/get', { params: {} })
-        .then(res => {
-          let colors = res.data
-          let colors_grid = []
-          let data_uni = []
-          for (let i = 0; i < colors.length; i++) {
-            if (data_uni.indexOf(colors[i].fabriccolor_name) === -1) {
-              colors_grid.push(
-                <Option key={colors[i].fabriccolor_name}> {colors[i].fabriccolor_name}</Option>,
-              )
-              data_uni.push(colors[i].fabriccolor_name)
-            }
+
+    axios
+      .get('api/fabric/color/get', { params: {} })
+      .then(res => {
+        let colors = res.data
+        let colors_grid = []
+        let data_uni = []
+        for (let i = 0; i < colors.length; i++) {
+          if (data_uni.indexOf(colors[i].fabriccolor_name) === -1) {
+            colors_grid.push(
+              <Option key={colors[i].fabriccolor_name}> {colors[i].fabriccolor_name}</Option>,
+            )
+            data_uni.push(colors[i].fabriccolor_name)
           }
-          this.setState({ data_colors: colors_grid })
-        })
-        .catch(err => {
-          this.setState({ data_colors: [] })
-        })
-    }
+        }
+        this.setState({ data_colors: colors_grid })
+      })
+      .catch(err => {
+        this.setState({ data_colors: [] })
+      })
+
   }
 
   loadFabricTypes = () => {
-    if (this.state.ftype_mouted) {
-      console.log('loadFabricTypes')
-      axios
-        .get('api/fabric/type/get', { params: {} })
-        .then(res => {
-          let data = res.data
-          let children = []
-          let data_uni = []
-          for (let i = 0; i < data.length; i++) {
-            if (data_uni.indexOf(data[i].fabrictype_name) === -1) {
-              children.push(
-                <Option key={data[i].fabrictype_name}> {data[i].fabrictype_name} </Option>,
-              )
-              data_uni.push(data[i].fabrictype_name)
-            }
+
+    console.log('loadFabricTypes')
+    axios
+      .get('api/fabric/type/get', { params: {} })
+      .then(res => {
+        let data = res.data
+        let children = []
+        let data_uni = []
+        for (let i = 0; i < data.length; i++) {
+          if (data_uni.indexOf(data[i].fabrictype_name) === -1) {
+            children.push(
+              <Option key={data[i].fabrictype_name}> {data[i].fabrictype_name} </Option>,
+            )
+            data_uni.push(data[i].fabrictype_name)
           }
-          this.setState({ data_types: children })
-        })
-        .catch(err => {
-          console.log(err)
-          this.setState({ data_types: [] })
-        })
-    }
+        }
+        this.setState({ data_types: children })
+      })
+      .catch(err => {
+        console.log(err)
+        this.setState({ data_types: [] })
+      })
+
   }
 
   componentDidMount = () => {
-    this.setState({ fcolor_mouted: true, ftype_mouted: true })
     this.loadFabricColors()
     this.loadFabricTypes()
   }
 
-  componentWillUnmount = () => {
-    this.setState({ fcolor_mouted: false, ftype_mouted: false })
-  }
   onViewDetail = e => {
     if (e) {
       let data_inventory_selected = this.state.data_inventory_selected
@@ -581,7 +554,18 @@ class WarehouseReportInvent extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    const WapperFormTransDetail = Form.create()(FormTransDetail)
+
+    const inventory_colums = [
+      { key: 'stt', dataIndex: 'stt', title: 'STT', name: 'STT', resizable: true, width: 60 },
+      { key: 'fabric_type', dataIndex: 'fabric_type', title: 'TYPE', resizable: true, name: 'TYPE' },
+      { key: 'fabric_color', dataIndex: 'fabric_color', title: 'COLOR', resizable: true, name: 'COLOR' },
+      { key: 'met', dataIndex: 'met', title: 'INV MET', resizable: true, name: 'INV MET' },
+      { key: 'roll', dataIndex: 'roll', title: 'INV ROLL', resizable: true, name: 'INV ROLL' },
+    ]
+    const { data_inventory, data_inventory_selected } = this.state
+
+    const dataset = this.inventoryDataset()
+
     return (
       <div>
         <WapperFormTransDetail
@@ -589,7 +573,7 @@ class WarehouseReportInvent extends Component {
           visible={this.state.showdetail}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
-          data={this.state.data_inventory_selected}
+          data={data_inventory_selected}
         />
         <Form className="ant-advanced-search-panel " onSubmit={this.handleSearchInventory}>
           <Grid>
@@ -601,7 +585,6 @@ class WarehouseReportInvent extends Component {
                       mode="tags"
                       style={{ width: '100%' }}
                       tokenSeparators={[',']}
-                      onChange={this.handleTypeChange}
                     >
                       {this.state.data_types}
                     </Select>,
@@ -615,7 +598,6 @@ class WarehouseReportInvent extends Component {
                       mode="tags"
                       style={{ width: '100%' }}
                       tokenSeparators={[',']}
-                      onChange={this.handleColorChange}
                     >
                       {this.state.data_colors}
                     </Select>,
@@ -642,7 +624,8 @@ class WarehouseReportInvent extends Component {
         </Form>
         {this.state.show_grid_result === true ? (
           <div>
-            <div className="ant-advanced-toolbar">
+
+            <div >
               <ExcelFile
                 element={
                   <Button icon="export" size={button_size} type="primary">
@@ -652,7 +635,7 @@ class WarehouseReportInvent extends Component {
                 }
                 filename={'Inventory - ' + moment().format('MM/DD/YYYY h:mm:ss')}
               >
-                <ExcelSheet dataSet={this.inventoryDataset()} name="Inventory" />
+                <ExcelSheet dataSet={dataset} name="Inventory" />
               </ExcelFile>
               <Button
                 icon="info-circle"
@@ -666,15 +649,22 @@ class WarehouseReportInvent extends Component {
                 DETAIL
               </Button>
             </div>
-            <ReactDataGrid
-              enableCellSelect={true}
-              resizable={true}
+            <Table
+              style={{ marginTop: '5px' }}
+              rowKey={'_id'}
               columns={inventory_colums}
-              rowGetter={this.rowInventoryGetter}
-              rowsCount={this.state.data_inventory.length}
-              onRowClick={this.onRowWarehouseInventClick}
-              minHeight={290}
-              rowRenderer={RowRenderer}
+              dataSource={data_inventory}
+              rowClassName={(record, index) => { return index % 2 === 0 ? 'even-row' : 'old-row' }}
+              onRow={record => {
+                return {
+                  onClick: () => {
+                    this.setState({ data_inventory_selected: record })
+                  },
+                  onMouseEnter: () => { },
+                }
+              }}
+              size="small"
+              bordered
             />
           </div>
         ) : null}

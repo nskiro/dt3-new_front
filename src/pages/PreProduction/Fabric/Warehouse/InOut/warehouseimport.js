@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
 import { Grid, Row, Col } from 'react-bootstrap'
 
-import { Select, Input, Button, Form, Modal, Collapse, DatePicker } from 'antd'
+import { Select, Input, Button, Form, Modal, Collapse, Table, DatePicker, Pagination } from 'antd'
 
 import ReactDataGrid from 'react-data-grid'
 import update from 'immutability-helper'
-
-import RowRenderer from '../rowrenderer'
-import DateFormatter from '../dateformatter'
 
 import PropTypes from 'prop-types'
 import moment from 'moment'
@@ -19,15 +16,15 @@ import '../views.css'
 
 const { Editors } = require('react-data-grid-addons')
 const { AutoComplete: AutoCompleteEditor } = Editors
-const { DateLongFormatter, DateShortFormatter } = DateFormatter
 const { RangePicker } = DatePicker
 
 const FormItem = Form.Item
 const Option = Select.Option
 const Panel = Collapse.Panel
 //format
-const dateFormat = 'MM/DD/YYYY'
 
+const FORMAT_SHORT_DATE = 'MM/DD/YYYY'
+const FORMAT_LONG_DATE = 'MM/DD/YYYY HH:mm:ss'
 const button_size = 'small'
 const tab_size = 'small'
 
@@ -212,7 +209,7 @@ class WarehouseImportForm extends Component {
                       },
                     ],
                     initialValue: moment(this.props.data.inputdate_no),
-                  })(<DatePicker format={dateFormat} disabled />)}
+                  })(<DatePicker format={FORMAT_SHORT_DATE} disabled />)}
                 </FormItem>
               </Col>
               <Col md={6} sm={6} xs={6} style={{ textAlign: 'left' }}>
@@ -245,7 +242,7 @@ class WarehouseImportForm extends Component {
                     'declare_date',
                     { initialValue: moment(this.props.data.declare_date) },
                     { rules: [{ required: true, message: 'Vui lòng nhập ngày tờ khai!' }] },
-                  )(<DatePicker format={dateFormat} />)}
+                  )(<DatePicker format={FORMAT_SHORT_DATE} />)}
                 </FormItem>
               </Col>
             </Row>
@@ -564,16 +561,33 @@ class WarehouseImport extends Component {
       this.setState({ selected_warehouse_import: row })
     }
   }
+
+  onShowSizeChange = (current, pageSize) => {
+    console.log(current, pageSize);
+  }
+
+
   render() {
     const { getFieldDecorator } = this.props.form
-
+    const { warehouse_import_data } = this.state
     const columns = [
-      { key: 'inputdate_no', name: 'DATE', formatter: DateLongFormatter },
-      { key: 'provider_name', name: 'SUPPLIER' },
-      { key: 'declare_no', name: 'STK' },
-      { key: 'declare_date', name: 'STK DATE', formatter: DateShortFormatter },
-      { key: 'invoice_no', name: 'INVOICE #' },
+      {
+        key: 'inputdate_no', dataIndex: 'inputdate_no', title: 'DATE', name: 'DATE', render: (text, record) => (
+          <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_LONG_DATE)}</span>
+        )
+      },
+      { key: 'provider_name', dataIndex: 'provider_name', title: 'SUPPLIER', name: 'SUPPLIER' },
+      { key: 'declare_no', dataIndex: 'declare_no', title: 'STK', name: 'STK' },
+      {
+        key: 'declare_date', dataIndex: 'declare_date', title: 'STK DATE', name: 'STK DATE', render: (text, record) => (
+          <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_SHORT_DATE)}</span>
+        )
+      },
+      { key: 'invoice_no', dataIndex: 'invoice_no', title: 'INVOICE #', name: 'INVOICE #' },
     ]
+
+    const pagination = <Pagination showSizeChanger onShowSizeChange={this.onShowSizeChange} defaultCurrent={1} total={warehouse_import_data.length} />
+
     return (
       <div>
         <Collapse className="ant-advanced-search-panel-collapse">
@@ -608,7 +622,7 @@ class WarehouseImport extends Component {
 
                     <FormItem label={'STK DATE'}>
                       {getFieldDecorator('declare_dates', {})(
-                        <RangePicker placeholder="Nhập ngày tờ khai" format={dateFormat} />,
+                        <RangePicker placeholder="Nhập ngày tờ khai" format={FORMAT_SHORT_DATE} />,
                       )}
                     </FormItem>
                   </Col>
@@ -662,15 +676,23 @@ class WarehouseImport extends Component {
           onCreate={this.handleCreate}
           data={this.state.selected_warehouse_import}
         />
-        <ReactDataGrid
-          enableCellSelect={true}
-          resizable={true}
+
+        <Table
+          style={{ marginTop: '5px' }}
+          rowKey={'_id'}
           columns={columns}
-          rowGetter={this.rowGetter}
-          rowsCount={this.state.warehouse_import_data.length}
-          minHeight={290}
-          onRowClick={this.onRowWarehouseImportClick}
-          rowRenderer={RowRenderer}
+          dataSource={this.state.warehouse_import_data}
+          rowClassName={(record, index) => { return index % 2 === 0 ? 'even-row' : 'old-row' }}
+          onRow={record => {
+            return {
+              onClick: () => {
+                this.setState({ selected_warehouse_import: record })
+              },
+              onMouseEnter: () => { },
+            }
+          }}
+          size="small"
+          bordered
         />
       </div>
     )

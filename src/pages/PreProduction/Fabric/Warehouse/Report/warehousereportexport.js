@@ -1,40 +1,24 @@
 import React, { Component } from 'react'
 import { Grid, Row, Col } from 'react-bootstrap'
 import ExcelFileSheet from 'react-data-export'
-import { AutoComplete, InputNumber, Form, Button, Tabs, DatePicker, Select, Icon } from 'antd'
+import { AutoComplete, InputNumber, Form, Button, Tabs,Table, DatePicker, Select, Icon, Pagination } from 'antd'
 import ReactDataGrid from 'react-data-grid'
 
 import RowRenderer from '../rowrenderer'
 import DateFormatter from '../dateformatter'
 import moment from 'moment'
 import axios from '../../../../../axiosInst'
+import _ from 'lodash'
 //css
 import '../views.css'
 const Option = Select.Option
 
 const FormItem = Form.Item
 const { ExcelFile, ExcelSheet } = ExcelFileSheet
-const { DateShortFormatter } = DateFormatter
 
 const dateFormat = 'MM/DD/YYYY'
 const button_size = 'small'
 const tab_size = 'small'
-const export_columns = [
-  { key: 'inputdate_no', name: 'DATE', formatter: DateShortFormatter },
-  { key: 'fabric_type', name: 'CODE' },
-  { key: 'fabric_color', name: 'COLOR' },
-  { key: 'met', name: 'MET' },
-  { key: 'roll', name: 'ROLL' },
-  { key: 'orderid', name: 'ORDER #' },
-  { key: 'po_no', name: 'PO#' },
-  { key: 'line_no', name: 'LINE#' },
-  { key: 'sku', name: 'SKU' },
-  { key: 'des', name: 'DESCRIPTION' },
-  { key: 'qty', name: 'QTY' },
-  { key: 'yield', name: 'YIELD' },
-  { key: 'fab_qty', name: 'FAB_QTY' },
-  { key: 'note', name: 'NOTE' },
-]
 
 class WarehouseReportExport extends Component {
   constructor(props) {
@@ -54,6 +38,9 @@ class WarehouseReportExport extends Component {
         se_type: undefined,
         se_color: undefined,
       },
+
+      filteredInfo: null,
+      sortedInfo: null,
     }
   }
 
@@ -316,10 +303,95 @@ class WarehouseReportExport extends Component {
     //console.log(dataset)
     return dataset
   }
+  handleChange = (pagination, filters, sorter) => {
+    console.log('Various parameters', pagination, filters, sorter);
+    this.setState({
+      filteredInfo: filters,
+      sortedInfo: sorter,
+    });
+  }
+
+  clearFilters = () => {
+    this.setState({ filteredInfo: null });
+  }
+
+  clearAll = () => {
+    this.setState({
+      filteredInfo: null,
+      sortedInfo: null,
+    });
+  }
+
+  showTotal=(total) =>{
+    return `Total ${total} items`;
+  }
 
   render() {
     const { getFieldDecorator } = this.props.form
-    const { size } = 'default'
+    const { size } = 'small'
+
+    let { sortedInfo, filteredInfo,data_export } = this.state;
+    sortedInfo = sortedInfo || {};
+    filteredInfo = filteredInfo || {};
+    
+    let key_filter_fabric_type=[]
+    let key_filter_fabric_color=[]
+    let key_filter_order=[]
+    let key_filter_po=[]
+    let key_filter_line=[]
+    let key_filter_sku=[]
+    _.forEach(data_export,(v)=>{
+      if(_.findIndex(key_filter_fabric_type,{value:v.fabric_type})<0){key_filter_fabric_type.push({value:v.fabric_type,text:v.fabric_type})}
+      if(_.findIndex(key_filter_fabric_color,{value:v.fabric_color})<0){key_filter_fabric_color.push({value:v.fabric_color,text:v.fabric_color})}
+      if(_.findIndex(key_filter_order,{value:v.orderid})<0){key_filter_order.push({value:v.orderid,text:v.orderid})}
+      if(_.findIndex(key_filter_po,{value:v.po_no})<0){key_filter_po.push({value:v.po_no,text:v.po_no})}
+      if(_.findIndex(key_filter_line,{value:v.line_no})<0){key_filter_line.push({value:v.line_no,text:v.line_no})}
+      if(_.findIndex(key_filter_sku,{value:v.sku})<0){key_filter_sku.push({value:v.sku,text:v.sku})}
+    })
+
+    console.log('key_filter_order ==>' + JSON.stringify(key_filter_order));
+    const export_columns = [
+      { key: 'inputdate_no',dataIndex: 'inputdate_no', title: 'DATE', name: 'DATE', render: (text, record, index) => (
+        <span>{text === null ? '' : moment(new Date(text)).format(dateFormat)}</span>
+      ) },
+      { key: 'fabric_type',dataIndex: 'fabric_type', title: 'CODE', name: 'CODE',
+          filters:key_filter_fabric_type,
+          onFilter: (value, record) => record.fabric_type.includes(value), 
+          filteredValue: filteredInfo.fabric_type || null,
+        },
+      { key: 'fabric_color', dataIndex: 'fabric_color', title: 'COLOR',name: 'COLOR',
+          filters:key_filter_fabric_color,
+          onFilter: (value, record) => record.fabric_color.includes(value), 
+          filteredValue: filteredInfo.fabric_color || null,
+        },
+      { key: 'met', dataIndex: 'met', title: 'MET',name: 'MET' },
+      { key: 'roll', dataIndex: 'roll', title: 'ROLL',name: 'ROLL' },
+      { key: 'orderid',dataIndex: 'orderid', title: 'ORDER #', name: 'ORDER #',
+          //filters:key_filter_order,
+          // onFilter: (value, record) =>record.orderid.includes(value), 
+          //filteredValue: filteredInfo.orderid || null,
+      },
+      { key: 'po_no',dataIndex: 'po_no', title: 'PO#', name: 'PO#',
+         //   filters:key_filter_po,
+         //   onFilter: (value, record) => record.po_no.includes(value), 
+          //  filteredValue: filteredInfo.po_no || null,
+      },
+      { key: 'line_no',dataIndex: 'line_no', title: 'LINE#', name: 'LINE#',
+         // filters:key_filter_line,
+         // onFilter: (value, record) => record.line_no.includes(value), 
+        //  filteredValue: filteredInfo.line_no || null,
+      },
+      { key: 'sku', dataIndex: 'sku', title: 'SKU',name: 'SKU',
+        //  filters:key_filter_sku,
+        //  onFilter: (value, record) => record.sku.includes(value), 
+        //  filteredValue: filteredInfo.sku || null,  
+      },
+      { key: 'des',dataIndex: 'des', title: 'DESCRIPTION', name: 'DESCRIPTION' },
+      { key: 'qty',dataIndex: 'qty', title: 'QTY', name: 'QTY' },
+      { key: 'yield', dataIndex: 'yield', title: 'YIELD',name: 'YIELD' },
+      { key: 'fab_qty', dataIndex: 'fab_qty', title: 'FAB_QTY',name: 'FAB_QTY' },
+      { key: 'note',dataIndex: 'note', title: 'NOTE', name: 'NOTE' },
+    ]
 
     return (
       <div>
@@ -351,17 +423,6 @@ class WarehouseReportExport extends Component {
             </Row>
             <Row className="show-grid">
               <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
-                <FormItem label={'SUPPILERS'}>
-                  {getFieldDecorator('provider_name', {})(
-                    <AutoComplete
-                      placeholder="nhà cung cấp"
-                      dataSource={this.state.data_providers}
-                      filterOption={(inputValue, option) =>
-                        option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                      }
-                    />,
-                  )}
-                </FormItem>
                 <FormItem label={'TYPE '}>
                   {getFieldDecorator('fabric_type', {})(
                     <AutoComplete
@@ -421,15 +482,25 @@ class WarehouseReportExport extends Component {
                 <ExcelSheet dataSet={this.exportDataset()} name="Export" />
               </ExcelFile>
             </div>
-            <ReactDataGrid
-              enableCellSelect={true}
-              resizable={true}
+            <Table
+              style={{ marginTop: '5px' }}
+              rowKey={'_id'}
               columns={export_columns}
-              rowGetter={this.rowExportGetter}
-              rowsCount={this.state.data_export.length}
-              minHeight={290}
-              rowRenderer={RowRenderer}
-            />
+              dataSource={this.state.data_export}      
+              rowClassName={ (record, index) => { return index%2===0?'even-row':'old-row' }   }   
+              onRow={record => {
+                return {
+                  onClick: () => {
+                    this.setState({ selected_fabrictype: record })
+                  },
+                  onMouseEnter: () => {},
+                }
+              }}
+              size="small"
+              bordered
+              onChange={this.handleChange}
+              pagination={()=>{return <Pagination size="small" total={50} showTotal={this.showTotal} />}}
+        />
           </div>
         ) : null}
       </div>

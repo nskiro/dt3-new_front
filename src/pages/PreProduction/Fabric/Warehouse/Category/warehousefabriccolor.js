@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Grid, Row, Col } from 'react-bootstrap'
-import { Input, Button, Form, Modal, Collapse } from 'antd'
-import PropTypes from 'prop-types'
+import { Input, Button, Form, Modal, Collapse,Table } from 'antd'
+import moment from 'moment'
 
 import ReactDataGrid from 'react-data-grid'
 //import update from 'immutability-helper';
@@ -13,12 +13,14 @@ import DateFormatter from '../dateformatter'
 import axios from '../../../../../axiosInst' //'../../../../../axiosInst'
 //css
 import '../views.css' //'./views.css'
+import { MergeMapOperator } from '../../../../../../node_modules/rxjs/operators/mergeMap';
 
 const FormItem = Form.Item
 const Panel = Collapse.Panel
 const { DateLongFormatter } = DateFormatter
 const button_size = 'small'
 
+const FORMAT_LONG_DATE='MM/DD/YYYY HH:mm:ss'
 class FabricColorForm extends Component {
   render() {
     const { visible, onCancel, onCreate, form } = this.props
@@ -206,9 +208,17 @@ class WarehouseFabricColor extends Component {
     const { getFieldDecorator } = this.props.form
     const columns = [
       // {key: '_id', name: 'id', hidd: false },
-      { key: 'fabriccolor_code', name: 'COLOR' },
-      { key: 'create_date', name: 'CREATE DATE', formatter: DateLongFormatter },
-      { key: 'update_date', name: 'UPDATE DATE', formatter: DateLongFormatter },
+      { key: 'fabriccolor_code', dataIndex: 'fabriccolor_code', title: 'COLOR', name: 'COLOR' },
+      { key: 'create_date', dataIndex: 'create_date', title: 'CREATE DATE', name: 'CREATE DATE', formatter: DateLongFormatter,
+        render: (text, record) => (
+          <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_LONG_DATE)}</span>
+        )
+      },
+      { key: 'update_date', dataIndex: 'update_date', title: 'UPDATE DATE', name: 'UPDATE DATE', formatter: DateLongFormatter,
+      render: (text, record) => (
+        <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_LONG_DATE)}</span>
+      )
+     },
     ]
     return (
       <div>
@@ -225,17 +235,8 @@ class WarehouseFabricColor extends Component {
                     </FormItem>
                   </Col>
                   <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
-                    <Button icon="search" size={button_size} type="primary" htmlType="submit">
-                      SEARCH
-                    </Button>
-                    <Button
-                      icon="sync"
-                      size={button_size}
-                      style={{ marginLeft: 8 }}
-                      onClick={this.handleReset}
-                    >
-                      CLEAR
-                    </Button>
+                    <Button icon="search" size={button_size} type="primary" htmlType="submit"> SEARCH </Button>
+                    <Button icon="sync" size={button_size} style={{ marginLeft: 8 }} onClick={this.handleReset}>CLEAR</Button>
                   </Col>
                 </Row>
               </Grid>
@@ -244,35 +245,9 @@ class WarehouseFabricColor extends Component {
         </Collapse>
 
         <div className="ant-advanced-toolbar">
-          <Button
-            icon="plus"
-            size={button_size}
-            type="primary"
-            value="new"
-            className="ant-advanced-toolbar-item"
-            onClick={this.showModal}
-          >
-            NEW
-          </Button>
-          <Button
-            icon="edit"
-            size={button_size}
-            type="primary"
-            value="edit"
-            className="ant-advanced-toolbar-item"
-            onClick={this.showModal}
-          >
-            EDIT
-          </Button>
-          <Button
-            icon="sync"
-            size={button_size}
-            type="primary"
-            className="ant-advanced-toolbar-item"
-            onClick={this.onRefeshGrid}
-          >
-            REFESH
-          </Button>
+          <Button icon="plus" size={button_size} type="primary" value="new" className="ant-advanced-toolbar-item" onClick={this.showModal}>NEW</Button>
+          <Button icon="edit" size={button_size} type="primary" value="edit" className="ant-advanced-toolbar-item" onClick={this.showModal} >EDIT</Button>
+          <Button icon="sync" size={button_size} type="primary" className="ant-advanced-toolbar-item" onClick={this.onRefeshGrid}>REFESH</Button>
         </div>
         <WrappedFabricColorForm
           wrappedComponentRef={this.saveFormRef}
@@ -281,15 +256,22 @@ class WarehouseFabricColor extends Component {
           onCreate={this.handleCreate}
           data={this.state.selected_fabriccolor}
         />
-        <ReactDataGrid
-          enableCellSelect={true}
-          resizable={true}
+        <Table
+          style={{ marginTop: '5px' }}
+          rowKey={'_id'}
           columns={columns}
-          rowGetter={this.rowGetter}
-          rowsCount={this.state.data_fabriccolors.length}
-          minHeight={390}
-          onRowClick={this.onRowFabricColorClick}
-          rowRenderer={RowRenderer}
+          dataSource={this.state.data_fabriccolors}
+          rowClassName={ (record, index) => { return index%2===0?'even-row':'old-row' }   }   
+          onRow={record => {
+            return {
+              onClick: () => {
+                this.setState({ selected_fabriccolor: record })
+              },
+              onMouseEnter: () => {},
+            }
+          }}
+          size="small"
+          bordered
         />
       </div>
     )

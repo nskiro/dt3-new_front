@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Grid, Row, Col } from 'react-bootstrap'
-import { Input, Button, Form, Modal, Collapse } from 'antd'
+import { Input, Button, Form, Modal, Collapse,Table } from 'antd'
 import PropTypes from 'prop-types'
 
 import ReactDataGrid from 'react-data-grid'
@@ -9,10 +9,11 @@ import ReactDataGrid from 'react-data-grid'
 import RowRenderer from '../rowrenderer'
 import DateFormatter from '../dateformatter'
 
-//import moment from 'moment';
+import moment from 'moment';
 import axios from '../../../../../axiosInst'
 //css
 import '../views.css'
+const FORMAT_LONG_DATE='MM/DD/YYYY HH:mm:ss'
 
 const FormItem = Form.Item
 const Panel = Collapse.Panel
@@ -152,19 +153,14 @@ class WarehouseFabricType extends Component {
     const form = this.formRef.props.form
 
     form.validateFields((err, values) => {
-      // console.log(values);
-      // console.log(err);
       if (err) {
         return
       }
-      // console.log('Received values of form a: ', values);
-      //call goi service add
       let data = {
         _id: values.id,
         fabrictype_code: values.fabrictype_name,
         fabrictype_name: values.fabrictype_name,
       }
-      // console.log(data);
       if (values.id) {
         console.log('call update')
         axios
@@ -208,9 +204,13 @@ class WarehouseFabricType extends Component {
     const { getFieldDecorator } = this.props.form
     const columns = [
       // {key: '_id', name: 'id', hidd: false },
-      { key: 'fabrictype_name', name: 'TYPE' },
-      { key: 'create_date', name: 'CREATE DATE', formatter: DateLongFormatter },
-      { key: 'update_date', name: 'UPDATE DATE', formatter: DateLongFormatter },
+      { key: 'fabrictype_name',dataIndex: 'fabrictype_name', title: 'TYPE', name: 'TYPE' },
+      { key: 'create_date',dataIndex: 'create_date', title: 'CREATE DATE',name: 'CREATE DATE', render: (text, record, index) => (
+        <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_LONG_DATE)}</span>
+      ) },
+      { key: 'update_date',dataIndex: 'update_date', title: 'UPDATE DATE', name: 'UPDATE DATE',  render: (text, record) => (
+        <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_LONG_DATE)}</span>
+      ) },
     ]
     return (
       <div>
@@ -284,15 +284,22 @@ class WarehouseFabricType extends Component {
           data={this.state.selected_fabrictype}
         />
 
-        <ReactDataGrid
-          enableCellSelect={true}
-          resizable={true}
+        <Table
+          style={{ marginTop: '5px' }}
+          rowKey={'_id'}
           columns={columns}
-          rowGetter={this.rowGetter}
-          rowsCount={this.state.data_fabrictypes.length}
-          minHeight={390}
-          onRowClick={this.onRowFabricTypeClick}
-          rowRenderer={RowRenderer}
+          dataSource={this.state.data_fabrictypes}      
+          rowClassName={ (record, index) => { return index%2===0?'even-row':'old-row' }   }   
+          onRow={record => {
+            return {
+              onClick: () => {
+                this.setState({ selected_fabrictype: record })
+              },
+              onMouseEnter: () => {},
+            }
+          }}
+          size="small"
+          bordered
         />
       </div>
     )

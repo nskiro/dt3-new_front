@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
 import { Grid, Row, Col } from 'react-bootstrap'
 
-import { Select, Input, InputNumber, Button, Form, Modal, Collapse, DatePicker } from 'antd'
+import { Select, Input, InputNumber, Button, Form, Modal, Collapse, Table, DatePicker } from 'antd'
 
 import ReactDataGrid from 'react-data-grid'
 import update from 'immutability-helper'
-
-import RowRenderer from '../rowrenderer'
-import DateFormatter from '../dateformatter'
 
 import PropTypes from 'prop-types'
 import moment from 'moment'
@@ -19,14 +16,14 @@ import '../views.css' //'./views.css'
 
 const { Editors } = require('react-data-grid-addons')
 const { AutoComplete: AutoCompleteEditor } = Editors
-const { DateLongFormatter, DateShortFormatter } = DateFormatter
 //const { WeekPicker } = DatePicker;
 
 const FormItem = Form.Item
 const Option = Select.Option
 const Panel = Collapse.Panel
 //format
-const dateFormat = 'MM/DD/YYYY'
+const FORMAT_SHORT_DATE = 'MM/DD/YYYY'
+const FORMAT_LONG_DATE = 'MM/DD/YYYY HH:mm:ss'
 const button_size = 'small'
 
 const default_cols = [
@@ -242,7 +239,7 @@ class WarehouseExportForm extends Component {
                         },
                       ],
                     },
-                  )(<DatePicker format={dateFormat} disabled />)}
+                  )(<DatePicker format={FORMAT_SHORT_DATE} disabled />)}
                 </FormItem>
               </Col>
             </Row>
@@ -505,8 +502,16 @@ class WarehouseExport extends Component {
   render() {
     const { getFieldDecorator } = this.props.form
     const columns = [
-      { key: 'inputdate_no', name: 'EX DATE', formatter: DateShortFormatter },
-      { key: 'create_date', name: 'CREATE DATE', formatter: DateLongFormatter },
+      {
+        key: 'inputdate_no', dataIndex: 'inputdate_no', title: 'EX DATE', name: 'EX DATE', render: (text, record) => (
+          <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_SHORT_DATE)}</span>
+        )
+      },
+      {
+        key: 'create_date', dataIndex: 'create_date', title: 'CREATE DATE', name: 'CREATE DATE', render: (text, record) => (
+          <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_LONG_DATE)}</span>
+        )
+      },
     ]
     return (
       <div>
@@ -517,12 +522,12 @@ class WarehouseExport extends Component {
                 <Row className="show-grid">
                   <Col md={4} sm={6} xs={6} style={{ textAlign: 'left' }}>
                     <FormItem label="FROM EX DATE ">
-                      {getFieldDecorator('from_date', {}, {})(<DatePicker format={dateFormat} />)}
+                      {getFieldDecorator('from_date', {}, {})(<DatePicker format={FORMAT_SHORT_DATE} />)}
                     </FormItem>
                   </Col>
                   <Col md={4} sm={6} xs={6} style={{ textAlign: 'left' }}>
                     <FormItem label="TO EX DATE ">
-                      {getFieldDecorator('to_date', {}, {})(<DatePicker format={dateFormat} />)}
+                      {getFieldDecorator('to_date', {}, {})(<DatePicker format={FORMAT_SHORT_DATE} />)}
                     </FormItem>
                   </Col>
                 </Row>
@@ -594,17 +599,24 @@ class WarehouseExport extends Component {
           onCreate={this.handleCreate}
           data={this.state.data_export_selected}
         />
-
-        <ReactDataGrid
-          enableCellSelect={true}
-          resizable={true}
+        <Table
+          style={{ marginTop: '5px' }}
+          rowKey={'_id'}
           columns={columns}
-          rowGetter={this.rowGetter}
-          rowsCount={this.state.warehouse_import_data.length}
-          minHeight={290}
-          onRowClick={this.onRowWarehouseImportClick}
-          rowRenderer={RowRenderer}
+          dataSource={this.state.warehouse_import_data}
+          rowClassName={(record, index) => { return index % 2 === 0 ? 'even-row' : 'old-row' }}
+          onRow={record => {
+            return {
+              onClick: () => {
+                this.setState({ data_export_selected: record })
+              },
+              onMouseEnter: () => { },
+            }
+          }}
+          size="small"
+          bordered
         />
+
       </div>
     )
   }

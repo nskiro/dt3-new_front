@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Grid, Row, Col } from 'react-bootstrap'
-import { Input, Button, Form, Modal, Collapse } from 'antd'
+import { Input, Button, Form, Modal, Collapse,Table } from 'antd'
 import PropTypes from 'prop-types'
 
 import ReactDataGrid from 'react-data-grid'
@@ -9,7 +9,7 @@ import ReactDataGrid from 'react-data-grid'
 import RowRenderer from '../rowrenderer'
 import DateFormatter from '../dateformatter'
 
-//import moment from 'moment';
+import moment from 'moment';
 import axios from '../../../../../axiosInst'
 //css
 import '../views.css'
@@ -18,6 +18,7 @@ const FormItem = Form.Item
 const Panel = Collapse.Panel
 const { DateLongFormatter, DateShortFormatter } = DateFormatter
 const button_size = 'small'
+const FORMAT_LONG_DATE='MM/DD/YYYY HH:mm:ss'
 
 class ProviderForm extends Component {
   render() {
@@ -211,9 +212,13 @@ class WarehouseFabricProvider extends Component {
     const { getFieldDecorator } = this.props.form
     const columns = [
       // {key: '_id', name: 'id', hidd: false },
-      { key: 'provider_code', name: 'SUPPLIER' },
-      { key: 'create_date', name: 'CREATE DATE', formatter: DateLongFormatter },
-      { key: 'update_date', name: 'UPDATE DATE', formatter: DateLongFormatter },
+      { key: 'provider_code', dataIndex: 'provider_code', title: 'SUPPLIER', name: 'SUPPLIER' },
+      { key: 'create_date', dataIndex: 'create_date', title: 'CREATE DATE',name: 'CREATE DATE', render: (text, record) => (
+        <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_LONG_DATE)}</span>
+      ) },
+      { key: 'update_date', dataIndex: 'update_date', title: 'UPDATE DATE', name: 'UPDATE DATE', render: (text, record) => (
+        <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_LONG_DATE)}</span>
+      ) },
     ]
     return (
       <div>
@@ -286,17 +291,24 @@ class WarehouseFabricProvider extends Component {
           onCreate={this.handleCreate}
           data={this.state.selected_provider}
         />
-
-        <ReactDataGrid
-          enableCellSelect={true}
-          resizable={true}
+        <Table
+          style={{ marginTop: '5px' }}
+          rowKey={'_id'}
           columns={columns}
-          rowGetter={this.rowGetter}
-          rowsCount={this.state.data_providers.length}
-          minHeight={390}
-          onRowClick={this.onRowProviderClick}
-          rowRenderer={RowRenderer}
+          dataSource={this.state.data_providers}
+          rowClassName={ (record, index) => { return index%2===0?'even-row':'old-row' }   }   
+          onRow={record => {
+            return {
+              onClick: () => {
+                this.setState({ selected_provider: record })
+              },
+              onMouseEnter: () => {},
+            }
+          }}
+          size="small"
+          bordered
         />
+       
       </div>
     )
   }
