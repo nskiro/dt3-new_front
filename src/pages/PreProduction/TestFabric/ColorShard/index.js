@@ -105,11 +105,14 @@ class ColorShard extends Component {
     return (
       <Page {...props}>
         <Helmet title="Color Shard" />
-        <section className="card">
+        <div className="card">
+          <div className="card-header">
+            <div className="utils__title">Color Shard</div>
+          </div>
           <div className="card-body">
             <Table columns={masterColumns} dataSource={masterData} size="small" />
           </div>
-        </section>
+        </div>
       </Page>
     )
   }
