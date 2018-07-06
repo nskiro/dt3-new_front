@@ -15,10 +15,13 @@ import axios from '../../../../axiosInst' //'../../../../../axiosInst'
 import './views.css' //'./views.css'
 
 class RelaxForm extends Component {
-
-    render() {
-        return (<div><h1>Con còn có cái cẳng còng co co</h1> <Button type="primary">Cliked</Button></div>)
-    }
+  render() {
+    return (
+      <div>
+        <h1>Con còn có cái cẳng còng co co</h1> <Button type="primary">Cliked</Button>
+      </div>
+    )
+  }
 }
 
 export default RelaxForm
