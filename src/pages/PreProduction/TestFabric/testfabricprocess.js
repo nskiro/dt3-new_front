@@ -38,7 +38,6 @@ class TestFabricProcessView extends Component {
     super(props)
     this.state = {
       current: 0,
-
       data: {},
     }
   }
