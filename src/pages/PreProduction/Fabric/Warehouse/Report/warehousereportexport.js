@@ -10,13 +10,14 @@ import {
   DatePicker,
   Select,
   Icon,
-  Row, Col,
+  Row,
+  Col,
   Pagination,
 } from 'antd'
 import moment from 'moment'
 import axios from '../../../../../axiosInst'
 import _ from 'lodash'
-import { formItemLayout, tailFormItemLayout } from "../../../../Common/FormStyle";
+import { formItemLayout, tailFormItemLayout } from '../../../../Common/FormStyle'
 
 //css
 import '../views.css'
@@ -448,24 +449,44 @@ class WarehouseReportExport extends Component {
       <div>
         <Form className="ant-advanced-search-panel " onSubmit={this.handleSearchExport}>
           <div>
-            <Row gutter={2} >
-              <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+            <Row gutter={2}>
+              <Col
+                xs={{ span: 24 }}
+                sm={{ span: 24 }}
+                md={{ span: 8 }}
+                lg={{ span: 8 }}
+                xl={{ span: 8 }}
+              >
                 <Row>
                   <FormItem {...formItemLayout} label={'FROM ORDER #'}>
                     {getFieldDecorator('order_from', {})(
-                      <InputNumber style={{ width: '100%' }} name="order_from" placeholder="from order no" />,
+                      <InputNumber
+                        style={{ width: '100%' }}
+                        name="order_from"
+                        placeholder="from order no"
+                      />,
                     )}
                   </FormItem>
                 </Row>
                 <Row>
                   <FormItem {...formItemLayout} label={'TO ORDER #'}>
                     {getFieldDecorator('order_to', {})(
-                      <InputNumber style={{ width: '100%' }} name="order_to" placeholder="to oder no" />,
+                      <InputNumber
+                        style={{ width: '100%' }}
+                        name="order_to"
+                        placeholder="to oder no"
+                      />,
                     )}
                   </FormItem>
                 </Row>
               </Col>
-              <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+              <Col
+                xs={{ span: 24 }}
+                sm={{ span: 24 }}
+                md={{ span: 8 }}
+                lg={{ span: 8 }}
+                xl={{ span: 8 }}
+              >
                 <Row>
                   <FormItem {...formItemLayout} label={'FROM DATE'}>
                     {getFieldDecorator('from_date', {})(
@@ -475,20 +496,30 @@ class WarehouseReportExport extends Component {
                 </Row>
                 <Row>
                   <FormItem {...formItemLayout} label={'TO DATE'}>
-                    {getFieldDecorator('to_date', {})(<DatePicker size={size} format={dateFormat} style={{ width: '100%' }} />)}
+                    {getFieldDecorator('to_date', {})(
+                      <DatePicker size={size} format={dateFormat} style={{ width: '100%' }} />,
+                    )}
                   </FormItem>
                 </Row>
               </Col>
 
-              <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+              <Col
+                xs={{ span: 24 }}
+                sm={{ span: 24 }}
+                md={{ span: 8 }}
+                lg={{ span: 8 }}
+                xl={{ span: 8 }}
+              >
                 <Row>
                   <FormItem {...formItemLayout} label={'TYPE '}>
                     {getFieldDecorator('fabric_type', {})(
-                      <AutoComplete style={{ width: '100%' }}
+                      <AutoComplete
+                        style={{ width: '100%' }}
                         placeholder="loại vải"
                         dataSource={this.state.data_types}
                         filterOption={(inputValue, option) =>
-                          option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                          option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+                          -1
                         }
                       />,
                     )}
@@ -497,11 +528,13 @@ class WarehouseReportExport extends Component {
                 <Row>
                   <FormItem {...formItemLayout} label={'COLOR '}>
                     {getFieldDecorator('fabric_color', {})(
-                      <AutoComplete style={{ width: '100%' }}
+                      <AutoComplete
+                        style={{ width: '100%' }}
                         placeholder="màu vải"
                         dataSource={this.state.data_colors}
                         filterOption={(inputValue, option) =>
-                          option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                          option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+                          -1
                         }
                       />,
                     )}
@@ -510,57 +543,71 @@ class WarehouseReportExport extends Component {
               </Col>
             </Row>
             <Row gutter={2}>
-              <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
-                <FormItem {...tailFormItemLayout} >
-                  <Button icon="search" size={button_size} type="primary" htmlType="submit"> SEARCH </Button>
-                  <Button icon="sync" size={button_size} style={{ marginLeft: 8 }} onClick={this.handleExportReset}>CLEAR</Button>
+              <Col
+                xs={{ span: 24 }}
+                sm={{ span: 24 }}
+                md={{ span: 8 }}
+                lg={{ span: 8 }}
+                xl={{ span: 8 }}
+              >
+                <FormItem {...tailFormItemLayout}>
+                  <Button icon="search" size={button_size} type="primary" htmlType="submit">
+                    {' '}
+                    SEARCH{' '}
+                  </Button>
+                  <Button
+                    icon="sync"
+                    size={button_size}
+                    style={{ marginLeft: 8 }}
+                    onClick={this.handleExportReset}
+                  >
+                    CLEAR
+                  </Button>
                 </FormItem>
               </Col>
             </Row>
           </div>
         </Form>
-        {
-          this.state.show_grid_result === true ? (
-            <div>
-              <div className="ant-advanced-toolbar">
-                <ExcelFile
-                  element={
-                    <Button icon="export" size={button_size} type="primary">
-                      Download Data
+        {this.state.show_grid_result === true ? (
+          <div>
+            <div className="ant-advanced-toolbar">
+              <ExcelFile
+                element={
+                  <Button icon="export" size={button_size} type="primary">
+                    Download Data
                   </Button>
-                  }
-                  filename={'Export - ' + moment().format('MM/DD/YYYY h:mm:ss')}
-                >
-                  <ExcelSheet dataSet={this.exportDataset()} name="Export" />
-                </ExcelFile>
-              </div>
-              <Table
-                style={{ marginTop: '5px' }}
-                rowKey={'_id'}
-                columns={export_columns}
-                dataSource={this.state.data_export}
-                rowClassName={(record, index) => {
-                  return index % 2 === 0 ? 'even-row' : 'old-row'
-                }}
-                onRow={record => {
-                  return {
-                    onClick: () => {
-                      this.setState({ selected_fabrictype: record })
-                    },
-                    onMouseEnter: () => { },
-                  }
-                }}
-                size="small"
-                bordered
-                onChange={this.handleChange}
-                pagination={() => {
-                  return <Pagination size="small" total={50} showTotal={this.showTotal} />
-                }}
-              />
+                }
+                filename={'Export - ' + moment().format('MM/DD/YYYY h:mm:ss')}
+              >
+                <ExcelSheet dataSet={this.exportDataset()} name="Export" />
+              </ExcelFile>
             </div>
-          ) : null
-        }
-      </div >
+            <Table
+              style={{ marginTop: '5px' }}
+              rowKey={'_id'}
+              columns={export_columns}
+              dataSource={this.state.data_export}
+              rowClassName={(record, index) => {
+                return index % 2 === 0 ? 'even-row' : 'old-row'
+              }}
+              onRow={record => {
+                return {
+                  onClick: () => {
+                    this.setState({ selected_fabrictype: record })
+                  },
+                  onMouseEnter: () => {},
+                }
+              }}
+              size="small"
+              bordered
+              onChange={this.handleChange}
+              pagination={() => {
+                return <Pagination size="small" total={50} showTotal={this.showTotal} />
+              }}
+            />
+          </div>
+        ) : null}
+      </div>
     )
   }
 }

@@ -3,7 +3,7 @@ import ExcelFileSheet from 'react-data-export'
 import { AutoComplete, InputNumber, Form, Button, DatePicker, Select, Table, Row, Col } from 'antd'
 import moment from 'moment'
 import axios from '../../../../../axiosInst'
-import { formItemLayout, tailFormItemLayout } from "../../../../Common/FormStyle";
+import { formItemLayout, tailFormItemLayout } from '../../../../Common/FormStyle'
 
 //css
 import '../views.css'
@@ -11,7 +11,6 @@ import '../views.css'
 const Option = Select.Option
 const FormItem = Form.Item
 const { ExcelFile, ExcelSheet } = ExcelFileSheet
-
 
 const FORMAT_SHORT_DATE = 'MM/DD/YYYY'
 const FORMAT_LONG_DATE = 'MM/DD/YYYY HH:mm:ss'
@@ -328,62 +327,100 @@ class WarehouseReportImport extends Component {
       <div>
         <Form className="ant-advanced-search-panel " onSubmit={this.handleSearchImport}>
           <div>
-            <Row gutter={2} >
-              <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+            <Row gutter={2}>
+              <Col
+                xs={{ span: 24 }}
+                sm={{ span: 24 }}
+                md={{ span: 8 }}
+                lg={{ span: 8 }}
+                xl={{ span: 8 }}
+              >
                 <Row>
                   <FormItem {...formItemLayout} label={'FROM ORDER #'}>
                     {getFieldDecorator('order_from', {})(
-                      <InputNumber style={{ width: '100%' }} name="order_from" placeholder="from order no" />,
+                      <InputNumber
+                        style={{ width: '100%' }}
+                        name="order_from"
+                        placeholder="from order no"
+                      />,
                     )}
                   </FormItem>
                 </Row>
                 <Row>
                   <FormItem {...formItemLayout} label={'TO ORDER #'}>
                     {getFieldDecorator('order_to', {})(
-                      <InputNumber style={{ width: '100%' }} name="order_to" placeholder="to oder no" />,
+                      <InputNumber
+                        style={{ width: '100%' }}
+                        name="order_to"
+                        placeholder="to oder no"
+                      />,
                     )}
                   </FormItem>
                 </Row>
                 <Row>
                   <FormItem {...formItemLayout} label={'SUPPILERS'}>
                     {getFieldDecorator('provider_name', {})(
-                      <AutoComplete style={{ width: '100%' }}
+                      <AutoComplete
+                        style={{ width: '100%' }}
                         placeholder="nhà cung cấp"
                         dataSource={this.state.data_providers}
                         filterOption={(inputValue, option) =>
-                          option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                          option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+                          -1
                         }
                       />,
                     )}
                   </FormItem>
                 </Row>
               </Col>
-              <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+              <Col
+                xs={{ span: 24 }}
+                sm={{ span: 24 }}
+                md={{ span: 8 }}
+                lg={{ span: 8 }}
+                xl={{ span: 8 }}
+              >
                 <Row>
                   <FormItem {...formItemLayout} label={'FROM DATE'}>
                     {getFieldDecorator('from_date', {})(
-                      <DatePicker style={{ width: '100%' }} size={size} format={FORMAT_SHORT_DATE} />,
+                      <DatePicker
+                        style={{ width: '100%' }}
+                        size={size}
+                        format={FORMAT_SHORT_DATE}
+                      />,
                     )}
                   </FormItem>
                 </Row>
                 <Row>
                   <FormItem {...formItemLayout} label={'TO DATE'}>
                     {getFieldDecorator('to_date', {})(
-                      <DatePicker style={{ width: '100%' }} size={size} format={FORMAT_SHORT_DATE} />,
+                      <DatePicker
+                        style={{ width: '100%' }}
+                        size={size}
+                        format={FORMAT_SHORT_DATE}
+                      />,
                     )}
                   </FormItem>
                 </Row>
               </Col>
 
-              <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+              <Col
+                xs={{ span: 24 }}
+                sm={{ span: 24 }}
+                md={{ span: 8 }}
+                lg={{ span: 8 }}
+                xl={{ span: 8 }}
+              >
                 <Row>
                   <FormItem {...formItemLayout} label={'TYPE '}>
                     {getFieldDecorator('fabric_type', {})(
-                      <AutoComplete style={{ width: '100%' }}
+                      <AutoComplete
+                        style={{ width: '100%' }}
                         placeholder="loại vải"
                         dataSource={this.state.data_types}
                         filterOption={(inputValue, option) =>
-                          option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                          option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+                          -1
                         }
                       />,
                     )}
@@ -392,11 +429,13 @@ class WarehouseReportImport extends Component {
                 <Row>
                   <FormItem {...formItemLayout} label={'COLOR '}>
                     {getFieldDecorator('fabric_color', {})(
-                      <AutoComplete style={{ width: '100%' }}
+                      <AutoComplete
+                        style={{ width: '100%' }}
                         placeholder="màu vải"
                         dataSource={this.state.data_colors}
                         filterOption={(inputValue, option) =>
-                          option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                          option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+                          -1
                         }
                       />,
                     )}
@@ -406,10 +445,26 @@ class WarehouseReportImport extends Component {
             </Row>
 
             <Row gutter={2}>
-              <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
-                <FormItem {...tailFormItemLayout} >
-                  <Button icon="search" size={button_size} type="primary" htmlType="submit"> {' '}SEARCH </Button>
-                  <Button icon="sync" size={button_size} style={{ marginLeft: 8 }} onClick={this.handleImportReset}>CLEAR</Button>
+              <Col
+                xs={{ span: 24 }}
+                sm={{ span: 24 }}
+                md={{ span: 8 }}
+                lg={{ span: 8 }}
+                xl={{ span: 8 }}
+              >
+                <FormItem {...tailFormItemLayout}>
+                  <Button icon="search" size={button_size} type="primary" htmlType="submit">
+                    {' '}
+                    SEARCH{' '}
+                  </Button>
+                  <Button
+                    icon="sync"
+                    size={button_size}
+                    style={{ marginLeft: 8 }}
+                    onClick={this.handleImportReset}
+                  >
+                    CLEAR
+                  </Button>
                 </FormItem>
               </Col>
             </Row>
@@ -443,7 +498,7 @@ class WarehouseReportImport extends Component {
                   onClick: () => {
                     //this.setState({ selected_fabrictype: record })
                   },
-                  onMouseEnter: () => { },
+                  onMouseEnter: () => {},
                 }
               }}
               size="small"
