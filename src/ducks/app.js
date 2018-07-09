@@ -127,7 +127,7 @@ const initialState = {
     borderLess: false,
     fixedWidth: false,
     settingsOpened: false,
-    borderedCards: true
+    borderedCards: true,
   },
 
   // USER STATE

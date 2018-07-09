@@ -13,38 +13,38 @@ class PersonalInfoForm extends Component {
     const { userInfo } = this.props
     const { getFieldDecorator, getFieldValue } = this.props.form
     return (
-        <Form layout="horizontal" onSubmit={this.props.onSubmit}>
-          <FormItem label="" {...formItemLayout}>
-            {getFieldDecorator('pId', {
-              initialValue: userInfo._id,
-            })(<Input type="hidden" />)}
-          </FormItem>
-          <FormItem label="New Password" {...formItemLayout}>
-            {getFieldDecorator('password', {
-              rules: [
-                { required: true, message: 'Please input new pasword!' },
-                { min: 6, message: 'Password length must be greater than 5 characters' },
-              ],
-            })(<Input type="password" />)}
-          </FormItem>
-          <FormItem label="Confirm New Password" {...formItemLayout}>
-            {getFieldDecorator('password2', {
-              rules: [
-                { required: true, message: 'Confirm your new password' },
-                {
-                  message: 'Password does not match!',
-                  validator: (rule, value, cb) =>
-                    value === getFieldValue('password') ? cb() : cb(true),
-                },
-              ],
-            })(<Input type="password" />)}
-          </FormItem>
-          <FormItem {...formItemLayout}>
-            <Button type="primary" htmlType="submit">
-              Change
-            </Button>
-          </FormItem>
-        </Form>
+      <Form layout="horizontal" onSubmit={this.props.onSubmit}>
+        <FormItem label="" {...formItemLayout}>
+          {getFieldDecorator('pId', {
+            initialValue: userInfo._id,
+          })(<Input type="hidden" />)}
+        </FormItem>
+        <FormItem label="New Password" {...formItemLayout}>
+          {getFieldDecorator('password', {
+            rules: [
+              { required: true, message: 'Please input new pasword!' },
+              { min: 6, message: 'Password length must be greater than 5 characters' },
+            ],
+          })(<Input type="password" />)}
+        </FormItem>
+        <FormItem label="Confirm New Password" {...formItemLayout}>
+          {getFieldDecorator('password2', {
+            rules: [
+              { required: true, message: 'Confirm your new password' },
+              {
+                message: 'Password does not match!',
+                validator: (rule, value, cb) =>
+                  value === getFieldValue('password') ? cb() : cb(true),
+              },
+            ],
+          })(<Input type="password" />)}
+        </FormItem>
+        <FormItem {...formItemLayout}>
+          <Button type="primary" htmlType="submit">
+            Change
+          </Button>
+        </FormItem>
+      </Form>
     )
   }
 }

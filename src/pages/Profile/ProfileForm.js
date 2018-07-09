@@ -73,7 +73,10 @@ class ProfileForm extends Component {
               hoverable
               style={{ width: '90%', display: 'block', margin: 'auto' }}
               cover={
-                <img alt="example" src={`data:${dept.avatar.mimetype};base64,${dept.avatar.data}`} />
+                <img
+                  alt="example"
+                  src={`data:${dept.avatar.mimetype};base64,${dept.avatar.data}`}
+                />
               }
               actions={[
                 <Upload
@@ -95,7 +98,7 @@ class ProfileForm extends Component {
                 >
                   <Button type="primary" icon="upload">
                     Upload New Avatar
-                </Button>
+                  </Button>
                 </Upload>,
               ]}
             >

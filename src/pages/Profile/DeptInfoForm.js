@@ -14,23 +14,23 @@ class DeptInfoForm extends Component {
     const { deptInfo } = this.props
     const { getFieldDecorator } = this.props.form
     return (
-        <Form layout="horizontal" onSubmit={this.props.onSubmit}>
-          <FormItem label="" {...formItemLayout}>
-            {getFieldDecorator('dId', {
-              initialValue: deptInfo._id,
-            })(<Input type="hidden" />)}
-          </FormItem>
-          <FormItem label="Note" {...formItemLayout}>
-            {getFieldDecorator('note', {
-              initialValue: deptInfo.note,
-            })(<TextArea rows={13} />)}
-          </FormItem>
-          <FormItem {...formItemLayout}>
-            <Button type="primary" htmlType="submit">
-              Update
-            </Button>
-          </FormItem>
-        </Form>
+      <Form layout="horizontal" onSubmit={this.props.onSubmit}>
+        <FormItem label="" {...formItemLayout}>
+          {getFieldDecorator('dId', {
+            initialValue: deptInfo._id,
+          })(<Input type="hidden" />)}
+        </FormItem>
+        <FormItem label="Note" {...formItemLayout}>
+          {getFieldDecorator('note', {
+            initialValue: deptInfo.note,
+          })(<TextArea rows={13} />)}
+        </FormItem>
+        <FormItem {...formItemLayout}>
+          <Button type="primary" htmlType="submit">
+            Update
+          </Button>
+        </FormItem>
+      </Form>
     )
   }
 }

@@ -107,11 +107,7 @@ class ColorShard extends Component {
       <Page {...props}>
         <Helmet title="Color Shard" />
         <CustomCard title="Color Shard">
-          <Table
-            columns={masterColumns}
-            dataSource={masterData}
-            bordered
-            size="small" />
+          <Table columns={masterColumns} dataSource={masterData} bordered size="small" />
         </CustomCard>
       </Page>
     )
