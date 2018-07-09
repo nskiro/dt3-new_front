@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Page from 'components/LayoutComponents/Page'
+import CustomCard from 'components/LayoutComponents/CustomCard'
 import Helmet from 'react-helmet'
 import { Table } from 'antd'
 
@@ -105,14 +106,13 @@ class ColorShard extends Component {
     return (
       <Page {...props}>
         <Helmet title="Color Shard" />
-        <div className="card">
-          <div className="card-header">
-            <div className="utils__title">Color Shard</div>
-          </div>
-          <div className="card-body">
-            <Table columns={masterColumns} dataSource={masterData} size="small" />
-          </div>
-        </div>
+        <CustomCard title="Color Shard">
+          <Table
+            columns={masterColumns}
+            dataSource={masterData}
+            bordered
+            size="small" />
+        </CustomCard>
       </Page>
     )
   }

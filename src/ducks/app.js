@@ -122,11 +122,12 @@ const initialState = {
     menuMobileOpened: false,
     menuCollapsed: false,
     menuShadow: false,
-    themeLight: false,
-    squaredBorders: true,
-    borderLess: true,
+    themeLight: true,
+    squaredBorders: false,
+    borderLess: false,
     fixedWidth: false,
     settingsOpened: false,
+    borderedCards: true
   },
 
   // USER STATE

@@ -13,7 +13,6 @@ class PersonalInfoForm extends Component {
     const { userInfo } = this.props
     const { getFieldDecorator, getFieldValue } = this.props.form
     return (
-      <Card title="Change Password" style={{ width: '95%', display: 'block', margin: 'auto' }}>
         <Form layout="horizontal" onSubmit={this.props.onSubmit}>
           <FormItem label="" {...formItemLayout}>
             {getFieldDecorator('pId', {
@@ -46,7 +45,6 @@ class PersonalInfoForm extends Component {
             </Button>
           </FormItem>
         </Form>
-      </Card>
     )
   }
 }

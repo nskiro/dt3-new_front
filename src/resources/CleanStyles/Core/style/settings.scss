@@ -53,7 +53,8 @@ body.menuShadow {
 
 body.borderedCards {
   .card {
-    border-top: 4px solid $success !important;
+    border-top: 4px solid $blue-darken !important;
+    margin: 0 3px;
   }
 }
 

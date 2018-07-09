@@ -14,7 +14,6 @@ class DeptInfoForm extends Component {
     const { deptInfo } = this.props
     const { getFieldDecorator } = this.props.form
     return (
-      <Card title="Department Note" style={{ width: '95%', display: 'block', margin: 'auto' }}>
         <Form layout="horizontal" onSubmit={this.props.onSubmit}>
           <FormItem label="" {...formItemLayout}>
             {getFieldDecorator('dId', {
@@ -32,7 +31,6 @@ class DeptInfoForm extends Component {
             </Button>
           </FormItem>
         </Form>
-      </Card>
     )
   }
 }

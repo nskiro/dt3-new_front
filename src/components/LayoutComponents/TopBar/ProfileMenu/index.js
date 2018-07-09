@@ -59,7 +59,7 @@ class ProfileMenu extends React.Component {
         <Dropdown
           overlay={menu}
           trigger={['click']}
-          placement="bottomRight"
+          placement="bottomLeft"
           onVisibleChange={this.addCount}
         >
           <a className="ant-dropdown-link" href="#">
