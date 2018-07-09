@@ -10,7 +10,6 @@ import axios from '../../../../../axiosInst' //'../../../../../axiosInst'
 import '../views.css' //'./views.css'
 import { formItemLayout, tailFormItemLayout } from '../../../../Common/FormStyle'
 
-
 const FormItem = Form.Item
 const Panel = Collapse.Panel
 const { DateLongFormatter } = DateFormatter
@@ -230,17 +229,36 @@ class WarehouseFabricColor extends Component {
           <Panel header="SEARCH" key="1">
             <Form onSubmit={this.handleSearch}>
               <Row gutter={8}>
-                <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
-                  <FormItem   {...formItemLayout} label={'COLOR'}>
-                    {getFieldDecorator('fabriccolor_name', {})(
-                      <Input placeholder="tên màu vải" />,
-                    )}
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
+                  <FormItem {...formItemLayout} label={'COLOR'}>
+                    {getFieldDecorator('fabriccolor_name', {})(<Input placeholder="tên màu vải" />)}
                   </FormItem>
                 </Col>
-                <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
-                  <FormItem  {...formItemLayout}>
-                    <Button icon="search" size={button_size} type="primary" htmlType="submit">SEARCH</Button>
-                    <Button icon="sync" size={button_size} style={{ marginLeft: 8 }} onClick={this.handleReset}>CLEAR</Button>
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
+                  <FormItem {...formItemLayout}>
+                    <Button icon="search" size={button_size} type="primary" htmlType="submit">
+                      SEARCH
+                    </Button>
+                    <Button
+                      icon="sync"
+                      size={button_size}
+                      style={{ marginLeft: 8 }}
+                      onClick={this.handleReset}
+                    >
+                      CLEAR
+                    </Button>
                   </FormItem>
                 </Col>
               </Row>
@@ -249,11 +267,42 @@ class WarehouseFabricColor extends Component {
         </Collapse>
 
         <Row>
-          <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
-            <FormItem  {...formItemLayout}>
-              <Button icon="plus" size={button_size} type="primary" value="new" onClick={this.showModal}>NEW</Button>
-              <Button icon="edit" size={button_size} style={{ marginLeft: 8 }} type="primary" value="edit" onClick={this.showModal}>EDIT</Button>
-              <Button icon="sync"size={button_size} style={{ marginLeft: 8 }} type="primary" onClick={this.onRefeshGrid}>REFESH</Button>
+          <Col
+            xs={{ span: 24 }}
+            sm={{ span: 24 }}
+            md={{ span: 8 }}
+            lg={{ span: 8 }}
+            xl={{ span: 8 }}
+          >
+            <FormItem {...formItemLayout}>
+              <Button
+                icon="plus"
+                size={button_size}
+                type="primary"
+                value="new"
+                onClick={this.showModal}
+              >
+                NEW
+              </Button>
+              <Button
+                icon="edit"
+                size={button_size}
+                style={{ marginLeft: 8 }}
+                type="primary"
+                value="edit"
+                onClick={this.showModal}
+              >
+                EDIT
+              </Button>
+              <Button
+                icon="sync"
+                size={button_size}
+                style={{ marginLeft: 8 }}
+                type="primary"
+                onClick={this.onRefeshGrid}
+              >
+                REFESH
+              </Button>
             </FormItem>
           </Col>
         </Row>
@@ -277,7 +326,7 @@ class WarehouseFabricColor extends Component {
               onClick: () => {
                 this.setState({ selected_fabriccolor: record })
               },
-              onMouseEnter: () => { },
+              onMouseEnter: () => {},
             }
           }}
           size="small"

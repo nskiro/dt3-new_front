@@ -24,11 +24,23 @@ class ProviderForm extends Component {
     const { visible, onCancel, onCreate, form } = this.props
     const { getFieldDecorator } = form
     return (
-      <Modal title="SUPPILER" visible={visible} onOk={onCreate} maskClosable={false} onCancel={onCancel}>
+      <Modal
+        title="SUPPILER"
+        visible={visible}
+        onOk={onCreate}
+        maskClosable={false}
+        onCancel={onCancel}
+      >
         <Form>
           <Row gutter={2}>
-            <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
-              <FormItem  {...formItemLayout} >
+            <Col
+              xs={{ span: 24 }}
+              sm={{ span: 24 }}
+              md={{ span: 8 }}
+              lg={{ span: 8 }}
+              xl={{ span: 8 }}
+            >
+              <FormItem {...formItemLayout}>
                 {getFieldDecorator('id', { initialValue: this.props.data._id })(
                   <Input name="id" style={{ display: 'none', visible: false }} />,
                 )}
@@ -36,8 +48,14 @@ class ProviderForm extends Component {
             </Col>
           </Row>
           <Row gutter={2}>
-            <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 24 }} xl={{ span: 24 }}>
-              <FormItem  {...formItemLayout} style={{ paddingLeft: "5px" }} label={'SUPPLIER'}>
+            <Col
+              xs={{ span: 24 }}
+              sm={{ span: 24 }}
+              md={{ span: 24 }}
+              lg={{ span: 24 }}
+              xl={{ span: 24 }}
+            >
+              <FormItem {...formItemLayout} style={{ paddingLeft: '5px' }} label={'SUPPLIER'}>
                 {getFieldDecorator('provider_code', {
                   rules: [{ required: true, message: 'Vui lòng nhập tên nhà cung cấp!' }],
                   initialValue: this.props.data.provider_code,
@@ -45,7 +63,6 @@ class ProviderForm extends Component {
               </FormItem>
             </Col>
           </Row>
-
         </Form>
       </Modal>
     )
@@ -231,15 +248,38 @@ class WarehouseFabricProvider extends Component {
           <Panel header="SEARCH" key="1">
             <Form onSubmit={this.handleSearch}>
               <Row gutter={8}>
-                <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
                   <FormItem {...formItemLayout} label={'SUPPLIER'}>
                     {getFieldDecorator('provider_code', {})(<Input placeholder="nhà cung cấp" />)}
                   </FormItem>
                 </Col>
-                <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
                   <FormItem {...formItemLayout}>
-                    <Button icon="search" size={button_size} type="primary" htmlType="submit"> {' '}SEARCH </Button>
-                    <Button icon="sync" size={button_size} style={{ marginLeft: 8 }} onClick={this.handleReset}>{' '}CLEAR</Button>
+                    <Button icon="search" size={button_size} type="primary" htmlType="submit">
+                      {' '}
+                      SEARCH{' '}
+                    </Button>
+                    <Button
+                      icon="sync"
+                      size={button_size}
+                      style={{ marginLeft: 8 }}
+                      onClick={this.handleReset}
+                    >
+                      {' '}
+                      CLEAR
+                    </Button>
                   </FormItem>
                 </Col>
               </Row>
@@ -247,11 +287,43 @@ class WarehouseFabricProvider extends Component {
           </Panel>
         </Collapse>
         <Row gutter={8}>
-          <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+          <Col
+            xs={{ span: 24 }}
+            sm={{ span: 24 }}
+            md={{ span: 8 }}
+            lg={{ span: 8 }}
+            xl={{ span: 8 }}
+          >
             <FormItem {...formItemLayout}>
-              <Button icon="plus" size={button_size} type="primary" value="new" onClick={this.showModal}>NEW</Button>
-              <Button icon="edit" size={button_size} style={{ marginLeft: 8 }} type="primary" value="edit" onClick={this.showModal}>EDIT</Button>
-              <Button icon="sync" size={button_size} style={{ marginLeft: 8 }} type="primary" onClick={this.onRefeshGrid}>{' '}REFESH{' '}</Button>
+              <Button
+                icon="plus"
+                size={button_size}
+                type="primary"
+                value="new"
+                onClick={this.showModal}
+              >
+                NEW
+              </Button>
+              <Button
+                icon="edit"
+                size={button_size}
+                style={{ marginLeft: 8 }}
+                type="primary"
+                value="edit"
+                onClick={this.showModal}
+              >
+                EDIT
+              </Button>
+              <Button
+                icon="sync"
+                size={button_size}
+                style={{ marginLeft: 8 }}
+                type="primary"
+                onClick={this.onRefeshGrid}
+              >
+                {' '}
+                REFESH{' '}
+              </Button>
             </FormItem>
           </Col>
         </Row>
@@ -275,7 +347,7 @@ class WarehouseFabricProvider extends Component {
               onClick: () => {
                 this.setState({ selected_provider: record })
               },
-              onMouseEnter: () => { },
+              onMouseEnter: () => {},
             }
           }}
           size="small"

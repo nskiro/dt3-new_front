@@ -1,6 +1,18 @@
 import React, { Component } from 'react'
 
-import { Select, Input, InputNumber, Button, Form, Modal, Collapse, Table, DatePicker, Row, Col } from 'antd'
+import {
+  Select,
+  Input,
+  InputNumber,
+  Button,
+  Form,
+  Modal,
+  Collapse,
+  Table,
+  DatePicker,
+  Row,
+  Col,
+} from 'antd'
 
 import ReactDataGrid from 'react-data-grid'
 import update from 'immutability-helper'
@@ -219,23 +231,50 @@ class WarehouseExportForm extends Component {
             </Col>
           </Row>
           <Row gutter={8}>
-            <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
-              <FormItem {...formItemLayout} style={{ paddingLeft: "8px", width: "100%" }} label="EX DATE">
-                {getFieldDecorator('inputdate_no',
+            <Col
+              xs={{ span: 24 }}
+              sm={{ span: 24 }}
+              md={{ span: 8 }}
+              lg={{ span: 8 }}
+              xl={{ span: 8 }}
+            >
+              <FormItem
+                {...formItemLayout}
+                style={{ paddingLeft: '8px', width: '100%' }}
+                label="EX DATE"
+              >
+                {getFieldDecorator(
+                  'inputdate_no',
                   { initialValue: moment(this.props.data.inputdate_no) },
-                  { rules: [{ type: 'object', required: true, message: 'Vui lòng chọn thời gian xuất kho !', },], },
+                  {
+                    rules: [
+                      {
+                        type: 'object',
+                        required: true,
+                        message: 'Vui lòng chọn thời gian xuất kho !',
+                      },
+                    ],
+                  },
                 )(<DatePicker format={FORMAT_SHORT_DATE} disabled />)}
               </FormItem>
             </Col>
           </Row>
           <Row gutter={8}>
             <Col>
-              <FormItem {...formItemLayout} style={{ paddingLeft: "8px", width: "100%" }}>
-                <Button icon="plus" style={{ marginLeft: 8 }} type="primary" size={button_size} onClick={this.addNewRow}>New row</Button>
+              <FormItem {...formItemLayout} style={{ paddingLeft: '8px', width: '100%' }}>
+                <Button
+                  icon="plus"
+                  style={{ marginLeft: 8 }}
+                  type="primary"
+                  size={button_size}
+                  onClick={this.addNewRow}
+                >
+                  New row
+                </Button>
               </FormItem>
             </Col>
           </Row>
-          <Row gutter={2} >
+          <Row gutter={2}>
             <Col span={24}>
               <ReactDataGrid
                 enableCellSelect={true}
@@ -510,44 +549,83 @@ class WarehouseExport extends Component {
           <Panel header="SEARCH" key="1">
             <Form onSubmit={this.handleSearch}>
               <Row gutter={8}>
-                <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
                   <FormItem {...formItemLayout} label="FROM EX DATE ">
                     {getFieldDecorator('from_date', {}, {})(
-                      <DatePicker style={{ width: "100%" }} format={FORMAT_SHORT_DATE} />,
+                      <DatePicker style={{ width: '100%' }} format={FORMAT_SHORT_DATE} />,
                     )}
                   </FormItem>
                 </Col>
-                <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
                   <FormItem {...formItemLayout} label="TO EX DATE ">
                     {getFieldDecorator('to_date', {}, {})(
-                      <DatePicker style={{ width: "100%" }} format={FORMAT_SHORT_DATE} />,
+                      <DatePicker style={{ width: '100%' }} format={FORMAT_SHORT_DATE} />,
                     )}
                   </FormItem>
                 </Col>
               </Row>
               <Row gutter={8}>
-                <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
                   <FormItem {...formItemLayout} label="FROM ORDER # ">
                     {getFieldDecorator('from_orderid', {})(
-                      <InputNumber style={{ width: "100%" }} placeholder="from order #" />,
+                      <InputNumber style={{ width: '100%' }} placeholder="from order #" />,
                     )}
                   </FormItem>
                 </Col>
 
-                <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
                   <FormItem {...formItemLayout} label="TO ORDER # ">
                     {getFieldDecorator('to_orderid', {})(
-                      <InputNumber style={{ width: "100%" }} placeholder="to order #" />,
+                      <InputNumber style={{ width: '100%' }} placeholder="to order #" />,
                     )}
                   </FormItem>
                 </Col>
               </Row>
 
               <Row gutter={8}>
-                <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
                   <FormItem {...tailFormItemLayout}>
-                    <Button icon="search" size={button_size} type="primary" htmlType="submit">SEARCH</Button>
-                    <Button icon="sync" size={button_size} style={{ marginLeft: 8 }} onClick={this.handleReset}>CLEAR</Button>
+                    <Button icon="search" size={button_size} type="primary" htmlType="submit">
+                      SEARCH
+                    </Button>
+                    <Button
+                      icon="sync"
+                      size={button_size}
+                      style={{ marginLeft: 8 }}
+                      onClick={this.handleReset}
+                    >
+                      CLEAR
+                    </Button>
                   </FormItem>
                 </Col>
               </Row>
@@ -556,10 +634,33 @@ class WarehouseExport extends Component {
         </Collapse>
 
         <Row gutter={8}>
-          <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+          <Col
+            xs={{ span: 24 }}
+            sm={{ span: 24 }}
+            md={{ span: 8 }}
+            lg={{ span: 8 }}
+            xl={{ span: 8 }}
+          >
             <FormItem {...formItemLayout}>
-              <Button icon="plus" size={button_size} type="primary" value="new" onClick={this.showModal}>NEW</Button>
-              <Button icon="edit" size={button_size} style={{ marginLeft: 8 }} type="primary" value="detail" onClick={this.showModal}>DETAIL</Button>
+              <Button
+                icon="plus"
+                size={button_size}
+                type="primary"
+                value="new"
+                onClick={this.showModal}
+              >
+                NEW
+              </Button>
+              <Button
+                icon="edit"
+                size={button_size}
+                style={{ marginLeft: 8 }}
+                type="primary"
+                value="detail"
+                onClick={this.showModal}
+              >
+                DETAIL
+              </Button>
             </FormItem>
           </Col>
         </Row>
@@ -584,7 +685,7 @@ class WarehouseExport extends Component {
               onClick: () => {
                 this.setState({ data_export_selected: record })
               },
-              onMouseEnter: () => { },
+              onMouseEnter: () => {},
             }
           }}
           size="small"

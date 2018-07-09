@@ -29,7 +29,6 @@ class FabricTypeForm extends Component {
         onCancel={onCancel}
       >
         <Form>
-
           <Row gutter={8}>
             <Col>
               <FormItem>
@@ -40,9 +39,8 @@ class FabricTypeForm extends Component {
             </Col>
           </Row>
           <Row gutter={8}>
-
             <Col span={24}>
-              <FormItem  {...formItemLayout} label={'TYPE'}>
+              <FormItem {...formItemLayout} label={'TYPE'}>
                 {getFieldDecorator('fabrictype_name', {
                   rules: [{ required: true, message: 'Vui lòng nhập loại vải!' }],
                   initialValue: this.props.data.fabrictype_code,
@@ -50,7 +48,6 @@ class FabricTypeForm extends Component {
               </FormItem>
             </Col>
           </Row>
-
         </Form>
       </Modal>
     )
@@ -229,17 +226,36 @@ class WarehouseFabricType extends Component {
           <Panel header="Tìm kiếm" key="1">
             <Form onSubmit={this.handleSearch}>
               <Row gutter={8}>
-                <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
                   <FormItem {...formItemLayout} label={'TYPE'}>
-                    {getFieldDecorator('fabrictype_name', {})(
-                      <Input placeholder="tên loại vải" />,
-                    )}
+                    {getFieldDecorator('fabrictype_name', {})(<Input placeholder="tên loại vải" />)}
                   </FormItem>
                 </Col>
-                <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
                   <FormItem {...formItemLayout}>
-                    <Button icon="search" size={button_size} type="primary" htmlType="submit">SEARCH</Button>
-                    <Button icon="sync" size={button_size} style={{ marginLeft: 8 }} onClick={this.handleReset}>CLEAR</Button>
+                    <Button icon="search" size={button_size} type="primary" htmlType="submit">
+                      SEARCH
+                    </Button>
+                    <Button
+                      icon="sync"
+                      size={button_size}
+                      style={{ marginLeft: 8 }}
+                      onClick={this.handleReset}
+                    >
+                      CLEAR
+                    </Button>
                   </FormItem>
                 </Col>
               </Row>
@@ -249,9 +265,34 @@ class WarehouseFabricType extends Component {
         <Row gutter={8}>
           <Col>
             <FormItem {...formItemLayout}>
-              <Button icon="plus" size={button_size} type="primary" value="new" onClick={this.showModal}>NEW</Button>
-              <Button icon="edit" size={button_size} style={{ marginLeft: 8 }} type="primary" value="edit" onClick={this.showModal}>EDIT</Button>
-              <Button icon="sync" size={button_size} style={{ marginLeft: 8 }} type="primary" onClick={this.onRefeshGrid}>REFESH</Button>
+              <Button
+                icon="plus"
+                size={button_size}
+                type="primary"
+                value="new"
+                onClick={this.showModal}
+              >
+                NEW
+              </Button>
+              <Button
+                icon="edit"
+                size={button_size}
+                style={{ marginLeft: 8 }}
+                type="primary"
+                value="edit"
+                onClick={this.showModal}
+              >
+                EDIT
+              </Button>
+              <Button
+                icon="sync"
+                size={button_size}
+                style={{ marginLeft: 8 }}
+                type="primary"
+                onClick={this.onRefeshGrid}
+              >
+                REFESH
+              </Button>
             </FormItem>
           </Col>
         </Row>
@@ -276,7 +317,7 @@ class WarehouseFabricType extends Component {
               onClick: () => {
                 this.setState({ selected_fabrictype: record })
               },
-              onMouseEnter: () => { },
+              onMouseEnter: () => {},
             }
           }}
           size="small"
