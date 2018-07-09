@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { Grid, Row, Col } from 'react-bootstrap'
 
-import { Select, Input, Button, Form, Modal, Collapse, Table, DatePicker, Pagination } from 'antd'
+import { Select, Input, Button, Form, Modal, Collapse, Table, DatePicker, Pagination, Row, Col } from 'antd'
 
 import ReactDataGrid from 'react-data-grid'
 import update from 'immutability-helper'
+import { formItemLayout, tailFormItemLayout } from '../../../../Common/FormStyle'
 
 import PropTypes from 'prop-types'
 import moment from 'moment'
@@ -187,98 +187,93 @@ class WarehouseImportForm extends Component {
         style={{ top: 5 }}
       >
         <Form className="ant-advanced-search-panel">
-          <Grid>
-            <Row className="show-grid">
-              <Col>
-                <FormItem>
-                  {getFieldDecorator('id', { initialValue: this.props.data._id })(
-                    <Input name="id" style={{ display: 'none', visible: false }} />,
-                  )}
-                </FormItem>
-              </Col>
-            </Row>
-            <Row className="show-grid">
-              <Col md={6} sm={6} xs={6} style={{ textAlign: 'left' }}>
-                <FormItem {...formItemLayout} label="IM DATE">
-                  {getFieldDecorator('inputdate_no', {
-                    rules: [
-                      {
-                        type: 'object',
-                        required: true,
-                        message: 'Vui lòng chọn thời gian nhập kho !',
-                      },
-                    ],
-                    initialValue: moment(this.props.data.inputdate_no),
-                  })(<DatePicker format={FORMAT_SHORT_DATE} disabled />)}
-                </FormItem>
-              </Col>
-              <Col md={6} sm={6} xs={6} style={{ textAlign: 'left' }}>
-                <FormItem {...formItemLayout} label="SUPPLIER">
-                  {getFieldDecorator('provider_name', {
-                    rules: [{ required: true, message: 'Vui lòng chọn nhà cung cấp!' }],
-                    initialValue: this.props.data.provider_name,
-                  })(
-                    <Select size={'default'} placeholder="nhà cung cấp.">
-                      {this.state.data_providers}
-                    </Select>,
-                  )}
-                </FormItem>
-              </Col>
-            </Row>
+          <Row>
+            <Col>
+              <FormItem>
+                {getFieldDecorator('id', { initialValue: this.props.data._id })(
+                  <Input name="id" style={{ display: 'none', visible: false }} />,
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8} style={{ paddingLeft: "8px", paddingRight: "8px", }}>
+            <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+              <FormItem {...formItemLayout} label="IM DATE">
+                {getFieldDecorator('inputdate_no', {
+                  rules: [
+                    {
+                      type: 'object',
+                      required: true,
+                      message: 'Vui lòng chọn thời gian nhập kho !',
+                    },
+                  ],
+                  initialValue: moment(this.props.data.inputdate_no),
+                })(<DatePicker style={{ width: "100%" }} format={FORMAT_SHORT_DATE} disabled />)}
+              </FormItem>
+            </Col>
+            <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+              <FormItem {...formItemLayout} label="SUPPLIER">
+                {getFieldDecorator('provider_name', {
+                  rules: [{ required: true, message: 'Vui lòng chọn nhà cung cấp!' }],
+                  initialValue: this.props.data.provider_name,
+                })(
+                  <Select style={{ width: "100%" }} size={'default'} placeholder="nhà cung cấp.">
+                    {this.state.data_providers}
+                  </Select>,
+                )}
+              </FormItem>
+            </Col>
+          </Row>
 
-            <Row className="show-grid">
-              <Col md={6} sm={6} xs={6}>
-                <FormItem {...formItemLayout} label="STK">
-                  {getFieldDecorator(
-                    'declare_no',
-                    { initialValue: this.props.data.declare_no },
-                    { rules: [{ required: true, message: 'Vui lòng nhập số tờ khai.' }] },
-                  )(<Input placeholder="số tờ khai" />)}
-                </FormItem>
-              </Col>
-              <Col md={6} sm={6} xs={6}>
-                <FormItem {...formItemLayout} label="STK DATE">
-                  {getFieldDecorator(
-                    'declare_date',
-                    { initialValue: moment(this.props.data.declare_date) },
-                    { rules: [{ required: true, message: 'Vui lòng nhập ngày tờ khai!' }] },
-                  )(<DatePicker format={FORMAT_SHORT_DATE} />)}
-                </FormItem>
-              </Col>
-            </Row>
-            <Row className="show-grid">
-              <Col md={6} sm={6} xs={6}>
-                <FormItem {...formItemLayout} label="INVOICE #">
-                  {getFieldDecorator(
-                    'invoice_no',
-                    { initialValue: this.props.data.invoice_no },
-                    { rules: [{ required: true, message: 'Vui lòng nhập số invoice!' }] },
-                  )(<Input placeholder="số invoice" />)}
-                </FormItem>
-              </Col>
-            </Row>
-            <Row className="show-grid">
-              <Col md={6} sm={6} xs={6}>
-                <Button icon="plus-circle" size={button_size} onClick={this.addNewRow}>
-                  {' '}
-                  NEW ROW{' '}
-                </Button>
-              </Col>
-            </Row>
-            <Row className="show-grid">
-              <Col md={11} sm={11} xs={11}>
-                <ReactDataGrid
-                  enableCellSelect={true}
-                  resizable={true}
-                  columns={this.state.columns ? this.state.columns : []}
-                  rowGetter={this.rowGetter}
-                  rowsCount={this.state.rows ? this.state.rows.length : 0}
-                  minHeight={200}
-                  onGridRowsUpdated={this.handleGridRowsUpdated}
-                />
-              </Col>
-            </Row>
-          </Grid>
+          <Row gutter={8} style={{ paddingLeft: "8px", paddingRight: "8px", }}>
+            <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+              <FormItem {...formItemLayout} label="STK">
+                {getFieldDecorator(
+                  'declare_no',
+                  { initialValue: this.props.data.declare_no },
+                  { rules: [{ required: true, message: 'Vui lòng nhập số tờ khai.' }] },
+                )(<Input style={{ width: "100%" }} placeholder="số tờ khai" />)}
+              </FormItem>
+            </Col>
+            <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+              <FormItem {...formItemLayout} label="STK DATE">
+                {getFieldDecorator(
+                  'declare_date',
+                  { initialValue: moment(this.props.data.declare_date) },
+                  { rules: [{ required: true, message: 'Vui lòng nhập ngày tờ khai!' }] },
+                )(<DatePicker style={{ width: "100%" }} format={FORMAT_SHORT_DATE} />)}
+              </FormItem>
+            </Col>
+            <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+              <FormItem {...formItemLayout} label="INVOICE #">
+                {getFieldDecorator(
+                  'invoice_no',
+                  { initialValue: this.props.data.invoice_no },
+                  { rules: [{ required: true, message: 'Vui lòng nhập số invoice!' }] },
+                )(<Input style={{ width: "100%" }} placeholder="số invoice" />)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col>
+              <FormItem {...formItemLayout} >
+                <Button icon="plus-circle" size={button_size} onClick={this.addNewRow}>NEW ROW</Button>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row >
+            <Col span={24}>
+              <ReactDataGrid
+                enableCellSelect={true}
+                resizable={true}
+                columns={this.state.columns ? this.state.columns : []}
+                rowGetter={this.rowGetter}
+                rowsCount={this.state.rows ? this.state.rows.length : 0}
+                minHeight={200}
+                onGridRowsUpdated={this.handleGridRowsUpdated}
+              />
+            </Col>
+          </Row>
         </Form>
       </Modal>
     )
@@ -606,83 +601,70 @@ class WarehouseImport extends Component {
       <div>
         <Collapse className="ant-advanced-search-panel-collapse">
           <Panel header="SEARCH" key="1" size="small">
-            <Form className="ant-advanced-search-panel " onSubmit={this.handleSearch}>
-              <Grid>
-                <Row className="show-grid">
-                  <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
-                    <FormItem label={'ORDER #'}>
-                      {getFieldDecorator('orderid', {})(<Input placeholder="Nhập mã order #" />)}
-                    </FormItem>
-                    <FormItem label={'INVOICE #'}>
-                      {getFieldDecorator('invoice_no', {})(
-                        <Input placeholder="Nhập mã số invoice" />,
-                      )}
-                    </FormItem>
-                    <FormItem label={'SUPPLIER'}>
-                      {getFieldDecorator('provider_name', {})(
-                        <Select
-                          placeholder="Chọn nhà cung cấp"
-                          size={this.state.data_providers_size}
-                        >
-                          {this.state.data_providers}
-                        </Select>,
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col md={6} sm={12} xs={6}>
-                    <FormItem label={'STK'}>
-                      {getFieldDecorator('declare_no', {})(<Input placeholder="Nhập số tờ khai" />)}
-                    </FormItem>
+            <Form onSubmit={this.handleSearch}>
+              <Row gutter={8}>
+                <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+                  <FormItem {...formItemLayout} label={'ORDER #'}>
+                    {getFieldDecorator('orderid', {})(<Input placeholder="Nhập mã order #" />)}
+                  </FormItem>
+                </Col>
 
-                    <FormItem label={'STK DATE'}>
-                      {getFieldDecorator('declare_dates', {})(
-                        <RangePicker placeholder="Nhập ngày tờ khai" format={FORMAT_SHORT_DATE} />,
-                      )}
-                    </FormItem>
-                  </Col>
-                </Row>
-                <Row className="show-grid">
-                  <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
-                    <Button icon="search" size={button_size} type="primary" htmlType="submit">
-                      SEARCH
-                    </Button>
-                    <Button
-                      icon="sync"
-                      size={button_size}
-                      style={{ marginLeft: 8 }}
-                      onClick={this.handleReset}
-                    >
-                      CLEAR
-                    </Button>
-                  </Col>
-                </Row>
-              </Grid>
+                <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+                  <FormItem {...formItemLayout} label={'STK'}>
+                    {getFieldDecorator('declare_no', {})(<Input placeholder="Nhập số tờ khai" />)}
+                  </FormItem>
+
+                </Col>
+                <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+
+                  <FormItem {...formItemLayout} label={'STK DATE'}>
+                    {getFieldDecorator('declare_dates', {})(
+                      <RangePicker style={{ width: "100%" }} placeholder="Nhập ngày tờ khai" format={FORMAT_SHORT_DATE} />,
+                    )}
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row gutter={8}>
+                <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+                  <FormItem {...formItemLayout} label={'INVOICE #'}>
+                    {getFieldDecorator('invoice_no', {})(
+                      <Input style={{ width: "100%" }} placeholder="Nhập mã số invoice" />,
+                    )}
+                  </FormItem>
+                </Col>
+                <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+                  <FormItem {...formItemLayout} label={'SUPPLIER'}>
+                    {getFieldDecorator('provider_name', {})(
+                      <Select style={{ width: "100%" }}
+                        placeholder="Chọn nhà cung cấp"
+                        size={this.state.data_providers_size}
+                      >
+                        {this.state.data_providers}
+                      </Select>,
+                    )}
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row >
+                <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+                  <FormItem {...tailFormItemLayout} >
+                    <Button icon="search" size={button_size} type="primary" htmlType="submit">SEARCH</Button>
+                    <Button icon="sync" size={button_size} style={{ marginLeft: 8 }} onClick={this.handleReset}>CLEAR</Button>
+                  </FormItem>
+                </Col>
+              </Row>
             </Form>
           </Panel>
         </Collapse>
 
-        <div className="ant-advanced-toolbar">
-          <Button
-            type="primary"
-            size={button_size}
-            icon="plus-circle"
-            value="new"
-            className="ant-advanced-toolbar-item"
-            onClick={this.showModal}
-          >
-            NEW{' '}
-          </Button>
-          <Button
-            type="primary"
-            size={button_size}
-            icon="info-circle"
-            value="view"
-            className="ant-advanced-toolbar-item"
-            onClick={this.showModal}
-          >
-            DETAIL
-          </Button>
-        </div>
+        <Row>
+          <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+            <FormItem {...formItemLayout} >
+              <Button type="primary" size={button_size} icon="plus-circle" value="new" onClick={this.showModal}>NEW</Button>
+              <Button type="primary" size={button_size} icon="info-circle" value="view" style={{ marginLeft: 8 }} onClick={this.showModal}>DETAIL</Button>
+            </FormItem>
+          </Col>
+        </Row>
         <WrappedWarehouseImportForm
           wrappedComponentRef={this.saveFormRef}
           visible={this.state.modalvisible}
@@ -704,7 +686,7 @@ class WarehouseImport extends Component {
               onClick: () => {
                 this.setState({ selected_warehouse_import: record })
               },
-              onMouseEnter: () => {},
+              onMouseEnter: () => { },
             }
           }}
           size="small"

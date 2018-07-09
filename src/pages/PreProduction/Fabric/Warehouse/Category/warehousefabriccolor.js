@@ -1,19 +1,15 @@
 import React, { Component } from 'react'
-import { Grid, Row, Col } from 'react-bootstrap'
-import { Input, Button, Form, Modal, Collapse, Table } from 'antd'
+import { Input, Button, Form, Modal, Collapse, Table, Row, Col } from 'antd'
 import moment from 'moment'
 
-import ReactDataGrid from 'react-data-grid'
-//import update from 'immutability-helper';
-
-import RowRenderer from '../rowrenderer'
 import DateFormatter from '../dateformatter'
 
 //import moment from 'moment';
 import axios from '../../../../../axiosInst' //'../../../../../axiosInst'
 //css
 import '../views.css' //'./views.css'
-import { MergeMapOperator } from '../../../../../../node_modules/rxjs/operators/mergeMap'
+import { formItemLayout, tailFormItemLayout } from '../../../../Common/FormStyle'
+
 
 const FormItem = Form.Item
 const Panel = Collapse.Panel
@@ -34,25 +30,23 @@ class FabricColorForm extends Component {
         onCancel={onCancel}
       >
         <Form>
-          <Grid>
-            <Row className="show-grid">
-              <Col>
-                <FormItem>
-                  {getFieldDecorator('id', { initialValue: this.props.data._id })(
-                    <Input name="id" style={{ display: 'none', visible: false }} />,
-                  )}
-                </FormItem>
-              </Col>
-              <Col md={12} sm={12} xs={12}>
-                <FormItem label={'COLOR'}>
-                  {getFieldDecorator('fabriccolor_code', {
-                    rules: [{ required: true, message: 'Vui lòng nhập tên màu vải!' }],
-                    initialValue: this.props.data.fabriccolor_code,
-                  })(<Input placeholder="tên màu vải" />)}
-                </FormItem>
-              </Col>
-            </Row>
-          </Grid>
+          <Row className="show-grid">
+            <Col>
+              <FormItem>
+                {getFieldDecorator('id', { initialValue: this.props.data._id })(
+                  <Input name="id" style={{ display: 'none', visible: false }} />,
+                )}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={12} xs={12}>
+              <FormItem label={'COLOR'}>
+                {getFieldDecorator('fabriccolor_code', {
+                  rules: [{ required: true, message: 'Vui lòng nhập tên màu vải!' }],
+                  initialValue: this.props.data.fabriccolor_code,
+                })(<Input placeholder="tên màu vải" />)}
+              </FormItem>
+            </Col>
+          </Row>
         </Form>
       </Modal>
     )
@@ -234,67 +228,35 @@ class WarehouseFabricColor extends Component {
       <div>
         <Collapse className="ant-advanced-search-panel-collapse">
           <Panel header="SEARCH" key="1">
-            <Form className="ant-advanced-search-panel " onSubmit={this.handleSearch}>
-              <Grid>
-                <Row className="show-grid">
-                  <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
-                    <FormItem label={'COLOR'}>
-                      {getFieldDecorator('fabriccolor_name', {})(
-                        <Input placeholder="tên màu vải" />,
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
-                    <Button icon="search" size={button_size} type="primary" htmlType="submit">
-                      {' '}
-                      SEARCH{' '}
-                    </Button>
-                    <Button
-                      icon="sync"
-                      size={button_size}
-                      style={{ marginLeft: 8 }}
-                      onClick={this.handleReset}
-                    >
-                      CLEAR
-                    </Button>
-                  </Col>
-                </Row>
-              </Grid>
+            <Form onSubmit={this.handleSearch}>
+              <Row gutter={8}>
+                <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+                  <FormItem   {...formItemLayout} label={'COLOR'}>
+                    {getFieldDecorator('fabriccolor_name', {})(
+                      <Input placeholder="tên màu vải" />,
+                    )}
+                  </FormItem>
+                </Col>
+                <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+                  <FormItem  {...formItemLayout}>
+                    <Button icon="search" size={button_size} type="primary" htmlType="submit">SEARCH</Button>
+                    <Button icon="sync" size={button_size} style={{ marginLeft: 8 }} onClick={this.handleReset}>CLEAR</Button>
+                  </FormItem>
+                </Col>
+              </Row>
             </Form>
           </Panel>
         </Collapse>
 
-        <div className="ant-advanced-toolbar">
-          <Button
-            icon="plus"
-            size={button_size}
-            type="primary"
-            value="new"
-            className="ant-advanced-toolbar-item"
-            onClick={this.showModal}
-          >
-            NEW
-          </Button>
-          <Button
-            icon="edit"
-            size={button_size}
-            type="primary"
-            value="edit"
-            className="ant-advanced-toolbar-item"
-            onClick={this.showModal}
-          >
-            EDIT
-          </Button>
-          <Button
-            icon="sync"
-            size={button_size}
-            type="primary"
-            className="ant-advanced-toolbar-item"
-            onClick={this.onRefeshGrid}
-          >
-            REFESH
-          </Button>
-        </div>
+        <Row>
+          <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 8 }} lg={{ span: 8 }} xl={{ span: 8 }}>
+            <FormItem  {...formItemLayout}>
+              <Button icon="plus" size={button_size} type="primary" value="new" onClick={this.showModal}>NEW</Button>
+              <Button icon="edit" size={button_size} style={{ marginLeft: 8 }} type="primary" value="edit" onClick={this.showModal}>EDIT</Button>
+              <Button icon="sync"size={button_size} style={{ marginLeft: 8 }} type="primary" onClick={this.onRefeshGrid}>REFESH</Button>
+            </FormItem>
+          </Col>
+        </Row>
         <WrappedFabricColorForm
           wrappedComponentRef={this.saveFormRef}
           visible={this.state.modalvisible}
@@ -315,7 +277,7 @@ class WarehouseFabricColor extends Component {
               onClick: () => {
                 this.setState({ selected_fabriccolor: record })
               },
-              onMouseEnter: () => {},
+              onMouseEnter: () => { },
             }
           }}
           size="small"

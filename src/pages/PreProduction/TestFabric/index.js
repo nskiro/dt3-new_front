@@ -318,7 +318,7 @@ class TestFabricListView extends Component {
                         xl={{ span: 8 }}
                       >
                         <FormItem {...formItemLayout} label="Stk">
-                          {getFieldDecorator('stk', {}, {})(<Input />)}
+                          {getFieldDecorator('invoice_no', {}, {})(<Input />)}
                         </FormItem>
                       </Col>
                       <Col
@@ -330,7 +330,7 @@ class TestFabricListView extends Component {
                         style={{ textAlign: 'left' }}
                       >
                         <FormItem {...formItemLayout} label="Type ">
-                          {getFieldDecorator('fabrictype_name', {})(
+                          {getFieldDecorator('fabric_type', {})(
                             <AutoComplete
                               style={{ width: '100%' }}
                               placeholder="type"
@@ -354,7 +354,7 @@ class TestFabricListView extends Component {
                         style={{ textAlign: 'left' }}
                       >
                         <FormItem {...formItemLayout} label="Color ">
-                          {getFieldDecorator('fabricolor_name', {})(
+                          {getFieldDecorator('fabric_color', {})(
                             <AutoComplete
                               style={{ width: '100%' }}
                               placeholder="color"
