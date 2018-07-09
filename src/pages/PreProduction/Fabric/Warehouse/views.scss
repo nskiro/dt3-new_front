@@ -77,30 +77,6 @@
   .collection-create-form_last-form-item {
     margin-bottom: 0;
   }
-//override
-
-
-  /*
-  .ant-advanced-search-form .ant-form-item {
-    display: flex;
-    flex-direction: row;
-
-  }
-  
-  .ant-advanced-search-form .ant-form-item-control-wrapper {
-    flex: 1;
-  }
-
-  .ant-advanced-search-form-row{
-      display: flex;
-      flex-direction: column;
-  }
-  .ant-advanced-search-form-col{
-      display: flex;
-      flex-direction: column;
-      flex: 33.33%;
-  }
-*/
 
   .editable-cell {
     position: relative;
@@ -157,5 +133,5 @@
   }
   
   .even-row{
-    background-color: #eeeded;
+    background-color:rgb(159, 195, 241)
   }

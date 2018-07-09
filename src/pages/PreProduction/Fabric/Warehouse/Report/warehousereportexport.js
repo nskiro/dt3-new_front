@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Grid, Row, Col } from 'react-bootstrap'
 import ExcelFileSheet from 'react-data-export'
 import {
   AutoComplete,
@@ -11,15 +10,15 @@ import {
   DatePicker,
   Select,
   Icon,
+  Row,
+  Col,
   Pagination,
 } from 'antd'
-import ReactDataGrid from 'react-data-grid'
-
-import RowRenderer from '../rowrenderer'
-import DateFormatter from '../dateformatter'
 import moment from 'moment'
 import axios from '../../../../../axiosInst'
 import _ from 'lodash'
+import { formItemLayout, tailFormItemLayout } from '../../../../Common/FormStyle'
+
 //css
 import '../views.css'
 const Option = Select.Option
@@ -449,77 +448,125 @@ class WarehouseReportExport extends Component {
     return (
       <div>
         <Form className="ant-advanced-search-panel " onSubmit={this.handleSearchExport}>
-          <Grid>
-            <Row className="show-grid">
-              <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
-                <FormItem label={'FROM ORDER #'}>
-                  {getFieldDecorator('order_from', {})(
-                    <InputNumber name="order_from" placeholder="from order no" />,
-                  )}
-                </FormItem>
-                <FormItem label={'TO ORDER #'}>
-                  {getFieldDecorator('order_to', {})(
-                    <InputNumber name="order_to" placeholder="to oder no" />,
-                  )}
-                </FormItem>
+          <div>
+            <Row gutter={2}>
+              <Col
+                xs={{ span: 24 }}
+                sm={{ span: 24 }}
+                md={{ span: 8 }}
+                lg={{ span: 8 }}
+                xl={{ span: 8 }}
+              >
+                <Row>
+                  <FormItem {...formItemLayout} label={'FROM ORDER #'}>
+                    {getFieldDecorator('order_from', {})(
+                      <InputNumber
+                        style={{ width: '100%' }}
+                        name="order_from"
+                        placeholder="from order no"
+                      />,
+                    )}
+                  </FormItem>
+                </Row>
+                <Row>
+                  <FormItem {...formItemLayout} label={'TO ORDER #'}>
+                    {getFieldDecorator('order_to', {})(
+                      <InputNumber
+                        style={{ width: '100%' }}
+                        name="order_to"
+                        placeholder="to oder no"
+                      />,
+                    )}
+                  </FormItem>
+                </Row>
               </Col>
-              <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
-                <FormItem label={'FROM DATE'}>
-                  {getFieldDecorator('from_date', {})(
-                    <DatePicker size={size} format={dateFormat} />,
-                  )}
-                </FormItem>
-                <FormItem label={'TO DATE'}>
-                  {getFieldDecorator('to_date', {})(<DatePicker size={size} format={dateFormat} />)}
+              <Col
+                xs={{ span: 24 }}
+                sm={{ span: 24 }}
+                md={{ span: 8 }}
+                lg={{ span: 8 }}
+                xl={{ span: 8 }}
+              >
+                <Row>
+                  <FormItem {...formItemLayout} label={'FROM DATE'}>
+                    {getFieldDecorator('from_date', {})(
+                      <DatePicker size={size} format={dateFormat} style={{ width: '100%' }} />,
+                    )}
+                  </FormItem>
+                </Row>
+                <Row>
+                  <FormItem {...formItemLayout} label={'TO DATE'}>
+                    {getFieldDecorator('to_date', {})(
+                      <DatePicker size={size} format={dateFormat} style={{ width: '100%' }} />,
+                    )}
+                  </FormItem>
+                </Row>
+              </Col>
+
+              <Col
+                xs={{ span: 24 }}
+                sm={{ span: 24 }}
+                md={{ span: 8 }}
+                lg={{ span: 8 }}
+                xl={{ span: 8 }}
+              >
+                <Row>
+                  <FormItem {...formItemLayout} label={'TYPE '}>
+                    {getFieldDecorator('fabric_type', {})(
+                      <AutoComplete
+                        style={{ width: '100%' }}
+                        placeholder="loại vải"
+                        dataSource={this.state.data_types}
+                        filterOption={(inputValue, option) =>
+                          option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+                          -1
+                        }
+                      />,
+                    )}
+                  </FormItem>
+                </Row>
+                <Row>
+                  <FormItem {...formItemLayout} label={'COLOR '}>
+                    {getFieldDecorator('fabric_color', {})(
+                      <AutoComplete
+                        style={{ width: '100%' }}
+                        placeholder="màu vải"
+                        dataSource={this.state.data_colors}
+                        filterOption={(inputValue, option) =>
+                          option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+                          -1
+                        }
+                      />,
+                    )}
+                  </FormItem>
+                </Row>
+              </Col>
+            </Row>
+            <Row gutter={2}>
+              <Col
+                xs={{ span: 24 }}
+                sm={{ span: 24 }}
+                md={{ span: 8 }}
+                lg={{ span: 8 }}
+                xl={{ span: 8 }}
+              >
+                <FormItem {...tailFormItemLayout}>
+                  <Button icon="search" size={button_size} type="primary" htmlType="submit">
+                    {' '}
+                    SEARCH{' '}
+                  </Button>
+                  <Button
+                    icon="sync"
+                    size={button_size}
+                    style={{ marginLeft: 8 }}
+                    onClick={this.handleExportReset}
+                  >
+                    CLEAR
+                  </Button>
                 </FormItem>
               </Col>
             </Row>
-            <Row className="show-grid">
-              <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
-                <FormItem label={'TYPE '}>
-                  {getFieldDecorator('fabric_type', {})(
-                    <AutoComplete
-                      placeholder="loại vải"
-                      dataSource={this.state.data_types}
-                      filterOption={(inputValue, option) =>
-                        option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                      }
-                    />,
-                  )}
-                </FormItem>
-              </Col>
-            </Row>
-            <Row className="show-grid">
-              <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
-                <FormItem label={'COLOR '}>
-                  {getFieldDecorator('fabric_color', {})(
-                    <AutoComplete
-                      placeholder="màu vải"
-                      dataSource={this.state.data_colors}
-                      filterOption={(inputValue, option) =>
-                        option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                      }
-                    />,
-                  )}
-                </FormItem>
-              </Col>
-            </Row>
-            <Row className="show-grid">
-              <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
-                <Button icon="search" size={button_size} type="primary" htmlType="submit">
-                  SEARCH
-                </Button>
-                <Button
-                  icon="sync"
-                  size={button_size}
-                  style={{ marginLeft: 8 }}
-                  onClick={this.handleExportReset}
-                >
-                  CLEAR
-                </Button>
-              </Col>
-            </Row>
-          </Grid>
+          </div>
         </Form>
         {this.state.show_grid_result === true ? (
           <div>
