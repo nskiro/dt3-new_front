@@ -23,6 +23,8 @@ import axios from '../../../axiosInst' //'../../../../../axiosInst'
 import { formItemLayout, tailFormItemLayout } from '../../Common/FormStyle'
 
 import TestFabricRelax from './relax'
+import TestFabricFourPoint from './fourpoints'
+
 import { combineAll } from 'rxjs/operator/combineAll'
 import moment from 'moment'
 import _ from 'lodash'
@@ -42,7 +44,7 @@ const fabric_color_get_link = 'api/fabric/color/get'
 const fabric_import_getsearch_link = 'api/fabric/import/get'
 const fabric_import_getdetail_link = 'api/fabric/import/getdetails'
 
-const TestFabricProcessViewWapper = Form.create()(TestFabricProcessView)
+const TestFabricRelaxWapper = Form.create()(TestFabricRelax)
 
 class TestFabricListView extends Component {
   constructor(props) {
@@ -146,7 +148,7 @@ class TestFabricListView extends Component {
       axios
         .get(fabric_import_getdetail_link, { params: cond })
         .then(res => {
-          console.log('load_fabric_detail ->' + JSON.stringify(res))
+          //console.log('load_fabric_detail ->' + JSON.stringify(res))
           if (res.data.valid) {
             this.setState({ import_row_selected_details: res.data.data })
           } else {
@@ -239,7 +241,7 @@ class TestFabricListView extends Component {
     const steps = [
       {
         title: 'Xả Vải',
-        content: <TestFabricRelax data={this.state.import_row_selected_details} />,
+
       },
       { title: 'Kiểm Tra Độ Co Rút', content: 'Second-content' },
       { title: 'Kiểm Tra Trọng Lượng', content: 'Second-content' },
@@ -279,10 +281,12 @@ class TestFabricListView extends Component {
             </Row>
             <Divider />
             <div>
-              <Steps current={current}>
+              <Steps size="small" current={current}>
                 {steps.map(item => <Step key={item.title} title={item.title} />)}
               </Steps>
-              <div className="steps-content">{steps[current].content}</div>
+              <div className="steps-content">
+
+                {this.state.current === 0 ? <TestFabricRelaxWapper data={this.state.import_row_selected_details} /> : steps[this.state.current].content}</div>
               <div className="steps-action">
                 {current < steps.length - 1 && (
                   <Button type="primary" onClick={() => this.next()}>
@@ -303,189 +307,189 @@ class TestFabricListView extends Component {
             </div>
           </div>
         ) : (
-          <div>
-            {' '}
-            <Row>
-              <Collapse defaultActiveKey={['1']} className="ant-advanced-search-panel-collapse">
-                <Panel header="Search" key="1">
-                  <Form>
-                    <Row gutter={2}>
-                      <Col
-                        xs={{ span: 24 }}
-                        sm={{ span: 24 }}
-                        md={{ span: 8 }}
-                        lg={{ span: 8 }}
-                        xl={{ span: 8 }}
-                      >
-                        <FormItem {...formItemLayout} label="Stk">
-                          {getFieldDecorator('invoice_no', {}, {})(<Input />)}
-                        </FormItem>
-                      </Col>
-                      <Col
-                        xs={{ span: 24 }}
-                        sm={{ span: 24 }}
-                        md={{ span: 8 }}
-                        lg={{ span: 8 }}
-                        xl={{ span: 8 }}
-                        style={{ textAlign: 'left' }}
-                      >
-                        <FormItem {...formItemLayout} label="Type ">
-                          {getFieldDecorator('fabric_type', {})(
-                            <AutoComplete
-                              style={{ width: '100%' }}
-                              placeholder="type"
-                              dataSource={this.state.fabrictype_data}
-                              filterOption={(inputValue, option) =>
-                                option.props.children
-                                  .toUpperCase()
-                                  .indexOf(inputValue.toUpperCase()) !== -1
-                              }
-                            />,
-                          )}
-                        </FormItem>
-                      </Col>
+            <div>
+              {' '}
+              <Row>
+                <Collapse defaultActiveKey={['1']} className="ant-advanced-search-panel-collapse">
+                  <Panel header="Search" key="1">
+                    <Form>
+                      <Row gutter={2}>
+                        <Col
+                          xs={{ span: 24 }}
+                          sm={{ span: 24 }}
+                          md={{ span: 8 }}
+                          lg={{ span: 8 }}
+                          xl={{ span: 8 }}
+                        >
+                          <FormItem {...formItemLayout} label="Stk">
+                            {getFieldDecorator('invoice_no', {}, {})(<Input />)}
+                          </FormItem>
+                        </Col>
+                        <Col
+                          xs={{ span: 24 }}
+                          sm={{ span: 24 }}
+                          md={{ span: 8 }}
+                          lg={{ span: 8 }}
+                          xl={{ span: 8 }}
+                          style={{ textAlign: 'left' }}
+                        >
+                          <FormItem {...formItemLayout} label="Type ">
+                            {getFieldDecorator('fabric_type', {})(
+                              <AutoComplete
+                                style={{ width: '100%' }}
+                                placeholder="type"
+                                dataSource={this.state.fabrictype_data}
+                                filterOption={(inputValue, option) =>
+                                  option.props.children
+                                    .toUpperCase()
+                                    .indexOf(inputValue.toUpperCase()) !== -1
+                                }
+                              />,
+                            )}
+                          </FormItem>
+                        </Col>
 
-                      <Col
-                        xs={{ span: 24 }}
-                        sm={{ span: 24 }}
-                        md={{ span: 8 }}
-                        lg={{ span: 8 }}
-                        xl={{ span: 8 }}
-                        style={{ textAlign: 'left' }}
-                      >
-                        <FormItem {...formItemLayout} label="Color ">
-                          {getFieldDecorator('fabric_color', {})(
-                            <AutoComplete
-                              style={{ width: '100%' }}
-                              placeholder="color"
-                              dataSource={this.state.fabricolor_data}
-                              filterOption={(inputValue, option) =>
-                                option.props.children
-                                  .toUpperCase()
-                                  .indexOf(inputValue.toUpperCase()) !== -1
-                              }
-                            />,
-                          )}
-                        </FormItem>
-                      </Col>
-                    </Row>
-                    <Row gutter={2}>
-                      <Col
-                        xs={{ span: 24 }}
-                        sm={{ span: 24 }}
-                        md={{ span: 8 }}
-                        lg={{ span: 8 }}
-                        xl={{ span: 8 }}
-                        style={{ textAlign: 'left' }}
-                      >
-                        <FormItem {...formItemLayout} label="From Import Date ">
-                          {getFieldDecorator('from_date', {}, {})(
-                            <DatePicker format={FORMAT_SHORT_DATE} style={{ width: '100%' }} />,
-                          )}
-                        </FormItem>
-                      </Col>
-                      <Col
-                        xs={{ span: 24 }}
-                        sm={{ span: 24 }}
-                        md={{ span: 8 }}
-                        lg={{ span: 8 }}
-                        xl={{ span: 8 }}
-                        style={{ textAlign: 'left' }}
-                      >
-                        <FormItem {...formItemLayout} label="To Import Date ">
-                          {getFieldDecorator('to_date', {}, {})(
-                            <DatePicker format={FORMAT_SHORT_DATE} style={{ width: '100%' }} />,
-                          )}
-                        </FormItem>
-                      </Col>
-                      <Col
-                        xs={{ span: 24 }}
-                        sm={{ span: 24 }}
-                        md={{ span: 8 }}
-                        lg={{ span: 8 }}
-                        xl={{ span: 8 }}
-                        style={{ textAlign: 'left' }}
-                      >
-                        <FormItem {...formItemLayout} label="Status">
-                          {getFieldDecorator('record_status', {}, {})(<Input />)}
-                        </FormItem>
-                      </Col>
-                    </Row>
+                        <Col
+                          xs={{ span: 24 }}
+                          sm={{ span: 24 }}
+                          md={{ span: 8 }}
+                          lg={{ span: 8 }}
+                          xl={{ span: 8 }}
+                          style={{ textAlign: 'left' }}
+                        >
+                          <FormItem {...formItemLayout} label="Color ">
+                            {getFieldDecorator('fabric_color', {})(
+                              <AutoComplete
+                                style={{ width: '100%' }}
+                                placeholder="color"
+                                dataSource={this.state.fabricolor_data}
+                                filterOption={(inputValue, option) =>
+                                  option.props.children
+                                    .toUpperCase()
+                                    .indexOf(inputValue.toUpperCase()) !== -1
+                                }
+                              />,
+                            )}
+                          </FormItem>
+                        </Col>
+                      </Row>
+                      <Row gutter={2}>
+                        <Col
+                          xs={{ span: 24 }}
+                          sm={{ span: 24 }}
+                          md={{ span: 8 }}
+                          lg={{ span: 8 }}
+                          xl={{ span: 8 }}
+                          style={{ textAlign: 'left' }}
+                        >
+                          <FormItem {...formItemLayout} label="From Import Date ">
+                            {getFieldDecorator('from_date', {}, {})(
+                              <DatePicker format={FORMAT_SHORT_DATE} style={{ width: '100%' }} />,
+                            )}
+                          </FormItem>
+                        </Col>
+                        <Col
+                          xs={{ span: 24 }}
+                          sm={{ span: 24 }}
+                          md={{ span: 8 }}
+                          lg={{ span: 8 }}
+                          xl={{ span: 8 }}
+                          style={{ textAlign: 'left' }}
+                        >
+                          <FormItem {...formItemLayout} label="To Import Date ">
+                            {getFieldDecorator('to_date', {}, {})(
+                              <DatePicker format={FORMAT_SHORT_DATE} style={{ width: '100%' }} />,
+                            )}
+                          </FormItem>
+                        </Col>
+                        <Col
+                          xs={{ span: 24 }}
+                          sm={{ span: 24 }}
+                          md={{ span: 8 }}
+                          lg={{ span: 8 }}
+                          xl={{ span: 8 }}
+                          style={{ textAlign: 'left' }}
+                        >
+                          <FormItem {...formItemLayout} label="Status">
+                            {getFieldDecorator('record_status', {}, {})(<Input />)}
+                          </FormItem>
+                        </Col>
+                      </Row>
 
-                    <Row gutter={2}>
-                      <Col
-                        xs={{ span: 24 }}
-                        sm={{ span: 24 }}
-                        md={{ span: 8 }}
-                        lg={{ span: 8 }}
-                        xl={{ span: 8 }}
-                      >
-                        <FormItem {...tailFormItemLayout}>
-                          <Button
-                            icon="search"
-                            style={{ backgroundColor: '#0190FE' }}
-                            size={button_size}
-                            type="primary"
-                            onClick={this.handleSearch}
-                          >
-                            Search
+                      <Row gutter={2}>
+                        <Col
+                          xs={{ span: 24 }}
+                          sm={{ span: 24 }}
+                          md={{ span: 8 }}
+                          lg={{ span: 8 }}
+                          xl={{ span: 8 }}
+                        >
+                          <FormItem {...tailFormItemLayout}>
+                            <Button
+                              icon="search"
+                              style={{ backgroundColor: '#0190FE' }}
+                              size={button_size}
+                              type="primary"
+                              onClick={this.handleSearch}
+                            >
+                              Search
                           </Button>
-                        </FormItem>
-                      </Col>
-                    </Row>
+                          </FormItem>
+                        </Col>
+                      </Row>
+                    </Form>
+                  </Panel>
+                </Collapse>
+              </Row>
+              <Row gutter={2}>
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
+                  {' '}
+                  <Form>
+                    <FormItem {...formItemLayout} style={{ marginLeft: '1px' }}>
+                      <Button
+                        icon="search"
+                        size={button_size}
+                        onClick={this.showHideDetail}
+                        disabled={_.isEmpty(this.state.import_row_selected)}
+                      >
+                        Process
+                    </Button>
+                      <Button icon="sync" size={button_size} style={{ marginLeft: 8 }}>
+                        Clean
+                    </Button>
+                    </FormItem>
                   </Form>
-                </Panel>
-              </Collapse>
-            </Row>
-            <Row gutter={2}>
-              <Col
-                xs={{ span: 24 }}
-                sm={{ span: 24 }}
-                md={{ span: 8 }}
-                lg={{ span: 8 }}
-                xl={{ span: 8 }}
-              >
-                {' '}
-                <Form>
-                  <FormItem {...formItemLayout} style={{ marginLeft: '1px' }}>
-                    <Button
-                      icon="search"
-                      size={button_size}
-                      onClick={this.showHideDetail}
-                      disabled={_.isEmpty(this.state.import_row_selected)}
-                    >
-                      Process
-                    </Button>
-                    <Button icon="sync" size={button_size} style={{ marginLeft: 8 }}>
-                      Clean
-                    </Button>
-                  </FormItem>
-                </Form>
-              </Col>
-            </Row>
-            <Row>
-              <Table
-                rowKey={'_id'}
-                size="small"
-                bordered
-                style={{ marginTop: '5px' }}
-                columns={columns}
-                dataSource={this.state.fabricimport_data}
-                rowClassName={(record, index) => {
-                  return index % 2 === 0 ? 'even-row' : 'old-row'
-                }}
-                onRow={record => {
-                  return {
-                    onClick: () => {
-                      this.setState({ import_row_selected: record })
-                    }, // click row
-                    onMouseEnter: () => {}, // mouse enter row
-                  }
-                }}
-              />
-            </Row>
-          </div>
-        )}
+                </Col>
+              </Row>
+              <Row>
+                <Table
+                  rowKey={'_id'}
+                  size="small"
+                  bordered
+                  style={{ marginTop: '5px' }}
+                  columns={columns}
+                  dataSource={this.state.fabricimport_data}
+                  rowClassName={(record, index) => {
+                    return index % 2 === 0 ? 'even-row' : 'old-row'
+                  }}
+                  onRow={record => {
+                    return {
+                      onClick: () => {
+                        this.setState({ import_row_selected: record })
+                      }, // click row
+                      onMouseEnter: () => { }, // mouse enter row
+                    }
+                  }}
+                />
+              </Row>
+            </div>
+          )}
       </div>
     )
   }
