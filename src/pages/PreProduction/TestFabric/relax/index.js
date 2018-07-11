@@ -16,14 +16,14 @@ class TestFabricRelax extends Component {
     this.state = {
       data_detail: [],
       data_detail_id: [],
-      data_relax: []
+      data_relax: [],
     }
   }
   componentWillReceiveProps = nextProps => {
     console.log('TestFabricRelax componentWillReceiveProps =>' + JSON.stringify(nextProps))
 
     let arr_id = []
-    _.forEach(nextProps.data, (r) => {
+    _.forEach(nextProps.data, r => {
       arr_id.push(r._id)
       // console.log(r._id);
     })
@@ -32,7 +32,7 @@ class TestFabricRelax extends Component {
     console.log('arr_id =>' + JSON.stringify(arr_id))
   }
 
-  loadtestfabricrelax = (arr_id) => {
+  loadtestfabricrelax = arr_id => {
     // load du lieu cua xa vai
     const { data_detail_id } = this.state
     console.log(' componentDidMount data_detail_id =>' + JSON.stringify(data_detail_id))
@@ -40,7 +40,7 @@ class TestFabricRelax extends Component {
       .get(test_fabric_relax_get_link, { params: { data_detail_id } })
       .then(res => {
         let data = res.data
-        console.log(data);
+        console.log(data)
         //this.setState({ fabrictype_data: data_uni })
       })
       .catch(err => {
@@ -49,35 +49,39 @@ class TestFabricRelax extends Component {
       })
   }
 
-
   componentDidMount = () => {
     const { data_detail_id } = this.state
-    this.loadtestfabricrelax(data_detail_id);
+    this.loadtestfabricrelax(data_detail_id)
   }
 
   onCellChange = (key, dataIndex) => {
-    return (value) => {
-      const data_detail = [...this.state.data_detail];
-      const target = data_detail.find(item => item.key === key);
+    return value => {
+      const data_detail = [...this.state.data_detail]
+      const target = data_detail.find(item => item.key === key)
       if (target) {
-        target[dataIndex] = value;
-        this.setState({ data_detail });
+        target[dataIndex] = value
+        this.setState({ data_detail })
       }
-    };
+    }
   }
 
-  onAddNewRowForDetail = (index) => {
+  onAddNewRowForDetail = index => {
     const { data_relax } = this.state
     if (index <= data_relax.length) {
       let details = data_relax[index].details
       if (details) {
         let detail_size = details.length
-        let new_row = { stt_detail: (detail_size + 1), no_roll: 0, no_met: 0, note: '', _id: details._id }
+        let new_row = {
+          stt_detail: detail_size + 1,
+          no_roll: 0,
+          no_met: 0,
+          note: '',
+          _id: details._id,
+        }
         data_relax[index] = details
         this.setState({ data_relax })
       }
     }
-
   }
 
   render() {
@@ -87,12 +91,13 @@ class TestFabricRelax extends Component {
       { key: 'roll', dataIndex: 'roll', title: 'ROLL', name: 'ROLL' },
       { key: 'met', dataIndex: 'met', title: 'MET', name: 'MET' },
       {
-        key: 'relax', dataIndex: 'relax', title: 'RELAX', name: 'RELAX', render: (text, record) => (
-          <EditableNumberCell
-            value={text}
-            onChange={this.onCellChange(record.key, 'relax')}
-          />
-        )
+        key: 'relax',
+        dataIndex: 'relax',
+        title: 'RELAX',
+        name: 'RELAX',
+        render: (text, record) => (
+          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'relax')} />
+        ),
       },
       {
         key: 'condition_hours',
@@ -104,80 +109,83 @@ class TestFabricRelax extends Component {
             value={text}
             onChange={this.onCellChange(record.key, 'condition_hours')}
           />
-        )
+        ),
       },
       {
-        key: 'note', dataIndex: 'note', title: 'NOTE', name: 'NOTE', render: (text, record) => (
-          <EditableInputCell
-            value={text}
-            onChange={this.onCellChange(record.key, 'note')}
-          />
-        )
+        key: 'note',
+        dataIndex: 'note',
+        title: 'NOTE',
+        name: 'NOTE',
+        render: (text, record) => (
+          <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'note')} />
+        ),
       },
       {
-        key: 'start_date', dataIndex: 'start_date', title: 'START DATE', name: 'START DATE', render: (text, record) => (
-          <EditableDateCell
-            value={text}
-            onChange={this.onCellChange(record.key, 'start_date')}
-          />
-        )
+        key: 'start_date',
+        dataIndex: 'start_date',
+        title: 'START DATE',
+        name: 'START DATE',
+        render: (text, record) => (
+          <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'start_date')} />
+        ),
       },
       { key: 'end_date', dataIndex: 'end_date', title: 'END DATE', name: 'END DATE' },
     ]
 
-
-    const expandedRowRender = (r) => {
+    const expandedRowRender = r => {
       console.log(r)
       const columns = [
         {
-          title: 'NO.ROLL', dataIndex: 'no_roll', key: 'no_roll', render: (text, record) => (
-            <EditableNumberCell
-              value={text}
-              onChange={this.onCellChange(record.key, 'no_roll')}
-            />
-          )
+          title: 'NO.ROLL',
+          dataIndex: 'no_roll',
+          key: 'no_roll',
+          render: (text, record) => (
+            <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'no_roll')} />
+          ),
         },
         {
-          title: 'MET', dataIndex: 'no_met', key: 'no_met', render: (text, record) => (
-            <EditableNumberCell
-              value={text}
-              onChange={this.onCellChange(record.key, 'no_met')}
-            />
-          )
+          title: 'MET',
+          dataIndex: 'no_met',
+          key: 'no_met',
+          render: (text, record) => (
+            <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'no_met')} />
+          ),
         },
         {
-          title: 'NOTE', dataIndex: 'detail_note', key: 'detail_note', render: (text, record) => (
+          title: 'NOTE',
+          dataIndex: 'detail_note',
+          key: 'detail_note',
+          render: (text, record) => (
             <EditableInputCell
               value={text}
               onChange={this.onCellChange(record.key, 'detail_note')}
             />
-          )
+          ),
         },
-
       ]
       const data = []
       return (
         <div>
           <Row gutter={8}>
             <Col>
-              <Button type='primary' size='small'>NEW ROW</Button>
+              <Button type="primary" size="small">
+                NEW ROW
+              </Button>
             </Col>
           </Row>
           <Row gutter={8}>
-            <Col xs={{ span: 12 }}
+            <Col
+              xs={{ span: 12 }}
               sm={{ span: 12 }}
               md={{ span: 12 }}
               lg={{ span: 6 }}
-              xl={{ span: 6 }}>
-              <Table
-                columns={columns}
-                dataSource={data}
-                pagination={false}
-              />
+              xl={{ span: 6 }}
+            >
+              <Table columns={columns} dataSource={data} pagination={false} />
             </Col>
           </Row>
         </div>
-      );
+      )
     }
     return (
       <Form>

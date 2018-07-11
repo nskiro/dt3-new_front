@@ -39,8 +39,8 @@ class TestFabricProcessView extends Component {
     this.state = {
       current: 0,
       data: {},
-      import_row_selected:{},
-      import_row_selected_details:[]
+      import_row_selected: {},
+      import_row_selected_details: [],
     }
   }
 
@@ -48,7 +48,8 @@ class TestFabricProcessView extends Component {
     console.log('TestFabricProcessView  recive props ' + JSON.stringify(nextprops))
   }
 
-  componentDidMount = () => {//
+  componentDidMount = () => {
+    //
     //load detail of stk
     // and send it to component of step
   }
@@ -136,7 +137,6 @@ class TestFabricProcessView extends Component {
         </Row>
         <Divider />
         <Row>
-
           <Steps size="small" current={current}>
             {steps.map(item => <Step key={item.title} title={item.title} />)}
           </Steps>
@@ -145,17 +145,17 @@ class TestFabricProcessView extends Component {
             {current < steps.length - 1 && (
               <Button type="primary" onClick={() => this.next()}>
                 Next
-                  </Button>
+              </Button>
             )}
             {current === steps.length - 1 && (
               <Button type="primary" onClick={() => message.success('Processing complete!')}>
                 Done
-                  </Button>
+              </Button>
             )}
             {current > 0 && (
               <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
                 Previous
-                  </Button>
+              </Button>
             )}
           </div>
         </Row>
