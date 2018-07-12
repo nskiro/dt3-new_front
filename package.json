@@ -48,6 +48,7 @@
     "peity-react": "^0.0.7",
     "popper.js": "^1.14.3",
     "prop-types": "^15.5.10",
+    "query-string": "^6.1.0",
     "rc-drawer-menu": "^0.5.7",
     "react": "^16.4.1",
     "react-avatar-editor": "^10.2.1",

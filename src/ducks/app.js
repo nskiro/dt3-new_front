@@ -61,7 +61,7 @@ export async function login(username, password, dispatch) {
     const res = await axios.post('/user/login', { username: username, password: password })
     if (res.data) {
       window.sessionStorage.setItem('app.User', JSON.stringify(res.data))
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token
+      //axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token
       dispatch(_setHideLogin(true))
       dispatch(push('/'))
       return Promise.resolve(true)

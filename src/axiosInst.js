@@ -5,9 +5,6 @@ const axiosInst = axios.create({
 })
 
 axiosInst.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
-axiosInst.defaults.headers.common['Authorization'] =
-  window.localStorage.getItem('app.User') !== null
-    ? 'Bearer ' + JSON.parse(window.localStorage.getItem('app.User')).token
-    : null
+//axiosInst.defaults.headers.common['Authorization'] = window.localStorage.getItem('app.User') !== null ? 'Bearer ' + JSON.parse(window.sessionStorage.getItem('app.User')).token : null
 
 export default axiosInst
