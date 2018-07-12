@@ -4,25 +4,24 @@ import CustomCard from 'components/LayoutComponents/CustomCard'
 import Helmet from 'react-helmet'
 
 class PdfViewer extends Component {
-    static defaultProps = {
-        pathName: 'Report Viewer',
-    }
+  static defaultProps = {
+    pathName: 'Report Viewer',
+  }
 
-    componentDidMount(){
-        console.log(this.props.location.search)
-    }
+  componentDidMount() {
+    console.log(this.props.location.search)
+  }
 
-    render() {
-        const props = { ...this.props }
+  render() {
+    const props = { ...this.props }
 
-        return (
-            <Page {...props}>
-                <Helmet title="Report Viewer" />
-                <CustomCard title="Report Viewer">
-                </CustomCard>
-            </Page>
-        )
-    }
+    return (
+      <Page {...props}>
+        <Helmet title="Report Viewer" />
+        <CustomCard title="Report Viewer" />
+      </Page>
+    )
+  }
 }
 
 export default PdfViewer

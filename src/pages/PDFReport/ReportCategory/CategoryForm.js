@@ -50,13 +50,14 @@ class PDFCategoryPage extends Component {
 
   componentDidMount() {
     this.setState({ loading: true })
-    axios.get(`api/pdf/category/${this.props.user.dept._id}`)
+    axios
+      .get(`api/pdf/category/${this.props.user.dept._id}`)
       .then(res => {
-        res.data = res.data === "" ? [] : res.data
+        res.data = res.data === '' ? [] : res.data
         this.setState({ loading: false, reportCategories: res.data })
       })
       .catch(err => {
-        alert(err);
+        alert(err)
       })
   }
 
@@ -65,7 +66,8 @@ class PDFCategoryPage extends Component {
     this.props.form.validateFields((err, value) => {
       if (!err) {
         this.setState({ loading: true })
-        axios.post('/api/pdf/category/add', value)
+        axios
+          .post('/api/pdf/category/add', value)
           .then(res => {
             this.setState({ loading: false, reportCategories: res.data })
           })
@@ -102,7 +104,7 @@ class PDFCategoryPage extends Component {
           this.updateCategoryNode(temp, res.data._id)
           this.setState({ reportCategories: temp })
         })
-        .catch(err => { })
+        .catch(err => {})
     }
   }
 
@@ -156,87 +158,83 @@ class PDFCategoryPage extends Component {
     const { getFieldDecorator } = this.props.form
     const { loading, reportCategories, selectedNode } = this.state
     return (
-          <Row type="flex" justify="start">
-            <Col span={5}>
-              <Card title="Category List" style={{ width: '90%' }}>
-                {!loading ? (
-                  <Tree autoExpandParent={true} showIcon={true} onSelect={this.onCategorySelect}>
-                    {reportCategories ? this.renderTreeNodes(reportCategories): null}
-                  </Tree>
-                ) : (
-                    <Spin />
-                  )}
-              </Card>
-            </Col>
-            <Col span={10}>
-              <Form layout="horizontal" onSubmit={this.addCategory}>
-                <FormItem label="">
-                  {getFieldDecorator('categoryId', {
-                    initialValue: selectedNode ? selectedNode._id : '',
-                  })(<Input type="hidden" />)}
-                </FormItem>
-                <FormItem label="">
-                  {getFieldDecorator('dept', {
-                    initialValue: user.dept._id,
-                  })(<Input type="hidden" />)}
-                </FormItem>
-                <FormItem label="Category Name" {...formItemLayout}>
-                  {getFieldDecorator('categoryName', {
-                    rules: [{ required: true, message: 'Please input report category name!' }],
-                    initialValue: selectedNode ? selectedNode.title : '',
-                  })(<Input />)}
-                </FormItem>
-                <FormItem label="Parent Category" {...formItemLayout}>
-                  {getFieldDecorator('parentId', {
-                    initialValue: selectedNode ? selectedNode.parentId : '',
-                  })(
-                    <TreeSelect
-                      allowClear={true}
-                      style={{ width: '100%' }}
-                      dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                      treeData={reportCategories}
-                      treeDefaultExpandAll
-                    />,
-                  )}
-                </FormItem>
-                <FormItem>
-                  <Button type="primary" htmlType="submit" loading={loading}>
-                    Add
-                    </Button>
-                  <Divider type="vertical" />
-                  <Button
-                    type="success"
-                    loading={loading}
-                    disabled={selectedNode ? false : true}
-                    onClick={this.updateCategory}
-                  >
-                    Update
-                    </Button>
-                  <Divider type="vertical" />
-                  <Popconfirm
-                    title="Are you sure delete?"
-                    onConfirm={this.deleteCategory}
-                    okText="Yes"
-                    cancelText="No"
-                  >
-                    <Button
-                      type="danger"
-                      loading={loading}
-                      disabled={selectedNode ? false : true}
-                    >
-                      Delete
-                      </Button>
-                  </Popconfirm>
-                </FormItem>
-              </Form>
-              <Alert
-                message="Warning"
-                description="If deleting a category, all reports in category will be deleted too."
-                type="warning"
-                showIcon
-              />
-            </Col>
-          </Row>
+      <Row type="flex" justify="start">
+        <Col span={5}>
+          <Card title="Category List" style={{ width: '90%' }}>
+            {!loading ? (
+              <Tree autoExpandParent={true} showIcon={true} onSelect={this.onCategorySelect}>
+                {reportCategories ? this.renderTreeNodes(reportCategories) : null}
+              </Tree>
+            ) : (
+              <Spin />
+            )}
+          </Card>
+        </Col>
+        <Col span={10}>
+          <Form layout="horizontal" onSubmit={this.addCategory}>
+            <FormItem label="">
+              {getFieldDecorator('categoryId', {
+                initialValue: selectedNode ? selectedNode._id : '',
+              })(<Input type="hidden" />)}
+            </FormItem>
+            <FormItem label="">
+              {getFieldDecorator('dept', {
+                initialValue: user.dept._id,
+              })(<Input type="hidden" />)}
+            </FormItem>
+            <FormItem label="Category Name" {...formItemLayout}>
+              {getFieldDecorator('categoryName', {
+                rules: [{ required: true, message: 'Please input report category name!' }],
+                initialValue: selectedNode ? selectedNode.title : '',
+              })(<Input />)}
+            </FormItem>
+            <FormItem label="Parent Category" {...formItemLayout}>
+              {getFieldDecorator('parentId', {
+                initialValue: selectedNode ? selectedNode.parentId : '',
+              })(
+                <TreeSelect
+                  allowClear={true}
+                  style={{ width: '100%' }}
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  treeData={reportCategories}
+                  treeDefaultExpandAll
+                />,
+              )}
+            </FormItem>
+            <FormItem>
+              <Button type="primary" htmlType="submit" loading={loading}>
+                Add
+              </Button>
+              <Divider type="vertical" />
+              <Button
+                type="success"
+                loading={loading}
+                disabled={selectedNode ? false : true}
+                onClick={this.updateCategory}
+              >
+                Update
+              </Button>
+              <Divider type="vertical" />
+              <Popconfirm
+                title="Are you sure delete?"
+                onConfirm={this.deleteCategory}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button type="danger" loading={loading} disabled={selectedNode ? false : true}>
+                  Delete
+                </Button>
+              </Popconfirm>
+            </FormItem>
+          </Form>
+          <Alert
+            message="Warning"
+            description="If deleting a category, all reports in category will be deleted too."
+            type="warning"
+            showIcon
+          />
+        </Col>
+      </Row>
     )
   }
 }
