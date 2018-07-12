@@ -8,7 +8,6 @@ class EditableNumberCell extends Component {
   }
 
   handleChange = e => {
-    console.log(e)
     const value = e
     this.setState({ value })
   }
@@ -45,7 +44,7 @@ class EditableNumberCell extends Component {
           />
         ) : (
           <div style={{ paddingRight: 24 }}>
-            {value || ' '}
+            {value || '0'}
             <Icon type="edit" className="editable-cell-icon" onClick={this.edit} />
           </div>
         )}

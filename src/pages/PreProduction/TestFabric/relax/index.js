@@ -7,51 +7,99 @@ import { formItemLayout, tailFormItemLayout } from '../../../Common/FormStyle'
 
 import axios from '../../../../axiosInst' //'../../../../../axiosInst'
 import _ from 'lodash'
-
+import moment from 'moment'
+const uuidv1 = require('uuid/v1');
 const test_fabric_relax_get_link = '/api/testfabric/relax/get'
 
 class TestFabricRelax extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      data_detail: [],
+      data_received: [],
       data_detail_id: [],
+      data_detail: [],
       data_relax: [],
     }
   }
+
+
   componentWillReceiveProps = nextProps => {
     console.log('TestFabricRelax componentWillReceiveProps =>' + JSON.stringify(nextProps))
-
-    let arr_id = []
+    let data_detail_id = []
     _.forEach(nextProps.data, r => {
-      arr_id.push(r._id)
-      // console.log(r._id);
+      data_detail_id.push(r._id)
     })
-    this.setState({ data_detail: nextProps.data, data_detail_id: arr_id })
+    //this.setState({ data_received: nextProps.data, data_detail_id: arr_id })
+    this.loadtestfabricrelax(nextProps.data, data_detail_id)
 
-    console.log('arr_id =>' + JSON.stringify(arr_id))
+
   }
 
-  loadtestfabricrelax = arr_id => {
+  componentDidUpdate = (prevProps) => {
+    if (prevProps.myProps !== this.props.myProp) {
+      this.loadtestfabricrelax()
+    }
+  }
+
+  loadtestfabricrelax = (data_received, data_detail_id) => {
     // load du lieu cua xa vai
-    const { data_detail_id } = this.state
-    console.log(' componentDidMount data_detail_id =>' + JSON.stringify(data_detail_id))
+    //const { data_detail_id } = this.state
     axios
-      .get(test_fabric_relax_get_link, { params: { data_detail_id } })
+      .get(test_fabric_relax_get_link, { params: { detail_ids: data_detail_id } })
       .then(res => {
         let data = res.data
-        console.log(data)
-        //this.setState({ fabrictype_data: data_uni })
+        let new_data_detail = [...data_received]
+        if (data.data) {
+          console.log('vao day roi' + JSON.stringify(data))
+          if (data.data.length === 0) {
+            for (let i = 0; i < new_data_detail.length; i++) {
+              let r = new_data_detail[i]
+              r.relax = 0
+              r.condition_hours = 0
+              //r.end_date =new Date()
+              // r.end_date = moment(new Date())
+              let details = []
+              for (let j = 0; j < 5; j++) {
+                details.push({
+                  _id: uuidv1(),
+                  detail_stt: (j + 1),
+                  no_roll: 0,
+                  no_met: 0,
+                  note: '',
+                  fabricrelax_id: r._id
+                });
+              }
+              r.fabric_relax_detail_id = details
+              new_data_detail[i] = r
+            }
+          } else {
+            for (let i = 0; i < new_data_detail.length; i++) {
+              let r = new_data_detail[i]
+              let find_relax = _.find(data.data, { fabricimportdetail_id: r._id })
+              console.log('find_relax  result =' + JSON.stringify(find_relax));
+              if (find_relax) {
+                r.relax = find_relax.relax
+                r.condition_hours = find_relax.condition_hours
+                r.note = find_relax.note
+                // r.end_date =find_relax
+                // r.end_date = find_relax
+              }
+
+
+
+              r.fabric_relax_detail_id = find_relax.fabric_relax_detail_id
+              new_data_detail[i] = r
+            }
+
+          }
+        }
+        console.log('data_detail =>' + JSON.stringify(new_data_detail));
+        this.setState({ data_detail: new_data_detail });
       })
       .catch(err => {
         console.log(err)
-        this.setState({ fabrictype_data: [] })
+        this.setState({ data_detail: [] })
       })
-  }
-
-  componentDidMount = () => {
-    const { data_detail_id } = this.state
-    this.loadtestfabricrelax(data_detail_id)
   }
 
   onCellChange = (key, dataIndex) => {
@@ -60,6 +108,17 @@ class TestFabricRelax extends Component {
       const target = data_detail.find(item => item.key === key)
       if (target) {
         target[dataIndex] = value
+        this.setState({ data_detail })
+      }
+    }
+  }
+
+  onCellDetailChange = (dataIndex, row_index, fabricrelax_id) => {
+    return value => {
+      const data_detail = [...this.state.data_detail]
+      const target = data_detail.find(item => item._id === fabricrelax_id)
+      if (target) {
+        target.fabric_relax_detail_id[row_index][dataIndex] = value
         this.setState({ data_detail })
       }
     }
@@ -76,7 +135,7 @@ class TestFabricRelax extends Component {
           no_roll: 0,
           no_met: 0,
           note: '',
-          _id: details._id,
+          fabricrelax_id: details._id,
         }
         data_relax[index] = details
         this.setState({ data_relax })
@@ -96,7 +155,10 @@ class TestFabricRelax extends Component {
         title: 'RELAX',
         name: 'RELAX',
         render: (text, record) => (
-          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'relax')} />
+          <EditableNumberCell
+            value={text}
+            onChange={this.onCellChange(record.key, 'relax')}
+          />
         ),
       },
       {
@@ -129,59 +191,57 @@ class TestFabricRelax extends Component {
           <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'start_date')} />
         ),
       },
-      { key: 'end_date', dataIndex: 'end_date', title: 'END DATE', name: 'END DATE' },
+      {
+        key: 'end_date', dataIndex: 'end_date', title: 'END DATE', name: 'END DATE', render: (text, record) => (
+          <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'end_date')} />
+        ),
+      },
     ]
 
     const expandedRowRender = r => {
-      console.log(r)
+      const fabricrelax_id = r._id
+      // console.log('fabricrelax_id ='+ JSON.stringify(r))
       const columns = [
+        { title: 'STT', dataIndex: 'detail_stt', key: 'detail_stt' },
         {
           title: 'NO.ROLL',
           dataIndex: 'no_roll',
           key: 'no_roll',
-          render: (text, record) => (
-            <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'no_roll')} />
+          render: (text, record, index) => (
+            <EditableNumberCell value={text} onChange={this.onCellDetailChange('no_roll', index, fabricrelax_id)} />
           ),
         },
         {
           title: 'MET',
           dataIndex: 'no_met',
           key: 'no_met',
-          render: (text, record) => (
-            <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'no_met')} />
+          render: (text, record, index) => (
+            <EditableNumberCell value={text} onChange={this.onCellDetailChange('no_met', index, fabricrelax_id)} />
           ),
         },
         {
           title: 'NOTE',
           dataIndex: 'detail_note',
           key: 'detail_note',
-          render: (text, record) => (
+          render: (text, record, index) => (
             <EditableInputCell
               value={text}
-              onChange={this.onCellChange(record.key, 'detail_note')}
+              onChange={this.onCellDetailChange('detail_note', index, fabricrelax_id)}
             />
           ),
         },
       ]
-      const data = []
+      const data = r.fabric_relax_detail_id
       return (
         <div>
           <Row gutter={8}>
             <Col>
-              <Button type="primary" size="small">
-                NEW ROW
-              </Button>
+              <Button icon='plus' type="primary" size="small">NEW ROW</Button>
             </Col>
           </Row>
           <Row gutter={8}>
-            <Col
-              xs={{ span: 12 }}
-              sm={{ span: 12 }}
-              md={{ span: 12 }}
-              lg={{ span: 6 }}
-              xl={{ span: 6 }}
-            >
-              <Table columns={columns} dataSource={data} pagination={false} />
+            <Col span={12}>
+              <Table size='small' bordered style={{ marginTop: '5px' }} rowKey={'_id'} columns={columns} dataSource={data} pagination={false} />
             </Col>
           </Row>
         </div>

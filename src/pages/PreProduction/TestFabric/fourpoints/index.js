@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { Table } from 'antd'
+import { Table,Form } from 'antd'
 
 import axios from '../../../../axiosInst' //'../../../../../axiosInst'
 import _ from 'lodash'
 
 class TestFabricFourPoint extends Component {
   render() {
-    return <div>TestFabricFourPoint</div>
+    return (<Form><div>TestFabricFourPoint</div></Form>)
   }
 }
 
