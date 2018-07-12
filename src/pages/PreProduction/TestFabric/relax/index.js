@@ -8,7 +8,7 @@ import { formItemLayout, tailFormItemLayout } from '../../../Common/FormStyle'
 import axios from '../../../../axiosInst' //'../../../../../axiosInst'
 import _ from 'lodash'
 import moment from 'moment'
-const uuidv1 = require('uuid/v1');
+const uuidv1 = require('uuid/v1')
 const test_fabric_relax_get_link = '/api/testfabric/relax/get'
 
 class TestFabricRelax extends Component {
@@ -22,7 +22,6 @@ class TestFabricRelax extends Component {
     }
   }
 
-
   componentWillReceiveProps = nextProps => {
     console.log('TestFabricRelax componentWillReceiveProps =>' + JSON.stringify(nextProps))
     let data_detail_id = []
@@ -31,11 +30,9 @@ class TestFabricRelax extends Component {
     })
     //this.setState({ data_received: nextProps.data, data_detail_id: arr_id })
     this.loadtestfabricrelax(nextProps.data, data_detail_id)
-
-
   }
 
-  componentDidUpdate = (prevProps) => {
+  componentDidUpdate = prevProps => {
     if (prevProps.myProps !== this.props.myProp) {
       this.loadtestfabricrelax()
     }
@@ -62,12 +59,12 @@ class TestFabricRelax extends Component {
               for (let j = 0; j < 5; j++) {
                 details.push({
                   _id: uuidv1(),
-                  detail_stt: (j + 1),
+                  detail_stt: j + 1,
                   no_roll: 0,
                   no_met: 0,
                   note: '',
-                  fabricrelax_id: r._id
-                });
+                  fabricrelax_id: r._id,
+                })
               }
               r.fabric_relax_detail_id = details
               new_data_detail[i] = r
@@ -76,7 +73,7 @@ class TestFabricRelax extends Component {
             for (let i = 0; i < new_data_detail.length; i++) {
               let r = new_data_detail[i]
               let find_relax = _.find(data.data, { fabricimportdetail_id: r._id })
-              console.log('find_relax  result =' + JSON.stringify(find_relax));
+              console.log('find_relax  result =' + JSON.stringify(find_relax))
               if (find_relax) {
                 r.relax = find_relax.relax
                 r.condition_hours = find_relax.condition_hours
@@ -85,16 +82,13 @@ class TestFabricRelax extends Component {
                 // r.end_date = find_relax
               }
 
-
-
               r.fabric_relax_detail_id = find_relax.fabric_relax_detail_id
               new_data_detail[i] = r
             }
-
           }
         }
-        console.log('data_detail =>' + JSON.stringify(new_data_detail));
-        this.setState({ data_detail: new_data_detail });
+        console.log('data_detail =>' + JSON.stringify(new_data_detail))
+        this.setState({ data_detail: new_data_detail })
       })
       .catch(err => {
         console.log(err)
@@ -155,10 +149,7 @@ class TestFabricRelax extends Component {
         title: 'RELAX',
         name: 'RELAX',
         render: (text, record) => (
-          <EditableNumberCell
-            value={text}
-            onChange={this.onCellChange(record.key, 'relax')}
-          />
+          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'relax')} />
         ),
       },
       {
@@ -192,7 +183,11 @@ class TestFabricRelax extends Component {
         ),
       },
       {
-        key: 'end_date', dataIndex: 'end_date', title: 'END DATE', name: 'END DATE', render: (text, record) => (
+        key: 'end_date',
+        dataIndex: 'end_date',
+        title: 'END DATE',
+        name: 'END DATE',
+        render: (text, record) => (
           <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'end_date')} />
         ),
       },
@@ -208,7 +203,10 @@ class TestFabricRelax extends Component {
           dataIndex: 'no_roll',
           key: 'no_roll',
           render: (text, record, index) => (
-            <EditableNumberCell value={text} onChange={this.onCellDetailChange('no_roll', index, fabricrelax_id)} />
+            <EditableNumberCell
+              value={text}
+              onChange={this.onCellDetailChange('no_roll', index, fabricrelax_id)}
+            />
           ),
         },
         {
@@ -216,7 +214,10 @@ class TestFabricRelax extends Component {
           dataIndex: 'no_met',
           key: 'no_met',
           render: (text, record, index) => (
-            <EditableNumberCell value={text} onChange={this.onCellDetailChange('no_met', index, fabricrelax_id)} />
+            <EditableNumberCell
+              value={text}
+              onChange={this.onCellDetailChange('no_met', index, fabricrelax_id)}
+            />
           ),
         },
         {
@@ -236,12 +237,22 @@ class TestFabricRelax extends Component {
         <div>
           <Row gutter={8}>
             <Col>
-              <Button icon='plus' type="primary" size="small">NEW ROW</Button>
+              <Button icon="plus" type="primary" size="small">
+                NEW ROW
+              </Button>
             </Col>
           </Row>
           <Row gutter={8}>
             <Col span={12}>
-              <Table size='small' bordered style={{ marginTop: '5px' }} rowKey={'_id'} columns={columns} dataSource={data} pagination={false} />
+              <Table
+                size="small"
+                bordered
+                style={{ marginTop: '5px' }}
+                rowKey={'_id'}
+                columns={columns}
+                dataSource={data}
+                pagination={false}
+              />
             </Col>
           </Row>
         </div>

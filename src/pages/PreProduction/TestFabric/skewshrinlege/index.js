@@ -8,19 +8,23 @@ import { formItemLayout, tailFormItemLayout } from '../../../Common/FormStyle'
 import axios from '../../../../axiosInst' //'../../../../../axiosInst'
 import _ from 'lodash'
 
- class TestFabricSkewShrinlege extends Component {
-    constructor(props) {
-      super(props)
-      this.state = {
-        data_detail: [],
-        data_detail_id: [],
-        data_relax: [],
-      }
+class TestFabricSkewShrinlege extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      data_detail: [],
+      data_detail_id: [],
+      data_relax: [],
     }
+  }
 
-    render (){
-        return (<Form><div>TestFabricSkewShrinlege</div></Form>)
-    }
- }
+  render() {
+    return (
+      <Form>
+        <div>TestFabricSkewShrinlege</div>
+      </Form>
+    )
+  }
+}
 
- export default TestFabricSkewShrinlege
+export default TestFabricSkewShrinlege
