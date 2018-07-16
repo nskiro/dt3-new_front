@@ -8,7 +8,7 @@ import { formItemLayout, tailFormItemLayout } from '../../../Common/FormStyle'
 import axios from '../../../../axiosInst' //'../../../../../axiosInst'
 import _ from 'lodash'
 import moment from 'moment'
-import { isBuffer } from 'util';
+import { isBuffer } from 'util'
 const uuidv1 = require('uuid/v1')
 const test_fabric_relax_get_link = '/api/testfabric/relax/get'
 
@@ -21,7 +21,7 @@ class TestFabricRelax extends Component {
       data_detail: [],
 
       loadtestfabricrelax_done: false,
-      isUpdate: false
+      isUpdate: false,
     }
   }
 
@@ -43,7 +43,7 @@ class TestFabricRelax extends Component {
   shouldComponentUpdate = (nextProps, nextState) => {
     if (this.state.loadtestfabricrelax_done === false) {
       this.loadtestfabricrelax(nextState.data_received, nextState.data_detail_id)
-      return true;
+      return true
     }
     return false
   }
@@ -156,7 +156,7 @@ class TestFabricRelax extends Component {
   }
 
   onPanelChange = (value, mode) => {
-    console.log('value =' + value + ",mode =" + mode)
+    console.log('value =' + value + ',mode =' + mode)
   }
   render() {
     const columns = [
@@ -259,7 +259,9 @@ class TestFabricRelax extends Component {
         <div>
           <Row gutter={8}>
             <Col>
-              <Button icon="plus" type="primary" size="small">NEW ROW</Button>
+              <Button icon="plus" type="primary" size="small">
+                NEW ROW
+              </Button>
             </Col>
           </Row>
           <Row gutter={8}>
@@ -292,7 +294,6 @@ class TestFabricRelax extends Component {
           return index % 2 === 0 ? 'even-row' : 'old-row'
         }}
       />
-
     )
   }
 }

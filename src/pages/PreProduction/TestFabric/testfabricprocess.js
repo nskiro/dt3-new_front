@@ -39,7 +39,6 @@ const button_size = 'small'
 
 const Step = Steps.Step
 
-
 const fabric_import_getdetail_link = 'api/fabric/import/getdetails'
 const test_fabric_relax_get_add = '/api/testfabric/relax/add'
 const test_fabric_relax_get_update = '/api/testfabric/relax/update'
@@ -99,7 +98,6 @@ class TestFabricProcessView extends Component {
     }
   }
 
-
   next = () => {
     switch (this.state.current) {
       case 0:
@@ -113,7 +111,7 @@ class TestFabricProcessView extends Component {
       case 2:
         // trong luong
         this.onSaveWeight()
-        break;
+        break
       default:
         break
     }
@@ -150,16 +148,11 @@ class TestFabricProcessView extends Component {
           console.log(err)
         })
     }
-
   }
 
-  onSaveSkew = () => {
+  onSaveSkew = () => {}
 
-  }
-
-  onSaveWeight = () => {
-
-  }
+  onSaveWeight = () => {}
 
   prev = () => {
     const current = this.state.current - 1
@@ -217,7 +210,12 @@ class TestFabricProcessView extends Component {
     const steps = [
       {
         title: 'Xả Vải',
-        content: <TestFabricRelaxWapper data={this.state.import_row_selected_details} wrappedComponentRef={ref => (this.relaxChild = ref)} />,
+        content: (
+          <TestFabricRelaxWapper
+            data={this.state.import_row_selected_details}
+            wrappedComponentRef={ref => (this.relaxChild = ref)}
+          />
+        ),
       },
       /*
       {
@@ -226,7 +224,12 @@ class TestFabricProcessView extends Component {
       },*/
       {
         title: 'Kiểm Tra Trọng Lượng',
-        content: <TestFabricWeight data={this.state.import_row_selected_details} wrappedComponentRef={ref => (this.weightChild = ref)} />
+        content: (
+          <TestFabricWeight
+            data={this.state.import_row_selected_details}
+            wrappedComponentRef={ref => (this.weightChild = ref)}
+          />
+        ),
       },
       { title: 'Kiểm Tra Hệ Thống 4 Điểm', content: 'Last-content' },
       { title: 'Phân Tách Nhóm Màu', content: 'Last-content' },
@@ -237,9 +240,11 @@ class TestFabricProcessView extends Component {
 
     return (
       <div>
-        <Row >
+        <Row>
           <Col style={{ width: '150px' }}>
-            <Button icon="left" style={{ backgroundColor: '#0190FE' }} onClick={buttonBackClick}>Back </Button>
+            <Button icon="left" style={{ backgroundColor: '#0190FE' }} onClick={buttonBackClick}>
+              Back{' '}
+            </Button>
           </Col>
         </Row>
         <Row>

@@ -16,8 +16,6 @@ class EditableDateCell extends Component {
       const value = e
       this.setState({ value: '' })
     }
-
-
   }
 
   check = () => {
@@ -52,11 +50,11 @@ class EditableDateCell extends Component {
             suffix={<Icon type="check" className="editable-cell-icon-check" onClick={this.check} />}
           />
         ) : (
-            <div style={{ paddingRight: 0 }}>
-              {value ? (moment(value).format('MM/DD/YYYY')) : ' '}
-              <Icon type="edit" className="editable-cell-icon" onClick={this.edit} />
-            </div>
-          )}
+          <div style={{ paddingRight: 0 }}>
+            {value ? moment(value).format('MM/DD/YYYY') : ' '}
+            <Icon type="edit" className="editable-cell-icon" onClick={this.edit} />
+          </div>
+        )}
       </div>
     )
   }

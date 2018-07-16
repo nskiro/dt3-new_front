@@ -10,18 +10,16 @@ import _ from 'lodash'
 import moment from 'moment'
 const uuidv1 = require('uuid/v1')
 
-
 class TestFabricSkewShrinlege extends Component {
   constructor(props) {
     super(props)
     this.state = {
       data_detail: [],
-      data_detail_id: []
+      data_detail_id: [],
     }
   }
 
   render() {
-
     const columns = [
       { key: 'fabric_type', dataIndex: 'fabric_type', title: 'TYPE', name: 'TYPE' },
       { key: 'fabric_color', dataIndex: 'fabric_color', title: 'COLOR', name: 'COLOR' },
@@ -131,7 +129,6 @@ class TestFabricSkewShrinlege extends Component {
           return index % 2 === 0 ? 'even-row' : 'old-row'
         }}
       />
-
     )
   }
 }
