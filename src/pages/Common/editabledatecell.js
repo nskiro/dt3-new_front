@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { DatePicker, Icon } from 'antd'
-
+import moment from 'moment'
 class EditableDateCell extends Component {
   state = {
     value: this.props.value,
@@ -9,8 +9,15 @@ class EditableDateCell extends Component {
 
   handleChange = e => {
     console.log(e)
-    const value = e
-    this.setState({ value })
+    try {
+      const value = moment(e)
+      this.setState({ value, editable: false })
+    } catch (err) {
+      const value = e
+      this.setState({ value: '' })
+    }
+
+
   }
 
   check = () => {
@@ -34,21 +41,22 @@ class EditableDateCell extends Component {
   render() {
     const { value, editable } = this.state
     return (
-      <div className="editable-cell">
+      <div className="editable-cell" style={{ paddingRight: 0 }}>
         {editable ? (
           <DatePicker
             value={value}
             onChange={this.handleChange}
+            format={'MM/DD/YYYY'}
             onPressEnter={this.check}
             onKeyDown={this.dateInputKeyDown}
             suffix={<Icon type="check" className="editable-cell-icon-check" onClick={this.check} />}
           />
         ) : (
-          <div style={{ paddingRight: 24 }}>
-            {value || ' '}
-            <Icon type="edit" className="editable-cell-icon" onClick={this.edit} />
-          </div>
-        )}
+            <div style={{ paddingRight: 0 }}>
+              {value ? (moment(value).format('MM/DD/YYYY')) : ' '}
+              <Icon type="edit" className="editable-cell-icon" onClick={this.edit} />
+            </div>
+          )}
       </div>
     )
   }

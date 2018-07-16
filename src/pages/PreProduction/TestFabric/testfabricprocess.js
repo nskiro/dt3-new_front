@@ -19,9 +19,15 @@ import Helmet from 'react-helmet'
 import axios from '../../../axiosInst' //'../../../../../axiosInst'
 
 import { formItemLayout, tailFormItemLayout } from '../../Common/FormStyle'
-import TestFabricRelax from './relax'
 import { combineAll } from 'rxjs/operator/combineAll'
 import moment from 'moment'
+import _ from 'lodash'
+
+import TestFabricRelax from './relax'
+import TestFabricWeight from './weight'
+
+import TestFabricSkewShrinlege from './skewshrinlege'
+import TestFabricFourPoint from './fourpoints'
 
 const FormItem = Form.Item
 const Option = Select.Option
@@ -33,30 +39,126 @@ const button_size = 'small'
 
 const Step = Steps.Step
 
+
+const fabric_import_getdetail_link = 'api/fabric/import/getdetails'
+const test_fabric_relax_get_add = '/api/testfabric/relax/add'
+const test_fabric_relax_get_update = '/api/testfabric/relax/update'
 class TestFabricProcessView extends Component {
   constructor(props) {
     super(props)
     this.state = {
       current: 0,
-      data: {},
       import_row_selected: {},
       import_row_selected_details: [],
     }
   }
 
-  componentWillReceiveProps = nextprops => {
-    console.log('TestFabricProcessView  recive props ' + JSON.stringify(nextprops))
+  static getDerivedStateFromProps = (nextProps, state) => {
+    // console.log('getDerivedStateFromProps call')
+    let nextState = { ...state }
+    nextState.import_row_selected = nextProps.data
+    return nextState
   }
 
-  componentDidMount = () => {
-    //
-    //load detail of stk
-    // and send it to component of step
+  /*
+  shouldComponentUpdate = (nextProps, nextState) => {
+   // console.log('shouldComponentUpdate =>')
+    //console.log('nextState.import_row_selected =>' + JSON.stringify(nextState.import_row_selected))
+   // console.log('this.state.import_row_selected =>' + JSON.stringify(this.state.import_row_selected))
+    if (nextState.import_row_selected !== this.state.import_row_selected) {
+        console.log('reload page')
+      return true
+    }
+
+    return false
   }
+*/
+  componentDidMount = () => {
+    //console.log('componentDidMount call')
+    this.load_fabric_detail()
+  }
+
+  load_fabric_detail = () => {
+    const { import_row_selected } = this.state
+
+    let cond = { importid: import_row_selected._id, record_status: 'O' }
+    if (!_.isEmpty(import_row_selected)) {
+      axios
+        .get(fabric_import_getdetail_link, { params: cond })
+        .then(res => {
+          if (res.data.valid) {
+            this.setState({ import_row_selected_details: res.data.data })
+          } else {
+            this.setState({ import_row_selected_details: [] })
+          }
+        })
+        .catch(err => {
+          console.log(err)
+          this.setState({ fabrictype_data: [] })
+        })
+    }
+  }
+
 
   next = () => {
+    switch (this.state.current) {
+      case 0:
+        // xa vai
+        this.onSaveRelax()
+        break
+      case 1:
+        //co rut
+        this.onSaveSkew()
+        break
+      case 2:
+        // trong luong
+        this.onSaveWeight()
+        break;
+      default:
+        break
+    }
+
     const current = this.state.current + 1
     this.setState({ current })
+  }
+  onSaveRelax = () => {
+    const { data_detail, isUpdate } = this.relaxChild.state
+    console.log('data relax form ' + JSON.stringify(data_detail))
+    alert('isUpdate =' + isUpdate)
+    if (isUpdate) {
+      axios
+        .post(test_fabric_relax_get_update, data_detail)
+        .then(res => {
+          let rs = res.data
+          if (!rs.valid) {
+            alert('Error ' + rs.message)
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    } else {
+      axios
+        .post(test_fabric_relax_get_add, data_detail)
+        .then(res => {
+          let rs = res.data
+          if (!rs.valid) {
+            alert('Error ' + rs.message)
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+
+  }
+
+  onSaveSkew = () => {
+
+  }
+
+  onSaveWeight = () => {
+
   }
 
   prev = () => {
@@ -66,18 +168,6 @@ class TestFabricProcessView extends Component {
 
   render() {
     const { current } = this.state
-
-    const steps = [
-      {
-        title: 'Xả Vải',
-        content: <TestFabricRelax data={this.state.import_row_selected_details} />,
-      },
-      { title: 'Kiểm Tra Độ Co Rút', content: 'Second-content' },
-      { title: 'Kiểm Tra Trọng Lượng', content: 'Second-content' },
-      { title: 'Kiểm Tra Hệ Thống 4 Điểm', content: 'Last-content' },
-      { title: 'Phân Tách Nhóm Màu', content: 'Last-content' },
-      { title: 'Tổng Kết', content: 'Last-content' },
-    ]
 
     const columns = [
       {
@@ -118,9 +208,40 @@ class TestFabricProcessView extends Component {
         },
       },
     ]
+    const TestFabricRelaxWapper = Form.create()(TestFabricRelax)
+    /*
+    const TestFabricWeightWapper = Form.create()(TestFabricWeight)
+    const TestFabricSkewWapper = Form.create()(TestFabricSkewShrinlege)
+    const TestFabricFourPointWapper = Form.create()(TestFabricFourPoint)
+    */
+    const steps = [
+      {
+        title: 'Xả Vải',
+        content: <TestFabricRelaxWapper data={this.state.import_row_selected_details} wrappedComponentRef={ref => (this.relaxChild = ref)} />,
+      },
+      /*
+      {
+        title: 'Kiểm Tra Độ Co Rút',
+        content: <TestFabricSkewShrinlege data={this.state.import_row_selected_details} wrappedComponentRef={ref => (this.skewChild = ref)} />
+      },*/
+      {
+        title: 'Kiểm Tra Trọng Lượng',
+        content: <TestFabricWeight data={this.state.import_row_selected_details} wrappedComponentRef={ref => (this.weightChild = ref)} />
+      },
+      { title: 'Kiểm Tra Hệ Thống 4 Điểm', content: 'Last-content' },
+      { title: 'Phân Tách Nhóm Màu', content: 'Last-content' },
+      { title: 'Tổng Kết', content: 'Last-content' },
+    ]
+
+    const { buttonBackClick, buttonDoneClick } = this.props
 
     return (
       <div>
+        <Row >
+          <Col style={{ width: '150px' }}>
+            <Button icon="left" style={{ backgroundColor: '#0190FE' }} onClick={buttonBackClick}>Back </Button>
+          </Col>
+        </Row>
         <Row>
           <Table
             rowKey={'_id'}
