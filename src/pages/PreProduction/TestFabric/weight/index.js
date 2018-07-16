@@ -10,17 +10,16 @@ import _ from 'lodash'
 import moment from 'moment'
 import { isBuffer } from 'util'
 const uuidv1 = require('uuid/v1')
-const test_fabric_relax_get_link = '/api/testfabric/relax/get'
+const test_fabric_weight_get_link = '/api/testfabric/weight/get'
 
-class TestFabricRelax extends Component {
+class TestFabricWeight extends Component {
   constructor(props) {
     super(props)
     this.state = {
       data_received: [],
-      data_detail_id: [],
       data_detail: [],
-
-      loadtestfabricrelax_done: false,
+      data_detail_id: [],
+      loadtestfabricweight_done: false,
       isUpdate: false,
     }
   }
@@ -34,88 +33,77 @@ class TestFabricRelax extends Component {
       let nextState = { ...state }
       nextState.data_received = nextProps.data
       nextState.data_detail_id = data_detail_id
-      nextState.loadtestfabricrelax_done = false
+      nextState.loadtestfabricweight_done = false
+      console.log('nextState ==' + JSON.stringify(nextState))
       return nextState
     }
     return null
   }
-
-  shouldComponentUpdate = (nextProps, nextState) => {
-    if (this.state.loadtestfabricrelax_done === false) {
-      this.loadtestfabricrelax(nextState.data_received, nextState.data_detail_id)
-      return true
-    }
-    return false
-  }
-
+  /*
+        shouldComponentUpdate = (nextProps, nextState) => {
+            console.log('nextState.loadtestfabricweight_done =' + nextState.loadtestfabricweight_done)
+            if (!this.state.loadtestfabricweight_done) {
+                console.log('shouldComponentUpdate  called')
+                this.loadtestfabricweight(nextState.data_received, nextState.data_detail_id)
+                return true;
+            }
+            return false
+        }
+    */
   componentDidMount = () => {
+    console.log('weight componentDidMount call')
     let { data_received, data_detail_id } = this.state
-    console.log(this.state)
-    this.loadtestfabricrelax(data_received, data_detail_id)
+    console.log('weight componentDidMount this.state ' + JSON.stringify(this.state))
+    this.loadtestfabricweight(data_received, data_detail_id)
   }
 
-  componentWillUnmount = () => {
-    this.setState({ loadtestfabricrelax_done: true })
-  }
-
-  loadtestfabricrelax = (data_received, data_detail_id) => {
+  loadtestfabricweight = (data_received, data_detail_id) => {
     axios
-      .get(test_fabric_relax_get_link, { params: { detail_ids: data_detail_id } })
+      .get(test_fabric_weight_get_link, { params: { detail_ids: data_detail_id } })
       .then(res => {
         let data = res.data
         let new_data_detail = [...data_received]
-        let isUpdate = false
         if (_.isEmpty(data.data)) {
           for (let i = 0; i < new_data_detail.length; i++) {
             let r = new_data_detail[i]
-            r.relax = 0
-            r.condition_hours = 0
-            r.start_date = moment(new Date()).format('MM/DD/YYYY')
-            r.end_date = moment(new Date()).format('MM/DD/YYYY')
+            r.test_no = 0
+            r.fail_no = 0
+            r.note = ''
+            //r.end_date =new Date()
+            // r.end_date = moment(new Date())
             let details = []
             for (let j = 0; j < 5; j++) {
-              details.push({
-                _id: uuidv1(),
-                detail_stt: j + 1,
-                no_roll: 0,
-                no_met: 0,
-                note: '',
-                fabricrelax_id: r._id,
-              })
+              details.push(this.createDataNewRow())
             }
             r.fabric_relax_detail_id = details
             new_data_detail[i] = r
           }
+          this.setState({
+            data_detail: new_data_detail,
+            loadtestfabricweight_done: true,
+            isUpdate: false,
+          })
         } else {
-          for (let i = 0; i < new_data_detail.length; i++) {
-            let r = new_data_detail[i]
-            let find_relax = _.find(data.data, { fabricimportdetail_id: r._id })
-            //console.log('find_relax  result =' + JSON.stringify(find_relax))
-            if (find_relax) {
-              r.relax = find_relax.relax
-              r.condition_hours = find_relax.condition_hours
-              r.note = find_relax.note
-              r.end_date = moment(find_relax.end_date).format('MM/DD/YYYY')
-              r.start_date = moment(find_relax.start_date).format('MM/DD/YYYY')
-            }
-            r.fabric_relax_detail_id = find_relax.fabric_relax_detail_id
-            new_data_detail[i] = r
-          }
-          isUpdate = true
         }
-        this.setState({ data_detail: new_data_detail, loadtestfabricrelax_done: true, isUpdate })
       })
       .catch(err => {
         console.log(err)
-        this.setState({ data_detail: [], loadtestfabricrelax_done: true })
+        this.setState({ data_detail: [], loadtestfabricweight_done: true })
       })
   }
 
+  createDataNewRow = () => {
+    return {
+      _id: uuidv1(),
+      weight: 0,
+      weight_start: 0,
+      weight_mid: 0,
+      weight_end: 0,
+      weight_note: '',
+    }
+  }
   onCellChange = (key, dataIndex) => {
-    console.log('onCellChange call')
     return value => {
-      console.log('date value changed =' + value)
-
       const data_detail = [...this.state.data_detail]
       const target = data_detail.find(item => item.key === key)
       if (target) {
@@ -135,71 +123,21 @@ class TestFabricRelax extends Component {
       }
     }
   }
-
-  onAddNewRowForDetail = index => {
-    const { data_relax } = this.state
-    if (index <= data_relax.length) {
-      let details = data_relax[index].details
-      if (details) {
-        let detail_size = details.length
-        let new_row = {
-          stt_detail: detail_size + 1,
-          no_roll: 0,
-          no_met: 0,
-          note: '',
-          fabricrelax_id: details._id,
-        }
-        data_relax[index] = details
-        this.setState({ data_relax })
-      }
-    }
-  }
-
-  onPanelChange = (value, mode) => {
-    console.log('value =' + value + ',mode =' + mode)
-  }
   render() {
     const columns = [
       { key: 'fabric_type', dataIndex: 'fabric_type', title: 'TYPE', name: 'TYPE' },
       { key: 'fabric_color', dataIndex: 'fabric_color', title: 'COLOR', name: 'COLOR' },
       { key: 'roll', dataIndex: 'roll', title: 'ROLL', name: 'ROLL' },
       { key: 'met', dataIndex: 'met', title: 'MET', name: 'MET' },
-      {
-        key: 'relax',
-        dataIndex: 'relax',
-        title: 'RELAX',
-        name: 'RELAX',
-        render: (text, record) => (
-          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'relax')} />
-        ),
-      },
-      {
-        key: 'condition_hours',
-        dataIndex: 'condition_hours',
-        title: 'CONDITIONS(H)',
-        name: 'CONDITIONS(H)',
-        render: (text, record) => (
-          <EditableNumberCell
-            value={text}
-            onChange={this.onCellChange(record.key, 'condition_hours')}
-          />
-        ),
-      },
-      {
-        key: 'note',
-        dataIndex: 'note',
-        title: 'NOTE',
-        name: 'NOTE',
-        render: (text, record) => (
-          <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'note')} />
-        ),
-      },
+
+      { key: 'test_no', dataIndex: 'no_test', title: 'TEST #', name: 'TEST #' },
+      { key: 'fail_no', dataIndex: 'no_fail', title: 'FAIL #', name: 'FAIL #' },
+      { key: 'note', dataIndex: 'note', title: 'NOTE', name: 'NOTE' },
       {
         key: 'start_date',
         dataIndex: 'start_date',
         title: 'START DATE',
         name: 'START DATE',
-
         render: (text, record) => (
           <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'start_date')} />
         ),
@@ -219,7 +157,7 @@ class TestFabricRelax extends Component {
       const fabricrelax_id = r._id
       // console.log('fabricrelax_id ='+ JSON.stringify(r))
       const columns = [
-        { title: 'STT', dataIndex: 'detail_stt', key: 'detail_stt' },
+        //  { title: 'STT', dataIndex: 'detail_stt', key: 'detail_stt' },
         {
           title: 'NO.ROLL',
           dataIndex: 'no_roll',
@@ -232,24 +170,64 @@ class TestFabricRelax extends Component {
           ),
         },
         {
-          title: 'MET',
-          dataIndex: 'no_met',
-          key: 'no_met',
+          title: 'WEIGHT',
+          dataIndex: 'weight',
+          key: 'weight',
           render: (text, record, index) => (
             <EditableNumberCell
               value={text}
-              onChange={this.onCellDetailChange('no_met', index, fabricrelax_id)}
+              onChange={this.onCellDetailChange('weight', index, fabricrelax_id)}
             />
           ),
         },
+
         {
-          title: 'NOTE',
-          dataIndex: 'detail_note',
-          key: 'detail_note',
+          title: 'WEIGHT',
+          children: [
+            {
+              title: 'START',
+              dataIndex: 'weight_start',
+              key: 'weight_start',
+              render: (text, record, index) => (
+                <EditableNumberCell
+                  value={text}
+                  onChange={this.onCellDetailChange('weight_start', index, fabricrelax_id)}
+                />
+              ),
+            },
+            {
+              title: 'MID',
+              dataIndex: 'weight_mid',
+              key: 'weight_mid',
+              render: (text, record, index) => (
+                <EditableNumberCell
+                  value={text}
+                  onChange={this.onCellDetailChange('weight_mid', index, fabricrelax_id)}
+                />
+              ),
+            },
+            {
+              title: 'END',
+              dataIndex: 'weight_end',
+              key: 'weight_end',
+              render: (text, record, index) => (
+                <EditableNumberCell
+                  value={text}
+                  onChange={this.onCellDetailChange('weight_end', index, fabricrelax_id)}
+                />
+              ),
+            },
+          ],
+        },
+
+        {
+          title: 'NOTES',
+          dataIndex: 'weight_note',
+          key: 'weight_note',
           render: (text, record, index) => (
             <EditableInputCell
               value={text}
-              onChange={this.onCellDetailChange('detail_note', index, fabricrelax_id)}
+              onChange={this.onCellDetailChange('weight_note', index, fabricrelax_id)}
             />
           ),
         },
@@ -280,6 +258,9 @@ class TestFabricRelax extends Component {
         </div>
       )
     }
+
+    const { data_detail } = this.state
+    console.log('data_detail =>' + JSON.stringify(data_detail))
     return (
       <Table
         rowKey={'_id'}
@@ -288,7 +269,7 @@ class TestFabricRelax extends Component {
         style={{ marginTop: '5px' }}
         columns={columns}
         pagination={false}
-        dataSource={this.state.data_detail}
+        dataSource={data_detail}
         expandedRowRender={expandedRowRender}
         rowClassName={(record, index) => {
           return index % 2 === 0 ? 'even-row' : 'old-row'
@@ -298,4 +279,4 @@ class TestFabricRelax extends Component {
   }
 }
 
-export default TestFabricRelax
+export default TestFabricWeight

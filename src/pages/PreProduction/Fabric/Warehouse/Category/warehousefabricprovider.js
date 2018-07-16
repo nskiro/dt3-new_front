@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
-import { Grid, Row, Col } from 'react-bootstrap'
-import { Input, Button, Form, Modal, Collapse, Table } from 'antd'
+import { Input, Button, Form, Modal, Collapse, Table, Row, Col } from 'antd'
 import PropTypes from 'prop-types'
 
-import ReactDataGrid from 'react-data-grid'
+//import ReactDataGrid from 'react-data-grid'
 //import update from 'immutability-helper';
 
-import RowRenderer from '../rowrenderer'
+import { formItemLayout, tailFormItemLayout } from '../../../../Common/FormStyle'
 import DateFormatter from '../dateformatter'
 
 import moment from 'moment'
@@ -33,26 +32,37 @@ class ProviderForm extends Component {
         onCancel={onCancel}
       >
         <Form>
-          <Grid>
-            <Row className="show-grid">
-              <Col>
-                <FormItem>
-                  {getFieldDecorator('id', { initialValue: this.props.data._id })(
-                    <Input name="id" style={{ display: 'none', visible: false }} />,
-                  )}
-                </FormItem>
-              </Col>
-
-              <Col md={12} sm={12} xs={12}>
-                <FormItem label={'SUPPLIER'}>
-                  {getFieldDecorator('provider_code', {
-                    rules: [{ required: true, message: 'Vui lòng nhập tên nhà cung cấp!' }],
-                    initialValue: this.props.data.provider_code,
-                  })(<Input placeholder="nhà cung cấp" />)}
-                </FormItem>
-              </Col>
-            </Row>
-          </Grid>
+          <Row gutter={2}>
+            <Col
+              xs={{ span: 24 }}
+              sm={{ span: 24 }}
+              md={{ span: 8 }}
+              lg={{ span: 8 }}
+              xl={{ span: 8 }}
+            >
+              <FormItem {...formItemLayout}>
+                {getFieldDecorator('id', { initialValue: this.props.data._id })(
+                  <Input name="id" style={{ display: 'none', visible: false }} />,
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={2}>
+            <Col
+              xs={{ span: 24 }}
+              sm={{ span: 24 }}
+              md={{ span: 24 }}
+              lg={{ span: 24 }}
+              xl={{ span: 24 }}
+            >
+              <FormItem {...formItemLayout} style={{ paddingLeft: '5px' }} label={'SUPPLIER'}>
+                {getFieldDecorator('provider_code', {
+                  rules: [{ required: true, message: 'Vui lòng nhập tên nhà cung cấp!' }],
+                  initialValue: this.props.data.provider_code,
+                })(<Input placeholder="nhà cung cấp" />)}
+              </FormItem>
+            </Col>
+          </Row>
         </Form>
       </Modal>
     )
@@ -236,18 +246,30 @@ class WarehouseFabricProvider extends Component {
       <div>
         <Collapse className="ant-advanced-search-panel-collapse">
           <Panel header="SEARCH" key="1">
-            <Form className="ant-advanced-search-panel " onSubmit={this.handleSearch}>
-              <Grid>
-                <Row className="show-grid">
-                  <Col md={12} sm={12} xs={12} style={{ textAlign: 'left' }}>
-                    <FormItem label={'SUPPLIER'}>
-                      {getFieldDecorator('provider_code', {})(<Input placeholder="nhà cung cấp" />)}
-                    </FormItem>
-                  </Col>
-                  <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
+            <Form onSubmit={this.handleSearch}>
+              <Row gutter={8}>
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
+                  <FormItem {...formItemLayout} label={'SUPPLIER'}>
+                    {getFieldDecorator('provider_code', {})(<Input placeholder="nhà cung cấp" />)}
+                  </FormItem>
+                </Col>
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
+                  <FormItem {...formItemLayout}>
                     <Button icon="search" size={button_size} type="primary" htmlType="submit">
                       {' '}
-                      SEARCH
+                      SEARCH{' '}
                     </Button>
                     <Button
                       icon="sync"
@@ -258,44 +280,53 @@ class WarehouseFabricProvider extends Component {
                       {' '}
                       CLEAR
                     </Button>
-                  </Col>
-                </Row>
-              </Grid>
+                  </FormItem>
+                </Col>
+              </Row>
             </Form>
           </Panel>
         </Collapse>
-        <div className="ant-advanced-toolbar">
-          <Button
-            icon="plus"
-            size={button_size}
-            type="primary"
-            value="new"
-            className="ant-advanced-toolbar-item"
-            onClick={this.showModal}
+        <Row gutter={8}>
+          <Col
+            xs={{ span: 24 }}
+            sm={{ span: 24 }}
+            md={{ span: 8 }}
+            lg={{ span: 8 }}
+            xl={{ span: 8 }}
           >
-            NEW
-          </Button>
-          <Button
-            icon="edit"
-            size={button_size}
-            type="primary"
-            value="edit"
-            className="ant-advanced-toolbar-item"
-            onClick={this.showModal}
-          >
-            EDIT
-          </Button>
-          <Button
-            icon="sync"
-            size={button_size}
-            type="primary"
-            className="ant-advanced-toolbar-item"
-            onClick={this.onRefeshGrid}
-          >
-            {' '}
-            REFESH{' '}
-          </Button>
-        </div>
+            <FormItem {...formItemLayout}>
+              <Button
+                icon="plus"
+                size={button_size}
+                type="primary"
+                value="new"
+                onClick={this.showModal}
+              >
+                NEW
+              </Button>
+              <Button
+                icon="edit"
+                size={button_size}
+                style={{ marginLeft: 8 }}
+                type="primary"
+                value="edit"
+                onClick={this.showModal}
+              >
+                EDIT
+              </Button>
+              <Button
+                icon="sync"
+                size={button_size}
+                style={{ marginLeft: 8 }}
+                type="primary"
+                onClick={this.onRefeshGrid}
+              >
+                {' '}
+                REFESH{' '}
+              </Button>
+            </FormItem>
+          </Col>
+        </Row>
         <WrappedProviderForm
           wrappedComponentRef={this.saveFormRef}
           visible={this.state.modalvisible}

@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
-import { Grid, Row, Col } from 'react-bootstrap'
 import ExcelFileSheet from 'react-data-export'
 
-import { Input, Form, Modal, Button, DatePicker, Select, Table, Icon } from 'antd'
-import ReactDataGrid from 'react-data-grid'
-
-import RowRenderer from '../rowrenderer'
+import { Input, Form, Modal, Button, DatePicker, Select, Table, Row, Col } from 'antd'
+import { formItemLayout, tailFormItemLayout } from '../../../../Common/FormStyle'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import _ from 'lodash'
@@ -280,61 +277,87 @@ class FormTransDetail extends Component {
         onOk={onCreate}
         maskClosable={false}
         onCancel={onCancel}
-        width={1000}
+        width={1300}
         style={{ top: 5 }}
       >
         <div>
           <Form className="ant-advanced-search-panel ">
-            <Grid>
-              <Row className="show-grid">
-                <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
-                  <div>
-                    {' '}
-                    <b> TYPE:</b> {fabric_type}{' '}
-                  </div>
-                </Col>
-                <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
-                  <div>
-                    <b> COLOR:</b> {fabric_color}{' '}
-                  </div>
-                </Col>
-              </Row>
-              <Row className="show-grid">
-                <Col>
-                  <FormItem>
-                    {getFieldDecorator('fabric_type', { initialValue: fabric_type })(
-                      <Input style={{ display: 'none', visible: false }} />,
-                    )}
-                  </FormItem>
-                  <FormItem>
-                    {getFieldDecorator('fabric_color', { initialValue: fabric_color })(
-                      <Input style={{ display: 'none', visible: false }} />,
-                    )}
-                  </FormItem>
-                </Col>
-              </Row>
+            <Row gutter={8}>
+              <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
+                <div>
+                  {' '}
+                  <b> TYPE:</b> {fabric_type}{' '}
+                </div>
+              </Col>
+              <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
+                <div>
+                  <b> COLOR:</b> {fabric_color}{' '}
+                </div>
+              </Col>
+            </Row>
+            <Row gutter={8}>
+              <Col
+                xs={{ span: 24 }}
+                sm={{ span: 24 }}
+                md={{ span: 8 }}
+                lg={{ span: 8 }}
+                xl={{ span: 8 }}
+              >
+                <FormItem {...formItemLayout}>
+                  {getFieldDecorator('fabric_type', { initialValue: fabric_type })(
+                    <Input style={{ display: 'none', visible: false }} />,
+                  )}
+                </FormItem>
+                <FormItem {...formItemLayout}>
+                  {getFieldDecorator('fabric_color', { initialValue: fabric_color })(
+                    <Input style={{ display: 'none', visible: false }} />,
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col
+                xs={{ span: 24 }}
+                sm={{ span: 24 }}
+                md={{ span: 8 }}
+                lg={{ span: 8 }}
+                xl={{ span: 8 }}
+              >
+                <FormItem {...formItemLayout} label="FROM DATE">
+                  {getFieldDecorator('fromdate', {})(
+                    <DatePicker style={{ width: '100%' }} format={FORMAT_SHORT_DATE} />,
+                  )}
+                </FormItem>
+              </Col>
+              <Col
+                xs={{ span: 24 }}
+                sm={{ span: 24 }}
+                md={{ span: 8 }}
+                lg={{ span: 8 }}
+                xl={{ span: 8 }}
+              >
+                <FormItem {...formItemLayout} label="TO DATE">
+                  {getFieldDecorator('todate', {})(
+                    <DatePicker style={{ width: '100%' }} format={FORMAT_SHORT_DATE} />,
+                  )}
+                </FormItem>
+              </Col>
 
-              <Row className="show-grid">
-                <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
-                  <FormItem label="FROM DATE">
-                    {getFieldDecorator('fromdate', {})(<DatePicker format={FORMAT_SHORT_DATE} />)}
-                  </FormItem>
-                </Col>
-                <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
-                  <FormItem label="TO DATE">
-                    {getFieldDecorator('todate', {})(<DatePicker format={FORMAT_SHORT_DATE} />)}
-                  </FormItem>
-                </Col>
-              </Row>
-              <Row className="show-grid">
-                <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
+              <Col
+                xs={{ span: 24 }}
+                sm={{ span: 24 }}
+                md={{ span: 8 }}
+                lg={{ span: 8 }}
+                xl={{ span: 8 }}
+              >
+                <FormItem {...formItemLayout}>
                   <Button
                     icon="search"
                     size={button_size}
+                    style={{ marginLeft: 8 }}
                     type="primary"
                     onClick={this.onSearchDetailTrans}
                   >
-                    {' '}
                     SEARCH
                   </Button>
                   <Button
@@ -345,36 +368,43 @@ class FormTransDetail extends Component {
                   >
                     CLEAR
                   </Button>
-                </Col>
-              </Row>
-            </Grid>
+                </FormItem>
+              </Col>
+            </Row>
           </Form>
-          <div className="ant-advanced-toolbar">
-            <ExcelFile
-              element={
-                <Button icon="export" size={button_size} type="primary">
-                  {' '}
-                  Download Data{' '}
-                </Button>
-              }
-              filename={'InventoryDetail - ' + moment().format('MM/DD/YYYY h:mm:ss')}
-            >
-              <ExcelSheet dataSet={transDetailDataset} name="Inventory Detail" />
-            </ExcelFile>
-          </div>
-
-          <Table
-            style={{ marginTop: '5px' }}
-            rowKey={'_id'}
-            columns={inventory_trans_colums}
-            dataSource={data_trans}
-            rowClassName={(record, index) => {
-              return index % 2 === 0 ? 'even-row' : 'old-row'
-            }}
-            size="small"
-            scroll={{ x: 1300 }}
-            bordered
-          />
+          <Row>
+            <Col>
+              <FormItem {...formItemLayout}>
+                <ExcelFile
+                  element={
+                    <Button icon="export" size={button_size} type="primary">
+                      {' '}
+                      Download Data
+                    </Button>
+                  }
+                  filename={'InventoryDetail - ' + moment().format('MM/DD/YYYY h:mm:ss')}
+                >
+                  <ExcelSheet dataSet={transDetailDataset} name="Inventory Detail" />
+                </ExcelFile>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <Table
+                style={{ marginTop: '5px' }}
+                rowKey={'_id'}
+                columns={inventory_trans_colums}
+                dataSource={data_trans}
+                rowClassName={(record, index) => {
+                  return index % 2 === 0 ? 'even-row' : 'old-row'
+                }}
+                size="small"
+                scroll={{ x: 1300 }}
+                bordered
+              />
+            </Col>
+          </Row>
         </div>
       </Modal>
     )
@@ -495,9 +525,9 @@ class WarehouseReportInvent extends Component {
   }
 
   /*
-  rowInventoryGetter = i => {
-    if (i >= 0 && i < this.state.data_inventory.length) {
-      return this.state.data_inventory[i]
+rowInventoryGetter = i => {
+if (i >= 0 && i < this.state.data_inventory.length) {
+  return this.state.data_inventory[i]
     }
     return null
   }
@@ -621,31 +651,48 @@ class WarehouseReportInvent extends Component {
           data={data_inventory_selected}
         />
         <Form className="ant-advanced-search-panel " onSubmit={this.handleSearchInventory}>
-          <Grid>
-            <Row className="show-grid">
-              <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
-                <FormItem label={'TYPE '}>
-                  {getFieldDecorator('fabric_type', {})(
-                    <Select mode="tags" style={{ width: '100%' }} tokenSeparators={[',']}>
-                      {this.state.data_types}
-                    </Select>,
-                  )}
-                </FormItem>
-              </Col>
-              <Col md={6} sm={12} xs={6} style={{ textAlign: 'left' }}>
-                <FormItem label={'COLOR '}>
-                  {getFieldDecorator('fabric_color', {})(
-                    <Select mode="tags" style={{ width: '100%' }} tokenSeparators={[',']}>
-                      {this.state.data_colors}
-                    </Select>,
-                  )}
-                </FormItem>
-              </Col>
-            </Row>
-            <Row className="show-grid">
-              <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
+          <Row gutter={8}>
+            <Col
+              xs={{ span: 24 }}
+              sm={{ span: 24 }}
+              md={{ span: 8 }}
+              lg={{ span: 8 }}
+              xl={{ span: 8 }}
+            >
+              <FormItem {...formItemLayout} label={'TYPE '}>
+                {getFieldDecorator('fabric_type', {})(
+                  <Select mode="tags" style={{ width: '100%' }} tokenSeparators={[',']}>
+                    {this.state.data_types}
+                  </Select>,
+                )}
+              </FormItem>
+            </Col>
+            <Col
+              xs={{ span: 24 }}
+              sm={{ span: 24 }}
+              md={{ span: 8 }}
+              lg={{ span: 8 }}
+              xl={{ span: 8 }}
+            >
+              <FormItem {...formItemLayout} label={'COLOR '}>
+                {getFieldDecorator('fabric_color', {})(
+                  <Select mode="tags" style={{ width: '100%' }} tokenSeparators={[',']}>
+                    {this.state.data_colors}
+                  </Select>,
+                )}
+              </FormItem>
+            </Col>
+            <Col
+              xs={{ span: 24 }}
+              sm={{ span: 24 }}
+              md={{ span: 8 }}
+              lg={{ span: 8 }}
+              xl={{ span: 8 }}
+            >
+              <FormItem {...formItemLayout}>
                 <Button icon="search" size={button_size} type="primary" htmlType="submit">
-                  SEARCH
+                  {' '}
+                  SEARCH{' '}
                 </Button>
                 <Button
                   icon="sync"
@@ -655,9 +702,9 @@ class WarehouseReportInvent extends Component {
                 >
                   CLEAR
                 </Button>
-              </Col>
-            </Row>
-          </Grid>
+              </FormItem>
+            </Col>
+          </Row>
         </Form>
         {this.state.show_grid_result === true ? (
           <div>

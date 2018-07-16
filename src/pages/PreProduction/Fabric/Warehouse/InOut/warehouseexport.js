@@ -1,10 +1,22 @@
 import React, { Component } from 'react'
-import { Grid, Row, Col } from 'react-bootstrap'
 
-import { Select, Input, InputNumber, Button, Form, Modal, Collapse, Table, DatePicker } from 'antd'
+import {
+  Select,
+  Input,
+  InputNumber,
+  Button,
+  Form,
+  Modal,
+  Collapse,
+  Table,
+  DatePicker,
+  Row,
+  Col,
+} from 'antd'
 
 import ReactDataGrid from 'react-data-grid'
 import update from 'immutability-helper'
+import { formItemLayout, tailFormItemLayout } from '../../../../Common/FormStyle'
 
 import PropTypes from 'prop-types'
 import moment from 'moment'
@@ -198,11 +210,6 @@ class WarehouseExportForm extends Component {
     const { visible, onCancel, onCreate } = this.props
     const { getFieldDecorator } = this.props.form
 
-    const formItemLayout = {
-      labelCol: { xs: { span: 24 }, sm: { span: 8 } },
-      wrapperCol: { xs: { span: 24 }, sm: { span: 16 } },
-    }
-
     return (
       <Modal
         title={this.props.data.title}
@@ -210,61 +217,76 @@ class WarehouseExportForm extends Component {
         onOk={onCreate}
         maskClosable={false}
         onCancel={onCancel}
-        width={1024}
+        width={1300}
         style={{ top: 5 }}
       >
         <Form className="ant-advanced-search-panel">
-          <Grid>
-            <Row className="show-grid">
-              <Col>
-                <FormItem>
-                  {getFieldDecorator('id', { initialValue: this.props.data._id })(
-                    <Input name="id" style={{ display: 'none', visible: false }} />,
-                  )}
-                </FormItem>
-              </Col>
-            </Row>
-            <Row className="show-grid">
-              <Col md={6} sm={6} xs={6} style={{ textAlign: 'left' }}>
-                <FormItem {...formItemLayout} label="EX DATE">
-                  {getFieldDecorator(
-                    'inputdate_no',
-                    { initialValue: moment(this.props.data.inputdate_no) },
-                    {
-                      rules: [
-                        {
-                          type: 'object',
-                          required: true,
-                          message: 'Vui lòng chọn thời gian xuất kho !',
-                        },
-                      ],
-                    },
-                  )(<DatePicker format={FORMAT_SHORT_DATE} disabled />)}
-                </FormItem>
-              </Col>
-            </Row>
-            <Row className="show-grid">
-              <Col md={10} sm={10} xs={10}>
-                <Button icon="plus" size={button_size} onClick={this.addNewRow}>
-                  {' '}
-                  New row{' '}
+          <Row>
+            <Col>
+              <FormItem>
+                {getFieldDecorator('id', { initialValue: this.props.data._id })(
+                  <Input name="id" style={{ display: 'none', visible: false }} />,
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col
+              xs={{ span: 24 }}
+              sm={{ span: 24 }}
+              md={{ span: 8 }}
+              lg={{ span: 8 }}
+              xl={{ span: 8 }}
+            >
+              <FormItem
+                {...formItemLayout}
+                style={{ paddingLeft: '8px', width: '100%' }}
+                label="EX DATE"
+              >
+                {getFieldDecorator(
+                  'inputdate_no',
+                  { initialValue: moment(this.props.data.inputdate_no) },
+                  {
+                    rules: [
+                      {
+                        type: 'object',
+                        required: true,
+                        message: 'Vui lòng chọn thời gian xuất kho !',
+                      },
+                    ],
+                  },
+                )(<DatePicker format={FORMAT_SHORT_DATE} disabled />)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col>
+              <FormItem {...formItemLayout} style={{ paddingLeft: '8px', width: '100%' }}>
+                <Button
+                  icon="plus"
+                  style={{ marginLeft: 8 }}
+                  type="primary"
+                  size={button_size}
+                  onClick={this.addNewRow}
+                >
+                  New row
                 </Button>
-              </Col>
-            </Row>
-            <Row className="show-grid">
-              <Col md={11} sm={11} xs={11}>
-                <ReactDataGrid
-                  enableCellSelect={true}
-                  resizable={true}
-                  columns={this.state.columns}
-                  rowGetter={this.rowGetter}
-                  rowsCount={this.state.rows.length}
-                  minHeight={300}
-                  onGridRowsUpdated={this.handleGridRowsUpdated}
-                />
-              </Col>
-            </Row>
-          </Grid>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={2}>
+            <Col span={24}>
+              <ReactDataGrid
+                enableCellSelect={true}
+                resizable={true}
+                columns={this.state.columns}
+                rowGetter={this.rowGetter}
+                rowsCount={this.state.rows.length}
+                minHeight={300}
+                onGridRowsUpdated={this.handleGridRowsUpdated}
+              />
+            </Col>
+          </Row>
         </Form>
       </Modal>
     )
@@ -525,44 +547,74 @@ class WarehouseExport extends Component {
       <div>
         <Collapse className="ant-advanced-search-panel-collapse">
           <Panel header="SEARCH" key="1">
-            <Form className="ant-advanced-search-panel " onSubmit={this.handleSearch}>
-              <Grid>
-                <Row className="show-grid">
-                  <Col md={4} sm={6} xs={6} style={{ textAlign: 'left' }}>
-                    <FormItem label="FROM EX DATE ">
-                      {getFieldDecorator('from_date', {}, {})(
-                        <DatePicker format={FORMAT_SHORT_DATE} />,
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col md={4} sm={6} xs={6} style={{ textAlign: 'left' }}>
-                    <FormItem label="TO EX DATE ">
-                      {getFieldDecorator('to_date', {}, {})(
-                        <DatePicker format={FORMAT_SHORT_DATE} />,
-                      )}
-                    </FormItem>
-                  </Col>
-                </Row>
-                <Row className="show-grid">
-                  <Col md={4} sm={6} xs={6} style={{ textAlign: 'left' }}>
-                    <FormItem label="FROM ORDER # ">
-                      {getFieldDecorator('from_orderid', {})(
-                        <InputNumber placeholder="from order #" />,
-                      )}
-                    </FormItem>
-                  </Col>
+            <Form onSubmit={this.handleSearch}>
+              <Row gutter={8}>
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
+                  <FormItem {...formItemLayout} label="FROM EX DATE ">
+                    {getFieldDecorator('from_date', {}, {})(
+                      <DatePicker style={{ width: '100%' }} format={FORMAT_SHORT_DATE} />,
+                    )}
+                  </FormItem>
+                </Col>
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
+                  <FormItem {...formItemLayout} label="TO EX DATE ">
+                    {getFieldDecorator('to_date', {}, {})(
+                      <DatePicker style={{ width: '100%' }} format={FORMAT_SHORT_DATE} />,
+                    )}
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row gutter={8}>
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
+                  <FormItem {...formItemLayout} label="FROM ORDER # ">
+                    {getFieldDecorator('from_orderid', {})(
+                      <InputNumber style={{ width: '100%' }} placeholder="from order #" />,
+                    )}
+                  </FormItem>
+                </Col>
 
-                  <Col md={4} sm={6} xs={6} style={{ textAlign: 'left' }}>
-                    <FormItem label="TO ORDER # ">
-                      {getFieldDecorator('to_orderid', {})(
-                        <InputNumber placeholder="to order #" />,
-                      )}
-                    </FormItem>
-                  </Col>
-                </Row>
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
+                  <FormItem {...formItemLayout} label="TO ORDER # ">
+                    {getFieldDecorator('to_orderid', {})(
+                      <InputNumber style={{ width: '100%' }} placeholder="to order #" />,
+                    )}
+                  </FormItem>
+                </Col>
+              </Row>
 
-                <Row className="show-grid">
-                  <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
+              <Row gutter={8}>
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
+                  <FormItem {...tailFormItemLayout}>
                     <Button icon="search" size={button_size} type="primary" htmlType="submit">
                       SEARCH
                     </Button>
@@ -574,35 +626,44 @@ class WarehouseExport extends Component {
                     >
                       CLEAR
                     </Button>
-                  </Col>
-                </Row>
-              </Grid>
+                  </FormItem>
+                </Col>
+              </Row>
             </Form>
           </Panel>
         </Collapse>
 
-        <div className="ant-advanced-toolbar">
-          <Button
-            icon="plus"
-            size={button_size}
-            type="primary"
-            value="new"
-            className="ant-advanced-toolbar-item"
-            onClick={this.showModal}
+        <Row gutter={8}>
+          <Col
+            xs={{ span: 24 }}
+            sm={{ span: 24 }}
+            md={{ span: 8 }}
+            lg={{ span: 8 }}
+            xl={{ span: 8 }}
           >
-            NEW
-          </Button>
-          <Button
-            icon="edit"
-            size={button_size}
-            type="primary"
-            value="detail"
-            className="ant-advanced-toolbar-item"
-            onClick={this.showModal}
-          >
-            DETAIL
-          </Button>
-        </div>
+            <FormItem {...formItemLayout}>
+              <Button
+                icon="plus"
+                size={button_size}
+                type="primary"
+                value="new"
+                onClick={this.showModal}
+              >
+                NEW
+              </Button>
+              <Button
+                icon="edit"
+                size={button_size}
+                style={{ marginLeft: 8 }}
+                type="primary"
+                value="detail"
+                onClick={this.showModal}
+              >
+                DETAIL
+              </Button>
+            </FormItem>
+          </Col>
+        </Row>
 
         <WrappedWarehouseExportForm
           wrappedComponentRef={this.saveFormRef}

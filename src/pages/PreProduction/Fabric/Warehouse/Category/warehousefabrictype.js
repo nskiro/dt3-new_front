@@ -1,12 +1,9 @@
 import React, { Component } from 'react'
-import { Grid, Row, Col } from 'react-bootstrap'
-import { Input, Button, Form, Modal, Collapse, Table } from 'antd'
+import { Input, Button, Form, Modal, Collapse, Table, Row, Col } from 'antd'
 import PropTypes from 'prop-types'
 
-import ReactDataGrid from 'react-data-grid'
-//import update from 'immutability-helper';
+import { formItemLayout, tailFormItemLayout } from '../../../../Common/FormStyle'
 
-import RowRenderer from '../rowrenderer'
 import DateFormatter from '../dateformatter'
 
 import moment from 'moment'
@@ -32,26 +29,25 @@ class FabricTypeForm extends Component {
         onCancel={onCancel}
       >
         <Form>
-          <Grid>
-            <Row className="show-grid">
-              <Col>
-                <FormItem>
-                  {getFieldDecorator('id', { initialValue: this.props.data._id })(
-                    <Input name="id" style={{ display: 'none', visible: false }} />,
-                  )}
-                </FormItem>
-              </Col>
-
-              <Col md={12} sm={12} xs={12}>
-                <FormItem label={'TYPE'}>
-                  {getFieldDecorator('fabrictype_name', {
-                    rules: [{ required: true, message: 'Vui lòng nhập loại vải!' }],
-                    initialValue: this.props.data.fabrictype_code,
-                  })(<Input name="fabrictype_name" placeholder="loại vải" />)}
-                </FormItem>
-              </Col>
-            </Row>
-          </Grid>
+          <Row gutter={8}>
+            <Col>
+              <FormItem>
+                {getFieldDecorator('id', { initialValue: this.props.data._id })(
+                  <Input name="id" style={{ display: 'none', visible: false }} />,
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col span={24}>
+              <FormItem {...formItemLayout} label={'TYPE'}>
+                {getFieldDecorator('fabrictype_name', {
+                  rules: [{ required: true, message: 'Vui lòng nhập loại vải!' }],
+                  initialValue: this.props.data.fabrictype_code,
+                })(<Input name="fabrictype_name" placeholder="loại vải" />)}
+              </FormItem>
+            </Col>
+          </Row>
         </Form>
       </Modal>
     )
@@ -228,20 +224,29 @@ class WarehouseFabricType extends Component {
       <div>
         <Collapse className="ant-advanced-search-panel-collapse">
           <Panel header="Tìm kiếm" key="1">
-            <Form className="ant-advanced-search-panel " onSubmit={this.handleSearch}>
-              <Grid>
-                <Row className="show-grid">
-                  <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
-                    <FormItem label={'TYPE'}>
-                      {getFieldDecorator('fabrictype_name', {})(
-                        <Input placeholder="tên loại vải" />,
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col md={4} sm={6} xs={12} style={{ textAlign: 'left' }}>
+            <Form onSubmit={this.handleSearch}>
+              <Row gutter={8}>
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
+                  <FormItem {...formItemLayout} label={'TYPE'}>
+                    {getFieldDecorator('fabrictype_name', {})(<Input placeholder="tên loại vải" />)}
+                  </FormItem>
+                </Col>
+                <Col
+                  xs={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  md={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  xl={{ span: 8 }}
+                >
+                  <FormItem {...formItemLayout}>
                     <Button icon="search" size={button_size} type="primary" htmlType="submit">
-                      {' '}
-                      SEARCH{' '}
+                      SEARCH
                     </Button>
                     <Button
                       icon="sync"
@@ -251,43 +256,46 @@ class WarehouseFabricType extends Component {
                     >
                       CLEAR
                     </Button>
-                  </Col>
-                </Row>
-              </Grid>
+                  </FormItem>
+                </Col>
+              </Row>
             </Form>
           </Panel>
         </Collapse>
-        <div className="ant-advanced-toolbar">
-          <Button
-            icon="plus"
-            size={button_size}
-            type="primary"
-            value="new"
-            className="ant-advanced-toolbar-item"
-            onClick={this.showModal}
-          >
-            NEW
-          </Button>
-          <Button
-            icon="edit"
-            size={button_size}
-            type="primary"
-            value="edit"
-            className="ant-advanced-toolbar-item"
-            onClick={this.showModal}
-          >
-            EDIT
-          </Button>
-          <Button
-            icon="sync"
-            size={button_size}
-            type="primary"
-            className="ant-advanced-toolbar-item"
-            onClick={this.onRefeshGrid}
-          >
-            REFESH
-          </Button>
-        </div>
+        <Row gutter={8}>
+          <Col>
+            <FormItem {...formItemLayout}>
+              <Button
+                icon="plus"
+                size={button_size}
+                type="primary"
+                value="new"
+                onClick={this.showModal}
+              >
+                NEW
+              </Button>
+              <Button
+                icon="edit"
+                size={button_size}
+                style={{ marginLeft: 8 }}
+                type="primary"
+                value="edit"
+                onClick={this.showModal}
+              >
+                EDIT
+              </Button>
+              <Button
+                icon="sync"
+                size={button_size}
+                style={{ marginLeft: 8 }}
+                type="primary"
+                onClick={this.onRefeshGrid}
+              >
+                REFESH
+              </Button>
+            </FormItem>
+          </Col>
+        </Row>
         <WrappedFabricTypeForm
           wrappedComponentRef={this.saveFormRef}
           visible={this.state.modalvisible}
