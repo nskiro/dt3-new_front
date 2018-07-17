@@ -3,11 +3,13 @@ import Page from 'components/LayoutComponents/Page'
 import Helmet from 'react-helmet'
 import _ from 'lodash'
 import CustomCard from 'components/LayoutComponents/CustomCard'
-import { Row, Col, Button, Upload, TreeSelect, message, Table } from 'antd'
+import { Row, Col, Button, Upload, TreeSelect, message, Table, Select, Popconfirm } from 'antd'
 import { connect } from 'react-redux'
 
 import axios from 'axiosInst'
 import config from 'CommonConfig'
+
+const Option = Select.Option
 
 const mapStateToProps = ({ app }, props) => {
   const { userState } = app
@@ -42,25 +44,39 @@ class UploadPDFPage extends Component {
     loading: false,
     reportCategories: [],
     selectedCategory: undefined,
+    selectedDept: undefined,
     reportList: [],
     selectedRowKeys: [],
   }
 
   componentDidMount() {
     this.setState({ loading: true })
-    axios
+    /*axios
       .get(`api/pdf/category/${this.props.user.dept._id}`)
       .then(res => {
         this.setState({ loading: false, reportCategories: res.data })
       })
       .catch(err => {
         alert(err)
-      })
+      })*/
 
     axios
       .get(`api/pdf/report/`, { params: { user: this.props.user._id } })
       .then(res => {
         this.setState({ reportList: res.data })
+      })
+      .catch(err => {
+        alert(err)
+      })
+  }
+
+  loadCategory = value => {
+    this.setState({ loading: true, selectedDept: value })
+    axios
+      .get(`api/pdf/category/${value}`)
+      .then(res => {
+        res.data = res.data === '' ? [] : res.data
+        this.setState({ loading: false, reportCategories: res.data })
       })
       .catch(err => {
         alert(err)
@@ -93,10 +109,17 @@ class UploadPDFPage extends Component {
 
   render() {
     const { user } = this.props
-    const { reportCategories, loading, selectedCategory, reportList, selectedRowKeys } = this.state
+    const { reportCategories, loading, selectedCategory, reportList, selectedRowKeys, selectedDept } = this.state
     return (
       <Row type="flex" justify="start">
         <Col span={5}>
+          <Select style={{ width: '90%', marginBottom: '5px' }} onSelect={this.loadCategory} placeholder="Select department">
+            {
+              user.dept.length > 0 ? user.dept.map(o => {
+                return <Option key={o._id} value={o._id}>{o.name}</Option>
+              }) : null
+            }
+          </Select>
           <TreeSelect
             allowClear={true}
             placeholder="Select report category"
@@ -115,7 +138,7 @@ class UploadPDFPage extends Component {
             data={{
               category: selectedCategory,
               user: user._id,
-              dept: user.dept._id,
+              dept: selectedDept
             }}
             onChange={info => {
               const res = info.file.response
@@ -133,17 +156,18 @@ class UploadPDFPage extends Component {
           </Upload>
         </Col>
         <Col span={19}>
-          {
-            //this.state.fileReview !== '' ? <iframe title="pdf_viewer" src={`${config.baseURL}pdf/viewer.html?file=${config.baseURL}api/pdf/report/read/${fileReview}`} width="100%" height="600px" /> : null
-          }
-          <Button
-            type="danger"
-            size="small"
-            onClick={this.handleDeleteReport}
-            disabled={selectedRowKeys.length === 0 ? true : false}
-          >
-            Delete
-          </Button>
+          <Popconfirm
+            title="Are you sure delete?"
+            onConfirm={this.handleDeleteReport}
+            okText="Yes"
+            cancelText="No">
+              <Button
+                type="danger"
+                size="small"
+                disabled={selectedRowKeys.length === 0 ? true : false}>
+                Delete
+              </Button>
+          </Popconfirm>
           <Table
             style={{ marginTop: '5px' }}
             columns={columns}
