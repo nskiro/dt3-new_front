@@ -16,7 +16,7 @@ import {
   Card,
   Popconfirm,
   Alert,
-  Select
+  Select,
 } from 'antd'
 import { connect } from 'react-redux'
 
@@ -50,9 +50,7 @@ class PDFCategoryPage extends Component {
     pathName: 'PDF Report Category',
   }
 
-  componentDidMount() {
-    
-  }
+  componentDidMount() {}
 
   loadCategory = value => {
     this.setState({ loading: true })
@@ -110,7 +108,7 @@ class PDFCategoryPage extends Component {
           this.updateCategoryNode(temp, res.data._id)
           this.setState({ reportCategories: temp })
         })
-        .catch(err => { })
+        .catch(err => {})
     }
   }
 
@@ -169,20 +167,28 @@ class PDFCategoryPage extends Component {
           <Card title="Category List" style={{ width: '90%' }}>
             {!loading ? (
               <span>
-                <Select style={{ width: '100%' }} onSelect={this.loadCategory} placeholder="Select dept">
-                  {
-                    user.dept.length > 0 ? user.dept.map(o => {
-                      return <Option key={o._id} value={o._id}>{o.name}</Option>
-                    }) : null
-                  }
+                <Select
+                  style={{ width: '100%' }}
+                  onSelect={this.loadCategory}
+                  placeholder="Select dept"
+                >
+                  {user.dept.length > 0
+                    ? user.dept.map(o => {
+                        return (
+                          <Option key={o._id} value={o._id}>
+                            {o.name}
+                          </Option>
+                        )
+                      })
+                    : null}
                 </Select>
                 <Tree autoExpandParent={true} showIcon={true} onSelect={this.onCategorySelect}>
                   {reportCategories ? this.renderTreeNodes(reportCategories) : null}
                 </Tree>
               </span>
             ) : (
-                <Spin />
-              )}
+              <Spin />
+            )}
           </Card>
         </Col>
         <Col span={10}>
@@ -196,16 +202,19 @@ class PDFCategoryPage extends Component {
               {getFieldDecorator('dept', {
                 rules: [{ required: true, message: 'Please select department to report!' }],
                 initialValue: selectedNode ? selectedNode.dept._id : '',
-              })
-                (
+              })(
                 <Select style={{ width: '100%' }}>
-                  {
-                    user.dept.length > 0 ? user.dept.map(o => {
-                      return <Option key={o._id} value={o._id}>{o.name}</Option>
-                    }) : null
-                  }
-                </Select>
-                )}
+                  {user.dept.length > 0
+                    ? user.dept.map(o => {
+                        return (
+                          <Option key={o._id} value={o._id}>
+                            {o.name}
+                          </Option>
+                        )
+                      })
+                    : null}
+                </Select>,
+              )}
             </FormItem>
             <FormItem label="Category Name" {...formItemLayout}>
               {getFieldDecorator('categoryName', {

@@ -109,16 +109,31 @@ class UploadPDFPage extends Component {
 
   render() {
     const { user } = this.props
-    const { reportCategories, loading, selectedCategory, reportList, selectedRowKeys, selectedDept } = this.state
+    const {
+      reportCategories,
+      loading,
+      selectedCategory,
+      reportList,
+      selectedRowKeys,
+      selectedDept,
+    } = this.state
     return (
       <Row type="flex" justify="start">
         <Col span={5}>
-          <Select style={{ width: '90%', marginBottom: '5px' }} onSelect={this.loadCategory} placeholder="Select department">
-            {
-              user.dept.length > 0 ? user.dept.map(o => {
-                return <Option key={o._id} value={o._id}>{o.name}</Option>
-              }) : null
-            }
+          <Select
+            style={{ width: '90%', marginBottom: '5px' }}
+            onSelect={this.loadCategory}
+            placeholder="Select department"
+          >
+            {user.dept.length > 0
+              ? user.dept.map(o => {
+                  return (
+                    <Option key={o._id} value={o._id}>
+                      {o.name}
+                    </Option>
+                  )
+                })
+              : null}
           </Select>
           <TreeSelect
             allowClear={true}
@@ -138,7 +153,7 @@ class UploadPDFPage extends Component {
             data={{
               category: selectedCategory,
               user: user._id,
-              dept: selectedDept
+              dept: selectedDept,
             }}
             onChange={info => {
               const res = info.file.response
@@ -160,13 +175,15 @@ class UploadPDFPage extends Component {
             title="Are you sure delete?"
             onConfirm={this.handleDeleteReport}
             okText="Yes"
-            cancelText="No">
-              <Button
-                type="danger"
-                size="small"
-                disabled={selectedRowKeys.length === 0 ? true : false}>
-                Delete
-              </Button>
+            cancelText="No"
+          >
+            <Button
+              type="danger"
+              size="small"
+              disabled={selectedRowKeys.length === 0 ? true : false}
+            >
+              Delete
+            </Button>
           </Popconfirm>
           <Table
             style={{ marginTop: '5px' }}

@@ -16,7 +16,7 @@ class PdfViewer extends Component {
       <Page {...props}>
         <Helmet title="Report Viewer" />
         <CustomCard title="Report Viewer">
-          <ViewerForm dept={props.match.params.dept} key={props.match.params.dept}  />
+          <ViewerForm dept={props.match.params.dept} key={props.match.params.dept} />
         </CustomCard>
       </Page>
     )

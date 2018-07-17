@@ -24,13 +24,14 @@ class ViewerForm extends Component {
         this.setState({ loadingCategory: false, reportCategories: res.data })
         if (res.data.length === 1) {
           axios
-            .get(`api/pdf/report/`, { params: { dept: this.props.dept, category: res.data[0]._id } })
+            .get(`api/pdf/report/`, {
+              params: { dept: this.props.dept, category: res.data[0]._id },
+            })
             .then(res => {
               if (res.data.length > 0) {
-                message.success("Reports have been loaded")
-              }
-              else {
-                message.error("No report was found")
+                message.success('Reports have been loaded')
+              } else {
+                message.error('No report was found')
               }
               this.setState({ loadingCategory: false, loadingReport: false, reportList: res.data })
             })
@@ -64,10 +65,9 @@ class ViewerForm extends Component {
         .get(`api/pdf/report/`, { params: { dept: this.props.dept, category: selectedKeys } })
         .then(res => {
           if (res.data.length > 0) {
-            message.success("Reports have been loaded")
-          }
-          else {
-            message.error("No report was found")
+            message.success('Reports have been loaded')
+          } else {
+            message.error('No report was found')
           }
           this.setState({ loadingReport: false, reportList: res.data })
         })
@@ -77,17 +77,23 @@ class ViewerForm extends Component {
     }
   }
 
-  onSelectReport = (value) => {
+  onSelectReport = value => {
     this.setState({ selectedFile: value })
     scroller.scrollTo('viewer', {
       duration: 800,
       delay: 0,
-      smooth: 'easeInOutQuart'
+      smooth: 'easeInOutQuart',
     })
   }
 
   render() {
-    const { reportCategories, loadingCategory, loadingReport, reportList, selectedFile } = this.state
+    const {
+      reportCategories,
+      loadingCategory,
+      loadingReport,
+      reportList,
+      selectedFile,
+    } = this.state
     return (
       <div>
         <Row type="flex" justify="start">
@@ -100,7 +106,9 @@ class ViewerForm extends Component {
                 <Tree autoExpandParent={true} showIcon={true} onSelect={this.onCategorySelect}>
                   {reportCategories ? this.renderTreeNodes(reportCategories) : null}
                 </Tree>
-              ) : <Spin />}
+              ) : (
+                <Spin />
+              )}
             </Card>
           </Col>
           <Col span={5}>
@@ -108,7 +116,11 @@ class ViewerForm extends Component {
               <label>Select report file:</label>
               <Select style={{ width: '90%' }} onSelect={this.onSelectReport}>
                 {reportList.map(o => {
-                  return <Option key={o._id} value={o._id}>{o.reportName}</Option>
+                  return (
+                    <Option key={o._id} value={o._id}>
+                      {o.reportName}
+                    </Option>
+                  )
                 })}
               </Select>
             </Spin>
@@ -117,7 +129,16 @@ class ViewerForm extends Component {
         <Row>
           <Col span={24}>
             <Element name="viewer" className="element">
-              {selectedFile !== '' ? <iframe title="PDF Viewer" src={`${config.baseURL}pdf/viewer.html?file=${config.baseURL}api/pdf/report/read/${selectedFile}`} width="100%" height="600px" /> : null}
+              {selectedFile !== '' ? (
+                <iframe
+                  title="PDF Viewer"
+                  src={`${config.baseURL}pdf/viewer.html?file=${
+                    config.baseURL
+                  }api/pdf/report/read/${selectedFile}`}
+                  width="100%"
+                  height="600px"
+                />
+              ) : null}
             </Element>
           </Col>
         </Row>
