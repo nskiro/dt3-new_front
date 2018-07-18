@@ -48,7 +48,6 @@ const test_fabric_weight_get = '/api/testfabric/weight/get'
 const test_fabric_weight_add = '/api/testfabric/weight/add'
 const test_fabric_weight_update = '/api/testfabric/weight/update'
 
-
 class TestFabricProcessView extends Component {
   constructor(props) {
     super(props)
@@ -150,23 +149,21 @@ class TestFabricProcessView extends Component {
     }*/
   }
 
-  onSaveSkew = () => {
-
-
-  }
+  onSaveSkew = () => {}
 
   onSaveWeight = () => {
     const { data_detail, isUpdate } = this.weightChild.state
-    axios.post(test_fabric_weight_add, data_detail).then(res => {
-      let rs = res.data
-      if (!rs.valid) {
-        alert('Error ' + rs.message)
-      }
-    })
+    axios
+      .post(test_fabric_weight_add, data_detail)
+      .then(res => {
+        let rs = res.data
+        if (!rs.valid) {
+          alert('Error ' + rs.message)
+        }
+      })
       .catch(err => {
         console.log(err)
       })
-
   }
 
   prev = () => {
@@ -233,9 +230,12 @@ class TestFabricProcessView extends Component {
       },
       {
         title: 'Kiểm Tra Trọng Lượng',
-        content: <TestFabricWeightWapper
-          data={this.state.import_row_selected_details}
-          wrappedComponentRef={ref => (this.weightChild = ref)} />
+        content: (
+          <TestFabricWeightWapper
+            data={this.state.import_row_selected_details}
+            wrappedComponentRef={ref => (this.weightChild = ref)}
+          />
+        ),
       },
       {
         title: 'Kiểm Tra Độ Co Rút',
@@ -248,10 +248,12 @@ class TestFabricProcessView extends Component {
       },
       {
         title: 'Kiểm Tra Hệ Thống 4 Điểm',
-        content: <TestFabricFourPointWapper
-          data={this.state.import_row_selected_details}
-          wrappedComponentRef={ref => (this.fourPointChild = ref)}
-        />
+        content: (
+          <TestFabricFourPointWapper
+            data={this.state.import_row_selected_details}
+            wrappedComponentRef={ref => (this.fourPointChild = ref)}
+          />
+        ),
       },
       { title: 'Phân Tách Nhóm Màu', content: 'Last-content' },
       { title: 'Tổng Kết', content: 'Last-content' },

@@ -23,7 +23,7 @@ class TestFabricRelax extends Component {
 
       loadtestfabricrelax_done: false,
       isUpdate: false,
-      isNewRow: false
+      isNewRow: false,
     }
   }
 
@@ -77,7 +77,7 @@ class TestFabricRelax extends Component {
               met: d.met,
               roll: d.roll,
               importid: d.importid,
-              fabricimportdetail_id: d._id
+              fabricimportdetail_id: d._id,
             }
             r.relax = 0
             r.note = ''
@@ -88,7 +88,7 @@ class TestFabricRelax extends Component {
             for (let j = 0; j < 5; j++) {
               details.push({
                 _id: uuidv1(),
-                detail_stt: (j + 1),
+                detail_stt: j + 1,
                 no_roll: 0,
                 no_met: 0,
                 detail_note: '',
@@ -108,7 +108,7 @@ class TestFabricRelax extends Component {
               met: d.met,
               roll: d.roll,
               importid: d.importid,
-              fabricimportdetail_id: d._id
+              fabricimportdetail_id: d._id,
             }
             let find_relax = _.find(data.data, { fabricimportdetail_id: r.fabricimportdetail_id })
             if (find_relax) {
@@ -119,15 +119,15 @@ class TestFabricRelax extends Component {
               try {
                 r.end_date = moment(new Date(find_relax.end_date)).format(formatDate.shortType)
                 r.start_date = moment(new Date(find_relax.start_date)).format(formatDate.shortType)
-              } catch (e) { }
+              } catch (e) {}
 
               let details = []
               for (let j = 0; j < find_relax.fabric_relax_detail_id.length; j++) {
                 let n_row = { ...find_relax.fabric_relax_detail_id[j] }
-                n_row.detail_stt = (j + 1)
+                n_row.detail_stt = j + 1
                 details.push(n_row)
               }
-              r.fabric_relax_detail_id = details;
+              r.fabric_relax_detail_id = details
             }
             new_data_detail.push(r)
           }
@@ -164,7 +164,7 @@ class TestFabricRelax extends Component {
     }
   }
 
-  onAddNewRowForDetail = (e) => {
+  onAddNewRowForDetail = e => {
     if (e.target.value) {
       // return () => {
       const data_detail = [...this.state.data_detail]
@@ -175,7 +175,7 @@ class TestFabricRelax extends Component {
         let row_main = data_detail[index_row_main]
         let new_row = {
           _id: uuidv1(),
-          detail_stt: (row_main.fabric_relax_detail_id.length + 1),
+          detail_stt: row_main.fabric_relax_detail_id.length + 1,
           no_roll: 0,
           no_met: 0,
           detail_note: '',
@@ -291,7 +291,13 @@ class TestFabricRelax extends Component {
         <div>
           <Row gutter={8}>
             <Col>
-              <Button icon="plus" type="primary" size="small" onClick={this.onAddNewRowForDetail} value={fabricrelax_id}>
+              <Button
+                icon="plus"
+                type="primary"
+                size="small"
+                onClick={this.onAddNewRowForDetail}
+                value={fabricrelax_id}
+              >
                 NEW ROW
               </Button>
             </Col>

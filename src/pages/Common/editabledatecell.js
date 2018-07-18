@@ -9,7 +9,6 @@ class EditableDateCell extends Component {
   }
 
   handleChange = e => {
-
     if (e.length <= 10) {
       const value = moment(e, formatDate.shortType)
       this.setState({ value, editable: false })
@@ -17,7 +16,6 @@ class EditableDateCell extends Component {
       const value = moment(new Date(e)).format(formatDate.shortType)
       this.setState({ value, editable: false })
     }
-
   }
 
   check = () => {
@@ -51,11 +49,11 @@ class EditableDateCell extends Component {
             suffix={<Icon type="check" className="editable-cell-icon-check" onClick={this.check} />}
           />
         ) : (
-            <div style={{ paddingRight: 0 }}>
-              {value ? moment(value).format(formatDate.shortType) : ' '}
-              <Icon type="edit" className="editable-cell-icon" onClick={this.edit} />
-            </div>
-          )}
+          <div style={{ paddingRight: 0 }}>
+            {value ? moment(value).format(formatDate.shortType) : ' '}
+            <Icon type="edit" className="editable-cell-icon" onClick={this.edit} />
+          </div>
+        )}
       </div>
     )
   }

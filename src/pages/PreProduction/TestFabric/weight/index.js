@@ -10,7 +10,7 @@ import _ from 'lodash'
 import moment from 'moment'
 import { isBuffer } from 'util'
 
-const formatDate = require('../../../Common/formatdate');
+const formatDate = require('../../../Common/formatdate')
 const uuidv1 = require('uuid/v1')
 const test_fabric_weight_get_link = '/api/testfabric/weight/get'
 
@@ -82,7 +82,11 @@ class TestFabricWeight extends Component {
             r.details = details
             new_data_detail[i] = r
           }
-          this.setState({ data_detail: new_data_detail, loadtestfabricweight_done: true, isUpdate: false, })
+          this.setState({
+            data_detail: new_data_detail,
+            loadtestfabricweight_done: true,
+            isUpdate: false,
+          })
         } else {
           for (let i = 0; i < new_data_detail.length; i++) {
             const find_weight = _.find(data.data, { _id: new_data_detail[i]._id })
@@ -91,7 +95,11 @@ class TestFabricWeight extends Component {
             new_data_detail[i].note = find_weight.note
             new_data_detail[i].details = find_weight.details
           }
-          this.setState({ data_detail: new_data_detail, loadtestfabricweight_done: true, isUpdate: true, })
+          this.setState({
+            data_detail: new_data_detail,
+            loadtestfabricweight_done: true,
+            isUpdate: true,
+          })
           // console.log('new_data_detail =>' + JSON.stringify(new_data_detail))
         }
       })
@@ -101,9 +109,9 @@ class TestFabricWeight extends Component {
       })
   }
 
-  createDataNewRow = (i) => {
+  createDataNewRow = i => {
     return {
-      detail_stt: (i + 1),
+      detail_stt: i + 1,
       _id: uuidv1(),
       no_roll: 0,
       weight: 0,
@@ -141,22 +149,31 @@ class TestFabricWeight extends Component {
       { key: 'roll', dataIndex: 'roll', title: 'ROLL', name: 'ROLL' },
       { key: 'met', dataIndex: 'met', title: 'MET', name: 'MET' },
       {
-        key: 'test_no', dataIndex: 'test_no', title: 'TEST #', name: 'TEST #',
+        key: 'test_no',
+        dataIndex: 'test_no',
+        title: 'TEST #',
+        name: 'TEST #',
         render: (text, record) => (
           <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'test_no')} />
         ),
       },
       {
-        key: 'fail_no', dataIndex: 'fail_no', title: 'FAIL #', name: 'FAIL #',
+        key: 'fail_no',
+        dataIndex: 'fail_no',
+        title: 'FAIL #',
+        name: 'FAIL #',
         render: (text, record) => (
           <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'fail_no')} />
-        )
+        ),
       },
       {
-        key: 'note', dataIndex: 'note', title: 'NOTE', name: 'NOTE',
+        key: 'note',
+        dataIndex: 'note',
+        title: 'NOTE',
+        name: 'NOTE',
         render: (text, record) => (
           <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'note')} />
-        )
+        ),
       },
       {
         key: 'start_date',

@@ -27,13 +27,19 @@ class TestFabricSkewShrinlege extends Component {
       { key: 'met', dataIndex: 'met', title: 'MET', name: 'MET' },
 
       {
-        key: 'no_test', dataIndex: 'no_test', title: 'TEST #', name: 'TEST #',
+        key: 'no_test',
+        dataIndex: 'no_test',
+        title: 'TEST #',
+        name: 'TEST #',
         render: (text, record) => (
           <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'no_test')} />
-        )
+        ),
       },
       {
-        key: 'no_fail', dataIndex: 'no_fail', title: 'FAIL #', name: 'FAIL #',
+        key: 'no_fail',
+        dataIndex: 'no_fail',
+        title: 'FAIL #',
+        name: 'FAIL #',
         render: (text, record) => (
           <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'no_fail')} />
         ),
