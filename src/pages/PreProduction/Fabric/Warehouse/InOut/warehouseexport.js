@@ -371,7 +371,6 @@ class WarehouseExport extends Component {
 
   isDataRowValid = row => {
     let c_size = 0
-    //console.log(row);
     let check_keys = [
       'fabric_color',
       'fabric_type',

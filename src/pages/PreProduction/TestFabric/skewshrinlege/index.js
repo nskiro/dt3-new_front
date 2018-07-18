@@ -26,8 +26,18 @@ class TestFabricSkewShrinlege extends Component {
       { key: 'roll', dataIndex: 'roll', title: 'ROLL', name: 'ROLL' },
       { key: 'met', dataIndex: 'met', title: 'MET', name: 'MET' },
 
-      { key: 'no_test', dataIndex: 'no_test', title: 'TEST #', name: 'TEST #' },
-      { key: 'no_fail', dataIndex: 'no_fail', title: 'FAIL #', name: 'FAIL #' },
+      {
+        key: 'no_test', dataIndex: 'no_test', title: 'TEST #', name: 'TEST #',
+        render: (text, record) => (
+          <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'no_test')} />
+        )
+      },
+      {
+        key: 'no_fail', dataIndex: 'no_fail', title: 'FAIL #', name: 'FAIL #',
+        render: (text, record) => (
+          <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'no_fail')} />
+        ),
+      },
       { key: 'skew_note', dataIndex: 'skew_note', title: 'NOTE', name: 'NOTE' },
       {
         key: 'start_date',
@@ -51,7 +61,6 @@ class TestFabricSkewShrinlege extends Component {
 
     const expandedRowRender = r => {
       const fabricrelax_id = r._id
-      // console.log('fabricrelax_id ='+ JSON.stringify(r))
       const columns = [
         { title: 'STT', dataIndex: 'detail_stt', key: 'detail_stt' },
         {

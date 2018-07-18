@@ -40,8 +40,15 @@ const button_size = 'small'
 const Step = Steps.Step
 
 const fabric_import_getdetail_link = 'api/fabric/import/getdetails'
+
 const test_fabric_relax_get_add = '/api/testfabric/relax/add'
 const test_fabric_relax_get_update = '/api/testfabric/relax/update'
+
+const test_fabric_weight_get = '/api/testfabric/weight/get'
+const test_fabric_weight_add = '/api/testfabric/weight/add'
+const test_fabric_weight_update = '/api/testfabric/weight/update'
+
+
 class TestFabricProcessView extends Component {
   constructor(props) {
     super(props)
@@ -51,7 +58,6 @@ class TestFabricProcessView extends Component {
       import_row_selected_details: [],
     }
   }
-
   static getDerivedStateFromProps = (nextProps, state) => {
     // console.log('getDerivedStateFromProps call')
     let nextState = { ...state }
@@ -68,7 +74,6 @@ class TestFabricProcessView extends Component {
         console.log('reload page')
       return true
     }
-
     return false
   }
 */
@@ -106,11 +111,11 @@ class TestFabricProcessView extends Component {
         break
       case 1:
         //co rut
-        this.onSaveSkew()
+        this.onSaveWeight()
         break
       case 2:
         // trong luong
-        this.onSaveWeight()
+        this.onSaveSkew()
         break
       default:
         break
@@ -121,38 +126,48 @@ class TestFabricProcessView extends Component {
   }
   onSaveRelax = () => {
     const { data_detail, isUpdate } = this.relaxChild.state
-    console.log('data relax form ' + JSON.stringify(data_detail))
-    alert('isUpdate =' + isUpdate)
-    if (isUpdate) {
-      axios
-        .post(test_fabric_relax_get_update, data_detail)
-        .then(res => {
-          let rs = res.data
-          if (!rs.valid) {
-            alert('Error ' + rs.message)
-          }
-        })
+
+    /*if (isUpdate) {
+      axios.post(test_fabric_relax_get_update, data_detail).then(res => {
+        let rs = res.data
+        if (!rs.valid) {
+          alert('Error ' + rs.message)
+        }
+      })
         .catch(err => {
           console.log(err)
         })
     } else {
-      axios
-        .post(test_fabric_relax_get_add, data_detail)
-        .then(res => {
-          let rs = res.data
-          if (!rs.valid) {
-            alert('Error ' + rs.message)
-          }
-        })
+      axios.post(test_fabric_relax_get_add, data_detail).then(res => {
+        let rs = res.data
+        if (!rs.valid) {
+          alert('Error ' + rs.message)
+        }
+      })
         .catch(err => {
           console.log(err)
         })
-    }
+    }*/
   }
 
-  onSaveSkew = () => {}
+  onSaveSkew = () => {
 
-  onSaveWeight = () => {}
+
+  }
+
+  onSaveWeight = () => {
+    const { data_detail, isUpdate } = this.weightChild.state
+    axios.post(test_fabric_weight_add, data_detail).then(res => {
+      let rs = res.data
+      if (!rs.valid) {
+        alert('Error ' + rs.message)
+      }
+    })
+      .catch(err => {
+        console.log(err)
+      })
+
+  }
 
   prev = () => {
     const current = this.state.current - 1
@@ -202,11 +217,10 @@ class TestFabricProcessView extends Component {
       },
     ]
     const TestFabricRelaxWapper = Form.create()(TestFabricRelax)
-    /*
     const TestFabricWeightWapper = Form.create()(TestFabricWeight)
     const TestFabricSkewWapper = Form.create()(TestFabricSkewShrinlege)
     const TestFabricFourPointWapper = Form.create()(TestFabricFourPoint)
-    */
+
     const steps = [
       {
         title: 'Xả Vải',
@@ -217,21 +231,28 @@ class TestFabricProcessView extends Component {
           />
         ),
       },
-      /*
-      {
-        title: 'Kiểm Tra Độ Co Rút',
-        content: <TestFabricSkewShrinlege data={this.state.import_row_selected_details} wrappedComponentRef={ref => (this.skewChild = ref)} />
-      },*/
       {
         title: 'Kiểm Tra Trọng Lượng',
+        content: <TestFabricWeightWapper
+          data={this.state.import_row_selected_details}
+          wrappedComponentRef={ref => (this.weightChild = ref)} />
+      },
+      {
+        title: 'Kiểm Tra Độ Co Rút',
         content: (
-          <TestFabricWeight
+          <TestFabricSkewWapper
             data={this.state.import_row_selected_details}
-            wrappedComponentRef={ref => (this.weightChild = ref)}
+            wrappedComponentRef={ref => (this.skewChild = ref)}
           />
         ),
       },
-      { title: 'Kiểm Tra Hệ Thống 4 Điểm', content: 'Last-content' },
+      {
+        title: 'Kiểm Tra Hệ Thống 4 Điểm',
+        content: <TestFabricFourPointWapper
+          data={this.state.import_row_selected_details}
+          wrappedComponentRef={ref => (this.fourPointChild = ref)}
+        />
+      },
       { title: 'Phân Tách Nhóm Màu', content: 'Last-content' },
       { title: 'Tổng Kết', content: 'Last-content' },
     ]

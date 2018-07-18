@@ -3,7 +3,8 @@ import { Table, Button, Icon, Row, Col } from 'antd'
 import EditableInputCell from '../../../Common/editableinputcell'
 import EditableNumberCell from '../../../Common/editablenumbercell'
 import EditableDateCell from '../../../Common/editabledatecell'
-import { formItemLayout, tailFormItemLayout } from '../../../Common/FormStyle'
+
+import { formatDate } from '../../../Common/formatdate'
 
 import axios from '../../../../axiosInst' //'../../../../../axiosInst'
 import _ from 'lodash'
@@ -22,6 +23,7 @@ class TestFabricRelax extends Component {
 
       loadtestfabricrelax_done: false,
       isUpdate: false,
+      isNewRow: false
     }
   }
 
@@ -50,7 +52,6 @@ class TestFabricRelax extends Component {
 
   componentDidMount = () => {
     let { data_received, data_detail_id } = this.state
-    console.log(this.state)
     this.loadtestfabricrelax(data_received, data_detail_id)
   }
 
@@ -63,43 +64,72 @@ class TestFabricRelax extends Component {
       .get(test_fabric_relax_get_link, { params: { detail_ids: data_detail_id } })
       .then(res => {
         let data = res.data
-        let new_data_detail = [...data_received]
+        let new_data_detail = []
         let isUpdate = false
         if (_.isEmpty(data.data)) {
-          for (let i = 0; i < new_data_detail.length; i++) {
-            let r = new_data_detail[i]
+          for (let i = 0; i < data_received.length; i++) {
+            let d = data_received[i]
+            let r = {
+              _id: d._id,
+              orderid: d.orderid,
+              fabric_type: d.fabric_type,
+              fabric_color: d.fabric_color,
+              met: d.met,
+              roll: d.roll,
+              importid: d.importid,
+              fabricimportdetail_id: d._id
+            }
             r.relax = 0
+            r.note = ''
             r.condition_hours = 0
-            r.start_date = moment(new Date()).format('MM/DD/YYYY')
-            r.end_date = moment(new Date()).format('MM/DD/YYYY')
+            r.start_date = moment(new Date()).format(formatDate.shortType)
+            r.end_date = moment(new Date()).format(formatDate.shortType)
             let details = []
             for (let j = 0; j < 5; j++) {
               details.push({
                 _id: uuidv1(),
-                detail_stt: j + 1,
+                detail_stt: (j + 1),
                 no_roll: 0,
                 no_met: 0,
-                note: '',
+                detail_note: '',
                 fabricrelax_id: r._id,
               })
             }
             r.fabric_relax_detail_id = details
-            new_data_detail[i] = r
+            new_data_detail.push(r)
           }
         } else {
-          for (let i = 0; i < new_data_detail.length; i++) {
-            let r = new_data_detail[i]
-            let find_relax = _.find(data.data, { fabricimportdetail_id: r._id })
-            //console.log('find_relax  result =' + JSON.stringify(find_relax))
+          for (let i = 0; i < data_received.length; i++) {
+            let d = data_received[i]
+            let r = {
+              orderid: d.orderid,
+              fabric_type: d.fabric_type,
+              fabric_color: d.fabric_color,
+              met: d.met,
+              roll: d.roll,
+              importid: d.importid,
+              fabricimportdetail_id: d._id
+            }
+            let find_relax = _.find(data.data, { fabricimportdetail_id: r.fabricimportdetail_id })
             if (find_relax) {
+              r._id = find_relax._id
               r.relax = find_relax.relax
               r.condition_hours = find_relax.condition_hours
               r.note = find_relax.note
-              r.end_date = moment(find_relax.end_date).format('MM/DD/YYYY')
-              r.start_date = moment(find_relax.start_date).format('MM/DD/YYYY')
+              try {
+                r.end_date = moment(new Date(find_relax.end_date)).format(formatDate.shortType)
+                r.start_date = moment(new Date(find_relax.start_date)).format(formatDate.shortType)
+              } catch (e) { }
+
+              let details = []
+              for (let j = 0; j < find_relax.fabric_relax_detail_id.length; j++) {
+                let n_row = { ...find_relax.fabric_relax_detail_id[j] }
+                n_row.detail_stt = (j + 1)
+                details.push(n_row)
+              }
+              r.fabric_relax_detail_id = details;
             }
-            r.fabric_relax_detail_id = find_relax.fabric_relax_detail_id
-            new_data_detail[i] = r
+            new_data_detail.push(r)
           }
           isUpdate = true
         }
@@ -112,10 +142,8 @@ class TestFabricRelax extends Component {
   }
 
   onCellChange = (key, dataIndex) => {
-    console.log('onCellChange call')
     return value => {
-      console.log('date value changed =' + value)
-
+      console.log(value)
       const data_detail = [...this.state.data_detail]
       const target = data_detail.find(item => item.key === key)
       if (target) {
@@ -136,28 +164,31 @@ class TestFabricRelax extends Component {
     }
   }
 
-  onAddNewRowForDetail = index => {
-    const { data_relax } = this.state
-    if (index <= data_relax.length) {
-      let details = data_relax[index].details
-      if (details) {
-        let detail_size = details.length
+  onAddNewRowForDetail = (e) => {
+    if (e.target.value) {
+      // return () => {
+      const data_detail = [...this.state.data_detail]
+      const fabricrelax_id = e.target.value
+      let index_row_main = _.findIndex(data_detail, { _id: fabricrelax_id })
+
+      if (index_row_main >= 0) {
+        let row_main = data_detail[index_row_main]
         let new_row = {
-          stt_detail: detail_size + 1,
+          _id: uuidv1(),
+          detail_stt: (row_main.fabric_relax_detail_id.length + 1),
           no_roll: 0,
           no_met: 0,
-          note: '',
-          fabricrelax_id: details._id,
+          detail_note: '',
+          fabricrelax_id: fabricrelax_id,
         }
-        data_relax[index] = details
-        this.setState({ data_relax })
+        row_main.fabric_relax_detail_id.push(new_row)
+        data_detail[index_row_main] = row_main
+        this.setState({ data_detail, isNewRow: true })
+        // }
       }
     }
   }
 
-  onPanelChange = (value, mode) => {
-    console.log('value =' + value + ',mode =' + mode)
-  }
   render() {
     const columns = [
       { key: 'fabric_type', dataIndex: 'fabric_type', title: 'TYPE', name: 'TYPE' },
@@ -217,7 +248,6 @@ class TestFabricRelax extends Component {
 
     const expandedRowRender = r => {
       const fabricrelax_id = r._id
-      // console.log('fabricrelax_id ='+ JSON.stringify(r))
       const columns = [
         { title: 'STT', dataIndex: 'detail_stt', key: 'detail_stt' },
         {
@@ -255,11 +285,13 @@ class TestFabricRelax extends Component {
         },
       ]
       const data = r.fabric_relax_detail_id
+
+      this.setState({ isNewRow: false })
       return (
         <div>
           <Row gutter={8}>
             <Col>
-              <Button icon="plus" type="primary" size="small">
+              <Button icon="plus" type="primary" size="small" onClick={this.onAddNewRowForDetail} value={fabricrelax_id}>
                 NEW ROW
               </Button>
             </Col>
@@ -267,10 +299,10 @@ class TestFabricRelax extends Component {
           <Row gutter={8}>
             <Col span={12}>
               <Table
+                rowKey={'_id'}
                 size="small"
                 bordered
                 style={{ marginTop: '5px' }}
-                rowKey={'_id'}
                 columns={columns}
                 dataSource={data}
                 pagination={false}

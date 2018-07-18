@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { DatePicker, Icon } from 'antd'
 import moment from 'moment'
+const { formatDate } = require('./formatdate')
 class EditableDateCell extends Component {
   state = {
     value: this.props.value,
@@ -8,18 +9,18 @@ class EditableDateCell extends Component {
   }
 
   handleChange = e => {
-    console.log(e)
-    try {
-      const value = moment(e)
+
+    if (e.length <= 10) {
+      const value = moment(e, formatDate.shortType)
       this.setState({ value, editable: false })
-    } catch (err) {
-      const value = e
-      this.setState({ value: '' })
+    } else {
+      const value = moment(new Date(e)).format(formatDate.shortType)
+      this.setState({ value, editable: false })
     }
+
   }
 
   check = () => {
-    console.log('editabledatecell call check')
     this.setState({ editable: false })
     if (this.props.onChange) {
       this.props.onChange(this.state.value)
@@ -42,19 +43,19 @@ class EditableDateCell extends Component {
       <div className="editable-cell" style={{ paddingRight: 0 }}>
         {editable ? (
           <DatePicker
-            value={value}
+            value={moment(value, formatDate.shortType)}
             onChange={this.handleChange}
-            format={'MM/DD/YYYY'}
+            format={formatDate.shortType}
             onPressEnter={this.check}
             onKeyDown={this.dateInputKeyDown}
             suffix={<Icon type="check" className="editable-cell-icon-check" onClick={this.check} />}
           />
         ) : (
-          <div style={{ paddingRight: 0 }}>
-            {value ? moment(value).format('MM/DD/YYYY') : ' '}
-            <Icon type="edit" className="editable-cell-icon" onClick={this.edit} />
-          </div>
-        )}
+            <div style={{ paddingRight: 0 }}>
+              {value ? moment(value).format(formatDate.shortType) : ' '}
+              <Icon type="edit" className="editable-cell-icon" onClick={this.edit} />
+            </div>
+          )}
       </div>
     )
   }
