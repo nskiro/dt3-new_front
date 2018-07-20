@@ -96,7 +96,7 @@ class TestFabricWeight extends Component {
 
             let details = [...find_weight.details]
             for (let j = 0; j < details.length; j++) {
-              details[j].detail_stt = (j + 1)
+              details[j].detail_stt = j + 1
             }
             new_data_detail[i].details = details
           }

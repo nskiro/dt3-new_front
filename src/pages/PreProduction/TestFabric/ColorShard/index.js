@@ -4,7 +4,6 @@ import _ from 'lodash'
 import moment from 'moment'
 import axios from '../../../../axiosInst'
 
-
 import EditableInputCell from '../../../Common/editableinputcell'
 import EditableNumberCell from '../../../Common/editablenumbercell'
 import EditableDateCell from '../../../Common/editabledatecell'
@@ -67,7 +66,7 @@ class TestFabricColorShard extends Component {
             r.details = details
             new_data_detail[i] = r
           }
-          this.setState({ data_detail: new_data_detail, isUpdate: false, })
+          this.setState({ data_detail: new_data_detail, isUpdate: false })
         } else {
           for (let i = 0; i < new_data_detail.length; i++) {
             const find_shard = _.find(data.data, { _id: new_data_detail[i]._id })
@@ -77,11 +76,11 @@ class TestFabricColorShard extends Component {
 
             let details = [...find_shard.details]
             for (let j = 0; j < details.length; j++) {
-              details[j].detail_stt = (j + 1)
+              details[j].detail_stt = j + 1
             }
             new_data_detail[i].details = details
           }
-          this.setState({ data_detail: new_data_detail, isUpdate: true, })
+          this.setState({ data_detail: new_data_detail, isUpdate: true })
         }
       })
       .catch(err => {
@@ -97,7 +96,7 @@ class TestFabricColorShard extends Component {
       roll_no: 0,
       met_no: 0,
       group_no_detail: 0,
-      detail_note: ''
+      detail_note: '',
     }
   }
   onCellChange = (key, dataIndex) => {
@@ -138,10 +137,7 @@ class TestFabricColorShard extends Component {
         dataIndex: 'roll_no',
         key: 'roll_no',
         render: (text, record, index) => (
-          <EditableNumberCell
-            value={text}
-            onChange={this.onCellChange(record.key, 'test_no')}
-          />
+          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'test_no')} />
         ),
       },
       {
@@ -149,10 +145,7 @@ class TestFabricColorShard extends Component {
         dataIndex: 'shard_no',
         key: 'shard_no',
         render: (text, record, index) => (
-          <EditableNumberCell
-            value={text}
-            onChange={this.onCellChange(record.key, 'shard_no')}
-          />
+          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'shard_no')} />
         ),
       },
       {
@@ -160,10 +153,7 @@ class TestFabricColorShard extends Component {
         dataIndex: 'group_no',
         key: 'group_no',
         render: (text, record, index) => (
-          <EditableNumberCell
-            value={text}
-            onChange={this.onCellChange(record.key, 'group_no')}
-          />
+          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'group_no')} />
         ),
       },
       {
@@ -171,10 +161,7 @@ class TestFabricColorShard extends Component {
         dataIndex: 'note',
         key: 'note',
         render: (text, record, index) => (
-          <EditableInputCell
-            value={text}
-            onChange={this.onCellChange(record.key, 'note')}
-          />
+          <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'note')} />
         ),
       },
       {

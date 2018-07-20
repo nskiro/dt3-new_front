@@ -80,7 +80,7 @@ class TestFabricFourPoint extends Component {
 
             let details = [...find_weight.details]
             for (let j = 0; j < details.length; j++) {
-              details[j].detail_stt = (j + 1)
+              details[j].detail_stt = j + 1
             }
             new_data_detail[i].details = details
           }
@@ -228,9 +228,8 @@ class TestFabricFourPoint extends Component {
                   onChange={this.onCellDetailChange('length_actual', index, fabricrelax_id)}
                 />
               ),
-            }
-          ]
-
+            },
+          ],
         },
         {
           title: 'Yard',
@@ -245,9 +244,8 @@ class TestFabricFourPoint extends Component {
                   onChange={this.onCellDetailChange('yard_actual', index, fabricrelax_id)}
                 />
               ),
-            }
-          ]
-
+            },
+          ],
         },
         {
           title: 'WIDTH',
@@ -273,8 +271,8 @@ class TestFabricFourPoint extends Component {
                   onChange={this.onCellDetailChange('width_actual', index, fabricrelax_id)}
                 />
               ),
-            }
-          ]
+            },
+          ],
         },
 
         {
@@ -379,7 +377,7 @@ class TestFabricFourPoint extends Component {
                 />
               ),
             },
-          ]
+          ],
         },
         {
           title: 'TOTAL POINT',
@@ -435,7 +433,7 @@ class TestFabricFourPoint extends Component {
               onChange={this.onCellDetailChange('photo_defect', index, fabricrelax_id)}
             />
           ),
-        }
+        },
       ]
       const data = r.details
       return (

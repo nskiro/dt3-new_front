@@ -165,7 +165,7 @@ class TestFabricProcessView extends Component {
       })
   }
 
-  onSaveSkew = () => { }
+  onSaveSkew = () => {}
 
   onSaveWeight = () => {
     const { data_detail, isUpdate } = this.weightChild.state
@@ -255,10 +255,13 @@ class TestFabricProcessView extends Component {
         ),
       },
       {
-        title: 'Phân Tách Nhóm Màu', content: <TestFabricColorShardWapper
-          data={this.state.import_row_selected_details}
-          wrappedComponentRef={ref => (this.colorShardChild = ref)}
-        />
+        title: 'Phân Tách Nhóm Màu',
+        content: (
+          <TestFabricColorShardWapper
+            data={this.state.import_row_selected_details}
+            wrappedComponentRef={ref => (this.colorShardChild = ref)}
+          />
+        ),
       },
       {
         title: 'Kiểm Tra Độ Co Rút',

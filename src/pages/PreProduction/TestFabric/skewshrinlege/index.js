@@ -58,7 +58,7 @@ class TestFabricSkewShrinlege extends Component {
       washing_skew: '',
 
       isPass: '',
-      remark: ''
+      remark: '',
     }
   }
 
@@ -97,7 +97,7 @@ class TestFabricSkewShrinlege extends Component {
 
             let details = [...find_weight.details]
             for (let j = 0; j < details.length; j++) {
-              details[j].detail_stt = (j + 1)
+              details[j].detail_stt = j + 1
             }
             new_data_detail[i].details = details
           }
@@ -212,8 +212,8 @@ class TestFabricSkewShrinlege extends Component {
                       onChange={this.onCellDetailChange('iron_width', index, fabricrelax_id)}
                     />
                   ),
-                }
-              ]
+                },
+              ],
             },
             {
               title: 'Skew',
@@ -225,9 +225,8 @@ class TestFabricSkewShrinlege extends Component {
                   onChange={this.onCellDetailChange('iron_skew', index, fabricrelax_id)}
                 />
               ),
-            }
-          ]
-
+            },
+          ],
         },
 
         {
@@ -257,8 +256,8 @@ class TestFabricSkewShrinlege extends Component {
                       onChange={this.onCellDetailChange('washing_width', index, fabricrelax_id)}
                     />
                   ),
-                }
-              ]
+                },
+              ],
             },
             {
               title: 'Skew',
@@ -270,9 +269,10 @@ class TestFabricSkewShrinlege extends Component {
                   onChange={this.onCellDetailChange('washing_skew', index, fabricrelax_id)}
                 />
               ),
-            }
-          ]
-        }, {
+            },
+          ],
+        },
+        {
           title: 'Pass/Fail',
           dataIndex: 'isPass',
           key: 'isPass',
@@ -300,7 +300,9 @@ class TestFabricSkewShrinlege extends Component {
         <div>
           <Row gutter={8}>
             <Col>
-              <Button icon="plus" type="primary" size="small"> NEW ROW
+              <Button icon="plus" type="primary" size="small">
+                {' '}
+                NEW ROW
               </Button>
             </Col>
           </Row>
