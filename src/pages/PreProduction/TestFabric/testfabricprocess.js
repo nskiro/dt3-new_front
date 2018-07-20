@@ -25,7 +25,7 @@ import _ from 'lodash'
 
 import TestFabricRelax from './relax'
 import TestFabricWeight from './weight'
-
+import TestFabricColorShard from './colorshard'
 import TestFabricSkewShrinlege from './skewshrinlege'
 import TestFabricFourPoint from './fourpoints'
 
@@ -47,6 +47,8 @@ const test_fabric_relax_get_update = '/api/testfabric/relax/update'
 const test_fabric_weight_get = '/api/testfabric/weight/get'
 const test_fabric_weight_add = '/api/testfabric/weight/add'
 const test_fabric_weight_update = '/api/testfabric/weight/update'
+
+const test_fabric_colorshard_save = '/api/testfabric/colorshard/save'
 
 class TestFabricProcessView extends Component {
   constructor(props) {
@@ -109,12 +111,12 @@ class TestFabricProcessView extends Component {
         this.onSaveRelax()
         break
       case 1:
-        //co rut
+        //trong luong
         this.onSaveWeight()
         break
       case 2:
-        // trong luong
-        this.onSaveSkew()
+        // phan tach nhom mau
+        this.onSaveColorShard()
         break
       default:
         break
@@ -125,7 +127,6 @@ class TestFabricProcessView extends Component {
   }
   onSaveRelax = () => {
     const { data_detail, isUpdate } = this.relaxChild.state
-
     /*if (isUpdate) {
       axios.post(test_fabric_relax_get_update, data_detail).then(res => {
         let rs = res.data
@@ -149,7 +150,22 @@ class TestFabricProcessView extends Component {
     }*/
   }
 
-  onSaveSkew = () => {}
+  onSaveColorShard = () => {
+    const { data_detail, isUpdate } = this.colorShardChild.state
+    axios
+      .post(test_fabric_colorshard_save, data_detail)
+      .then(res => {
+        let rs = res.data
+        if (!rs.valid) {
+          alert('Error ' + rs.message)
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+  onSaveSkew = () => { }
 
   onSaveWeight = () => {
     const { data_detail, isUpdate } = this.weightChild.state
@@ -215,6 +231,7 @@ class TestFabricProcessView extends Component {
     ]
     const TestFabricRelaxWapper = Form.create()(TestFabricRelax)
     const TestFabricWeightWapper = Form.create()(TestFabricWeight)
+    const TestFabricColorShardWapper = Form.create()(TestFabricColorShard)
     const TestFabricSkewWapper = Form.create()(TestFabricSkewShrinlege)
     const TestFabricFourPointWapper = Form.create()(TestFabricFourPoint)
 
@@ -238,6 +255,12 @@ class TestFabricProcessView extends Component {
         ),
       },
       {
+        title: 'Phân Tách Nhóm Màu', content: <TestFabricColorShardWapper
+          data={this.state.import_row_selected_details}
+          wrappedComponentRef={ref => (this.colorShardChild = ref)}
+        />
+      },
+      {
         title: 'Kiểm Tra Độ Co Rút',
         content: (
           <TestFabricSkewWapper
@@ -255,7 +278,7 @@ class TestFabricProcessView extends Component {
           />
         ),
       },
-      { title: 'Phân Tách Nhóm Màu', content: 'Last-content' },
+
       { title: 'Tổng Kết', content: 'Last-content' },
     ]
 

@@ -93,14 +93,18 @@ class TestFabricWeight extends Component {
             new_data_detail[i].test_no = find_weight.test_no
             new_data_detail[i].fail_no = find_weight.fail_no
             new_data_detail[i].note = find_weight.note
-            new_data_detail[i].details = find_weight.details
+
+            let details = [...find_weight.details]
+            for (let j = 0; j < details.length; j++) {
+              details[j].detail_stt = (j + 1)
+            }
+            new_data_detail[i].details = details
           }
           this.setState({
             data_detail: new_data_detail,
             loadtestfabricweight_done: true,
             isUpdate: true,
           })
-          // console.log('new_data_detail =>' + JSON.stringify(new_data_detail))
         }
       })
       .catch(err => {
@@ -211,7 +215,7 @@ class TestFabricWeight extends Component {
           ),
         },
         {
-          title: 'WEIGHT',
+          title: 'WEIGHT (KG)',
           dataIndex: 'weight',
           key: 'weight',
           render: (text, record, index) => (
@@ -300,8 +304,6 @@ class TestFabricWeight extends Component {
       )
     }
     const { data_detail } = this.state
-
-    console.log('weight render =>' + JSON.stringify(data_detail))
     return (
       <Form>
         <Table
