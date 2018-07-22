@@ -4,12 +4,12 @@ import EditableInputCell from '../../../Common/editableinputcell'
 import EditableNumberCell from '../../../Common/editablenumbercell'
 import EditableDateCell from '../../../Common/editabledatecell'
 import { formItemLayout, tailFormItemLayout } from '../../../Common/FormStyle'
+import { formatDate } from '../../../Common/formatdate'
 
 import axios from '../../../../axiosInst' //'../../../../../axiosInst'
 import _ from 'lodash'
 import moment from 'moment'
 
-const formatDate = require('../../../Common/formatdate')
 const uuidv1 = require('uuid/v1')
 
 const test_fabric_skew_get = '/api/testfabric/skew/get'

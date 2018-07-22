@@ -8,7 +8,7 @@ import EditableNumberCell from '../../../Common/editablenumbercell'
 import _ from 'lodash'
 import moment from 'moment'
 
-const formatDate = require('../../../Common/formatdate')
+import { formatDate } from '../../../Common/formatdate'
 const uuidv1 = require('uuid/v1')
 
 const test_fabric_fourpoint = '/api/testfabric/fourpoint/get'

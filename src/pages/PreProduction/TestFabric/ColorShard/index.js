@@ -7,8 +7,8 @@ import axios from '../../../../axiosInst'
 import EditableInputCell from '../../../Common/editableinputcell'
 import EditableNumberCell from '../../../Common/editablenumbercell'
 import EditableDateCell from '../../../Common/editabledatecell'
+import { formatDate } from '../../../Common/formatdate'
 
-const formatDate = require('../../../Common/formatdate')
 const uuidv1 = require('uuid/v1')
 
 const test_fabric_colorshard_get = '/api/testfabric/colorshard/get'
@@ -43,7 +43,6 @@ class TestFabricColorShard extends Component {
   }
 
   loadtestfabricscolorshard = (data_received, data_detail_id) => {
-    console.log('data_detail_id =>' + JSON.stringify(data_detail_id))
     axios
       .get(test_fabric_colorshard_get, { params: { _ids: data_detail_id } })
       .then(res => {
@@ -51,28 +50,38 @@ class TestFabricColorShard extends Component {
         let new_data_detail = [...data_received]
         if (_.isEmpty(data.data)) {
           for (let i = 0; i < new_data_detail.length; i++) {
-            let r = new_data_detail[i]
+            let r = new_data_detail[i];
             r.met_no = 0
             r.roll_no = 0
             r.shard_no = 0
             r.group_no = ''
             r.note = ''
-            r.end_date = moment().format(formatDate.shortType)
-            r.start_date = moment().format(formatDate.shortType)
-            let details = []
+            r.end_date = moment(new Date()).format(formatDate.shortType)
+            r.start_date = moment(new Date()).format(formatDate.shortType)
+            let details = [];
             for (let j = 0; j < 5; j++) {
               details.push(this.createDataNewRow(j))
             }
-            r.details = details
-            new_data_detail[i] = r
+            r.details = details;
+            new_data_detail[i] = r;
           }
           this.setState({ data_detail: new_data_detail, isUpdate: false })
         } else {
+          console.log('co data')
           for (let i = 0; i < new_data_detail.length; i++) {
             const find_shard = _.find(data.data, { _id: new_data_detail[i]._id })
             new_data_detail[i].test_no = find_shard.test_no
             new_data_detail[i].fail_no = find_shard.fail_no
             new_data_detail[i].note = find_shard.note
+
+            if (find_shard.start_date) {
+              const start_date = moment(new Date(find_shard.start_date)).format(formatDate.shortType)
+              new_data_detail[i].start_date = start_date
+            }
+            if (find_shard.end_date) {
+              const end_date = moment(new Date(find_shard.end_date)).format(formatDate.shortType)
+              new_data_detail[i].end_date = end_date
+            }
 
             let details = [...find_shard.details]
             for (let j = 0; j < details.length; j++) {
@@ -166,13 +175,20 @@ class TestFabricColorShard extends Component {
       },
       {
         title: 'START TIME',
-        dataIndex: 'start_time',
-        key: 'start_time',
+        dataIndex: 'start_date',
+        key: 'start_date',
+        render: (text, record, index) => (
+          <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'start_date')} />
+        ),
+
       },
       {
         title: 'END TIME',
-        dataIndex: 'end_time',
-        key: 'end_time',
+        dataIndex: 'end_date',
+        key: 'end_date',
+        render: (text, record, index) => (
+          <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'end_date')} />
+        ),
       },
     ]
     const { data_detail } = this.state

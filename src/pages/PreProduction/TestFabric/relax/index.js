@@ -21,7 +21,7 @@ class TestFabricRelax extends Component {
       data_detail_id: [],
       data_detail: [],
 
-      loadtestfabricrelax_done: false,
+      isMouted: false,
       isUpdate: false,
       isNewRow: false,
     }
@@ -51,12 +51,13 @@ class TestFabricRelax extends Component {
   }
 
   componentDidMount = () => {
+    this.setState({ isMouted: true })
     let { data_received, data_detail_id } = this.state
     this.loadtestfabricrelax(data_received, data_detail_id)
   }
 
   componentWillUnmount = () => {
-    this.setState({ loadtestfabricrelax_done: true })
+    this.setState({ isMouted: false })
   }
 
   loadtestfabricrelax = (data_received, data_detail_id) => {
@@ -119,7 +120,7 @@ class TestFabricRelax extends Component {
               try {
                 r.end_date = moment(new Date(find_relax.end_date)).format(formatDate.shortType)
                 r.start_date = moment(new Date(find_relax.start_date)).format(formatDate.shortType)
-              } catch (e) {}
+              } catch (e) { }
 
               let details = []
               for (let j = 0; j < find_relax.fabric_relax_detail_id.length; j++) {
@@ -133,17 +134,20 @@ class TestFabricRelax extends Component {
           }
           isUpdate = true
         }
-        this.setState({ data_detail: new_data_detail, loadtestfabricrelax_done: true, isUpdate })
+        if (this.state.isMouted) {
+          this.setState({ data_detail: new_data_detail, loadtestfabricrelax_done: true, isUpdate })
+        }
       })
       .catch(err => {
         console.log(err)
-        this.setState({ data_detail: [], loadtestfabricrelax_done: true })
+        if (this.state.isMouted) {
+          this.setState({ data_detail: [], loadtestfabricrelax_done: true })
+        }
       })
   }
 
   onCellChange = (key, dataIndex) => {
     return value => {
-      console.log(value)
       const data_detail = [...this.state.data_detail]
       const target = data_detail.find(item => item.key === key)
       if (target) {
