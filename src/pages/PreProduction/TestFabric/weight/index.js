@@ -11,7 +11,6 @@ import _ from 'lodash'
 import moment from 'moment'
 import { isBuffer } from 'util'
 
-
 const uuidv1 = require('uuid/v1')
 const test_fabric_weight_get_link = '/api/testfabric/weight/get'
 
@@ -94,11 +93,15 @@ class TestFabricWeight extends Component {
             new_data_detail[i].test_no = find_weight.test_no
             new_data_detail[i].fail_no = find_weight.fail_no
             new_data_detail[i].note = find_weight.note
-            if(find_weight.end_date){
-              new_data_detail[i].end_date = moment(new Date(find_weight.end_date)).format(formatDate.shortType)
+            if (find_weight.end_date) {
+              new_data_detail[i].end_date = moment(new Date(find_weight.end_date)).format(
+                formatDate.shortType,
+              )
             }
-            if(find_weight.start_date){
-              new_data_detail[i].start_date = moment(new Date(find_weight.start_date)).format(formatDate.shortType)
+            if (find_weight.start_date) {
+              new_data_detail[i].start_date = moment(new Date(find_weight.start_date)).format(
+                formatDate.shortType,
+              )
             }
             let details = [...find_weight.details]
             for (let j = 0; j < details.length; j++) {

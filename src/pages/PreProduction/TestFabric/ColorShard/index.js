@@ -50,7 +50,7 @@ class TestFabricColorShard extends Component {
         let new_data_detail = [...data_received]
         if (_.isEmpty(data.data)) {
           for (let i = 0; i < new_data_detail.length; i++) {
-            let r = new_data_detail[i];
+            let r = new_data_detail[i]
             r.met_no = 0
             r.roll_no = 0
             r.shard_no = 0
@@ -58,12 +58,12 @@ class TestFabricColorShard extends Component {
             r.note = ''
             r.end_date = moment(new Date()).format(formatDate.shortType)
             r.start_date = moment(new Date()).format(formatDate.shortType)
-            let details = [];
+            let details = []
             for (let j = 0; j < 5; j++) {
               details.push(this.createDataNewRow(j))
             }
-            r.details = details;
-            new_data_detail[i] = r;
+            r.details = details
+            new_data_detail[i] = r
           }
           this.setState({ data_detail: new_data_detail, isUpdate: false })
         } else {
@@ -75,7 +75,9 @@ class TestFabricColorShard extends Component {
             new_data_detail[i].note = find_shard.note
 
             if (find_shard.start_date) {
-              const start_date = moment(new Date(find_shard.start_date)).format(formatDate.shortType)
+              const start_date = moment(new Date(find_shard.start_date)).format(
+                formatDate.shortType,
+              )
               new_data_detail[i].start_date = start_date
             }
             if (find_shard.end_date) {
@@ -180,7 +182,6 @@ class TestFabricColorShard extends Component {
         render: (text, record, index) => (
           <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'start_date')} />
         ),
-
       },
       {
         title: 'END TIME',

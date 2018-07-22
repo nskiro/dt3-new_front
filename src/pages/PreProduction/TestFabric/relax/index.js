@@ -120,7 +120,7 @@ class TestFabricRelax extends Component {
               try {
                 r.end_date = moment(new Date(find_relax.end_date)).format(formatDate.shortType)
                 r.start_date = moment(new Date(find_relax.start_date)).format(formatDate.shortType)
-              } catch (e) { }
+              } catch (e) {}
 
               let details = []
               for (let j = 0; j < find_relax.fabric_relax_detail_id.length; j++) {

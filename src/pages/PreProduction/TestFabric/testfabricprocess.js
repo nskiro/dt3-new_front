@@ -48,7 +48,6 @@ const test_fabric_weight_get = '/api/testfabric/weight/get'
 const test_fabric_weight_save = '/api/testfabric/weight/save'
 const test_fabric_fourpoint_save = '/api/testfabric/fourpoint/save'
 
-
 const test_fabric_colorshard_save = '/api/testfabric/colorshard/save'
 
 class TestFabricProcessView extends Component {
@@ -131,22 +130,26 @@ class TestFabricProcessView extends Component {
   onSaveRelax = () => {
     const { data_detail, isUpdate } = this.relaxChild.state
     if (isUpdate) {
-      axios.post(test_fabric_relax_get_update, data_detail).then(res => {
-        let rs = res.data
-        if (!rs.valid) {
-          alert('Error ' + rs.message)
-        }
-      })
+      axios
+        .post(test_fabric_relax_get_update, data_detail)
+        .then(res => {
+          let rs = res.data
+          if (!rs.valid) {
+            alert('Error ' + rs.message)
+          }
+        })
         .catch(err => {
           console.log(err)
         })
     } else {
-      axios.post(test_fabric_relax_get_add, data_detail).then(res => {
-        let rs = res.data
-        if (!rs.valid) {
-          alert('Error ' + rs.message)
-        }
-      })
+      axios
+        .post(test_fabric_relax_get_add, data_detail)
+        .then(res => {
+          let rs = res.data
+          if (!rs.valid) {
+            alert('Error ' + rs.message)
+          }
+        })
         .catch(err => {
           console.log(err)
         })
@@ -312,7 +315,6 @@ class TestFabricProcessView extends Component {
           />
         ),
       },
-
 
       { title: 'Tổng Kết', content: 'Last-content' },
     ]

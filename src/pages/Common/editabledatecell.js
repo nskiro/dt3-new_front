@@ -10,12 +10,11 @@ class EditableDateCell extends Component {
       editable: false,
     }
   }
-  handleChange = (e) => {
+  handleChange = e => {
     const value = moment(e).format(formatDate.shortType)
     this.setState({ editable: false, value })
     this.props.onChange(value)
   }
-
 
   dateInputKeyDown = e => {
     if (e.keyCode === 13) {
@@ -38,11 +37,11 @@ class EditableDateCell extends Component {
             suffix={<Icon type="check" className="editable-cell-icon-check" onClick={this.check} />}
           />
         ) : (
-            <div style={{ paddingRight: 0 }}>
-              {value || ' '}
-              <Icon type="edit" className="editable-cell-icon" onClick={this.edit} />
-            </div>
-          )}
+          <div style={{ paddingRight: 0 }}>
+            {value || ' '}
+            <Icon type="edit" className="editable-cell-icon" onClick={this.edit} />
+          </div>
+        )}
       </div>
     )
   }
