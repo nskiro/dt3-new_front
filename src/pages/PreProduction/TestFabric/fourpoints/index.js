@@ -139,19 +139,19 @@ class TestFabricFourPoint extends Component {
       switch (j) {
         case 0:
           r.points = '1 (defect 0-3")'
-          break;
+          break
 
         case 1:
           r.points = '2 (defect 3-6")'
-          break;
+          break
 
         case 2:
           r.points = '3 (defect 6-9")'
-          break;
+          break
 
         case 3:
           r.points = '4 (defect >9")'
-          break;
+          break
         default:
       }
 
@@ -249,14 +249,15 @@ class TestFabricFourPoint extends Component {
           key: 'no_roll',
           render: (text, record, index) => {
             if (index % 4 === 0) {
-              return <EditableNumberCell
-                value={text}
-                onChange={this.onCellDetailChange('no_roll', index, fabricrelax_id)}
-              />
+              return (
+                <EditableNumberCell
+                  value={text}
+                  onChange={this.onCellDetailChange('no_roll', index, fabricrelax_id)}
+                />
+              )
             } else {
               return { text }
             }
-
           },
         },
         {
@@ -268,10 +269,12 @@ class TestFabricFourPoint extends Component {
               key: 'length_stick',
               render: (text, record, index) => {
                 if (index % 4 === 0) {
-                  return <EditableNumberCell
-                    value={text}
-                    onChange={this.onCellDetailChange('length_stick', index, fabricrelax_id)}
-                  />
+                  return (
+                    <EditableNumberCell
+                      value={text}
+                      onChange={this.onCellDetailChange('length_stick', index, fabricrelax_id)}
+                    />
+                  )
                 } else {
                   return { text }
                 }
@@ -283,10 +286,12 @@ class TestFabricFourPoint extends Component {
               key: 'length_actual',
               render: (text, record, index) => {
                 if (index % 4 === 0) {
-                  return <EditableNumberCell
-                    value={text}
-                    onChange={this.onCellDetailChange('length_actual', index, fabricrelax_id)}
-                  />
+                  return (
+                    <EditableNumberCell
+                      value={text}
+                      onChange={this.onCellDetailChange('length_actual', index, fabricrelax_id)}
+                    />
+                  )
                 } else {
                   return { text }
                 }
@@ -303,10 +308,12 @@ class TestFabricFourPoint extends Component {
               key: 'yard_actual',
               render: (text, record, index) => {
                 if (index % 4 === 0) {
-                  return <EditableNumberCell
-                    value={text}
-                    onChange={this.onCellDetailChange('yard_actual', index, fabricrelax_id)}
-                  />
+                  return (
+                    <EditableNumberCell
+                      value={text}
+                      onChange={this.onCellDetailChange('yard_actual', index, fabricrelax_id)}
+                    />
+                  )
                 } else {
                   return { text }
                 }
@@ -323,10 +330,12 @@ class TestFabricFourPoint extends Component {
               key: 'width_stick',
               render: (text, record, index) => {
                 if (index % 4 === 0) {
-                  return <EditableNumberCell
-                    value={text}
-                    onChange={this.onCellDetailChange('width_stick', index, fabricrelax_id)}
-                  />
+                  return (
+                    <EditableNumberCell
+                      value={text}
+                      onChange={this.onCellDetailChange('width_stick', index, fabricrelax_id)}
+                    />
+                  )
                 } else {
                   return { text }
                 }
@@ -338,10 +347,12 @@ class TestFabricFourPoint extends Component {
               dataIndex: 'width_actual',
               render: (text, record, index) => {
                 if (index % 4 === 0) {
-                  return <EditableNumberCell
-                    value={text}
-                    onChange={this.onCellDetailChange('width_actual', index, fabricrelax_id)}
-                  />
+                  return (
+                    <EditableNumberCell
+                      value={text}
+                      onChange={this.onCellDetailChange('width_actual', index, fabricrelax_id)}
+                    />
+                  )
                 } else {
                   return { text }
                 }
@@ -454,10 +465,12 @@ class TestFabricFourPoint extends Component {
           key: 'total_point',
           render: (text, record, index) => {
             if (index % 4 === 0) {
-              return <EditableNumberCell
-                value={text}
-                onChange={this.onCellDetailChange('total_point', index, fabricrelax_id)}
-              />
+              return (
+                <EditableNumberCell
+                  value={text}
+                  onChange={this.onCellDetailChange('total_point', index, fabricrelax_id)}
+                />
+              )
             } else {
               return { text }
             }
@@ -469,10 +482,12 @@ class TestFabricFourPoint extends Component {
           key: 'defective_point',
           render: (text, record, index) => {
             if (index % 4 === 0) {
-              return <EditableNumberCell
-                value={text}
-                onChange={this.onCellDetailChange('defective_point', index, fabricrelax_id)}
-              />
+              return (
+                <EditableNumberCell
+                  value={text}
+                  onChange={this.onCellDetailChange('defective_point', index, fabricrelax_id)}
+                />
+              )
             } else {
               return { text }
             }
@@ -484,10 +499,12 @@ class TestFabricFourPoint extends Component {
           key: 'result',
           render: (text, record, index) => {
             if (index % 4 === 0) {
-              return <EditableInputCell
-                value={text}
-                onChange={this.onCellDetailChange('result', index, fabricrelax_id)}
-              />
+              return (
+                <EditableInputCell
+                  value={text}
+                  onChange={this.onCellDetailChange('result', index, fabricrelax_id)}
+                />
+              )
             } else {
               return { text }
             }
@@ -499,10 +516,12 @@ class TestFabricFourPoint extends Component {
           key: 'detail_note',
           render: (text, record, index) => {
             if (index % 4 === 0) {
-              return <EditableInputCell
-                value={text}
-                onChange={this.onCellDetailChange('detail_note', index, fabricrelax_id)}
-              />
+              return (
+                <EditableInputCell
+                  value={text}
+                  onChange={this.onCellDetailChange('detail_note', index, fabricrelax_id)}
+                />
+              )
             } else {
               return { text }
             }

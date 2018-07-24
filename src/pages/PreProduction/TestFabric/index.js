@@ -35,7 +35,6 @@ const FORMAT_SHORT_DATE = 'MM/DD/YYYY'
 const FORMAT_LONG_DATE = 'MM/DD/YYYY HH:mm:ss'
 const button_size = 'small'
 
-
 const fabric_type_get_link = 'api/fabric/type/get'
 const fabric_color_get_link = 'api/fabric/color/get'
 const fabric_import_getsearch_link = 'api/fabric/import/get'
@@ -67,7 +66,7 @@ class TestFabricListView extends Component {
     this.setState({ show_detail: !show_detail })
   }
 
-  buttonDoneClick =() =>{
+  buttonDoneClick = () => {
     message.success('Processing complete!')
     const { show_detail } = this.state
     this.setState({ show_detail: !show_detail })

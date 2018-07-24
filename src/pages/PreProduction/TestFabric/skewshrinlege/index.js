@@ -49,7 +49,6 @@ class TestFabricSkewShrinlege extends Component {
     let rows = []
     for (let j = 0; j < 4; j++) {
       let r = {
-
         _id: uuidv1(),
         iron_lenght: 0,
         iron_width: 0,
@@ -61,7 +60,6 @@ class TestFabricSkewShrinlege extends Component {
 
         isPass: '',
         remark: '',
-
       }
       if (j === 3) {
         r.detail_stt = 'Diff %'
@@ -172,7 +170,10 @@ class TestFabricSkewShrinlege extends Component {
         ),
       },
       {
-        key: 'note', dataIndex: 'note', title: 'NOTE', name: 'NOTE',
+        key: 'note',
+        dataIndex: 'note',
+        title: 'NOTE',
+        name: 'NOTE',
         render: (text, record) => (
           <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'note')} />
         ),
@@ -294,16 +295,16 @@ class TestFabricSkewShrinlege extends Component {
           key: 'isPass',
           render: (text, record, index) => {
             if (index % 4 === 0) {
-              return <EditableInputCell
-                value={text}
-                onChange={this.onCellDetailChange('isPass', index, fabricrelax_id)}
-              />
+              return (
+                <EditableInputCell
+                  value={text}
+                  onChange={this.onCellDetailChange('isPass', index, fabricrelax_id)}
+                />
+              )
             } else {
-              return ""
+              return ''
             }
-
-          }
-
+          },
         },
         {
           title: 'Remarks',
@@ -311,15 +312,16 @@ class TestFabricSkewShrinlege extends Component {
           key: 'remark',
           render: (text, record, index) => {
             if (index % 4 === 0) {
-              return <EditableInputCell
-                value={text}
-                onChange={this.onCellDetailChange('remark', index, fabricrelax_id)}
-              />
+              return (
+                <EditableInputCell
+                  value={text}
+                  onChange={this.onCellDetailChange('remark', index, fabricrelax_id)}
+                />
+              )
             } else {
-              return ""
+              return ''
             }
-          }
-          ,
+          },
         },
       ]
       const data = r.details
@@ -346,7 +348,7 @@ class TestFabricSkewShrinlege extends Component {
               />
             </Col>
           </Row>
-        </div >
+        </div>
       )
     }
 

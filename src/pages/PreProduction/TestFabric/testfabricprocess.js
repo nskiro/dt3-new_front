@@ -121,7 +121,7 @@ class TestFabricProcessView extends Component {
         this.onSaveFourPoint()
         break
       case 4:
-       // this.onSaveSkew()
+        // this.onSaveSkew()
         break
       default:
         break
