@@ -46,20 +46,29 @@ class TestFabricSkewShrinlege extends Component {
   }
 
   createDataNewRow = i => {
-    return {
-      detail_stt: i + 1,
-      _id: uuidv1(),
-      iron_lenght: 0,
-      iron_width: 0,
-      iron_skew: 0,
+    let rows = []
+    for (let j = 0; j < 4; j++) {
+      let r = {
 
-      washing_lenght: 0,
-      washing_width: 0,
-      washing_skew: '',
+        _id: uuidv1(),
+        iron_lenght: 0,
+        iron_width: 0,
+        iron_skew: 0,
 
-      isPass: '',
-      remark: '',
+        washing_lenght: 0,
+        washing_width: 0,
+        washing_skew: '',
+
+        isPass: '',
+        remark: '',
+
+      }
+      if (j === 3) {
+        r.detail_stt = 'Diff %'
+      }
+      rows.push(r)
     }
+    return rows
   }
 
   loadtestfabricskew = (data_received, data_detail_id) => {
@@ -78,7 +87,7 @@ class TestFabricSkewShrinlege extends Component {
             r.start_date = moment().format(formatDate.shortType)
             let details = []
             for (let j = 0; j < 5; j++) {
-              details.push(this.createDataNewRow(j))
+              details = details.concat(this.createDataNewRow(j))
             }
             r.details = details
             new_data_detail[i] = r
@@ -97,7 +106,9 @@ class TestFabricSkewShrinlege extends Component {
 
             let details = [...find_weight.details]
             for (let j = 0; j < details.length; j++) {
-              details[j].detail_stt = j + 1
+              if (j % 4 === 3) {
+                details[j].detail_stt = 'Diff %'
+              }
             }
             new_data_detail[i].details = details
           }
@@ -143,24 +154,29 @@ class TestFabricSkewShrinlege extends Component {
       { key: 'roll', dataIndex: 'roll', title: 'ROLL', name: 'ROLL' },
       { key: 'met', dataIndex: 'met', title: 'MET', name: 'MET' },
       {
-        key: 'no_test',
-        dataIndex: 'no_test',
+        key: 'test_no',
+        dataIndex: 'test_no',
         title: 'TEST #',
         name: 'TEST #',
         render: (text, record) => (
-          <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'no_test')} />
+          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'test_no')} />
         ),
       },
       {
-        key: 'no_fail',
-        dataIndex: 'no_fail',
+        key: 'fail_no',
+        dataIndex: 'fail_no',
         title: 'FAIL #',
         name: 'FAIL #',
         render: (text, record) => (
-          <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'no_fail')} />
+          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'fail_no')} />
         ),
       },
-      { key: 'skew_note', dataIndex: 'skew_note', title: 'NOTE', name: 'NOTE' },
+      {
+        key: 'note', dataIndex: 'note', title: 'NOTE', name: 'NOTE',
+        render: (text, record) => (
+          <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'note')} />
+        ),
+      },
       {
         key: 'start_date',
         dataIndex: 'start_date',
@@ -276,23 +292,34 @@ class TestFabricSkewShrinlege extends Component {
           title: 'Pass/Fail',
           dataIndex: 'isPass',
           key: 'isPass',
-          render: (text, record, index) => (
-            <EditableInputCell
-              value={text}
-              onChange={this.onCellDetailChange('isPass', index, fabricrelax_id)}
-            />
-          ),
+          render: (text, record, index) => {
+            if (index % 4 === 0) {
+              return <EditableInputCell
+                value={text}
+                onChange={this.onCellDetailChange('isPass', index, fabricrelax_id)}
+              />
+            } else {
+              return ""
+            }
+
+          }
+
         },
         {
           title: 'Remarks',
           dataIndex: 'remark',
           key: 'remark',
-          render: (text, record, index) => (
-            <EditableInputCell
-              value={text}
-              onChange={this.onCellDetailChange('remark', index, fabricrelax_id)}
-            />
-          ),
+          render: (text, record, index) => {
+            if (index % 4 === 0) {
+              return <EditableInputCell
+                value={text}
+                onChange={this.onCellDetailChange('remark', index, fabricrelax_id)}
+              />
+            } else {
+              return ""
+            }
+          }
+          ,
         },
       ]
       const data = r.details
@@ -319,7 +346,7 @@ class TestFabricSkewShrinlege extends Component {
               />
             </Col>
           </Row>
-        </div>
+        </div >
       )
     }
 
