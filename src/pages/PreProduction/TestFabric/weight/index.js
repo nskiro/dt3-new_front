@@ -4,13 +4,13 @@ import EditableInputCell from '../../../Common/editableinputcell'
 import EditableNumberCell from '../../../Common/editablenumbercell'
 import EditableDateCell from '../../../Common/editabledatecell'
 import { formItemLayout, tailFormItemLayout } from '../../../Common/FormStyle'
+import { formatDate } from '../../../Common/formatdate'
 
 import axios from '../../../../axiosInst' //'../../../../../axiosInst'
 import _ from 'lodash'
 import moment from 'moment'
 import { isBuffer } from 'util'
 
-const formatDate = require('../../../Common/formatdate')
 const uuidv1 = require('uuid/v1')
 const test_fabric_weight_get_link = '/api/testfabric/weight/get'
 
@@ -73,8 +73,8 @@ class TestFabricWeight extends Component {
             r.test_no = 0
             r.fail_no = 0
             r.note = ''
-            r.end_date = moment().format(formatDate.shortType)
-            r.start_date = moment().format(formatDate.shortType)
+            r.end_date = moment(new Date()).format(formatDate.shortType)
+            r.start_date = moment(new Date()).format(formatDate.shortType)
             let details = []
             for (let j = 0; j < 5; j++) {
               details.push(this.createDataNewRow(j))
@@ -93,14 +93,27 @@ class TestFabricWeight extends Component {
             new_data_detail[i].test_no = find_weight.test_no
             new_data_detail[i].fail_no = find_weight.fail_no
             new_data_detail[i].note = find_weight.note
-            new_data_detail[i].details = find_weight.details
+            if (find_weight.end_date) {
+              new_data_detail[i].end_date = moment(new Date(find_weight.end_date)).format(
+                formatDate.shortType,
+              )
+            }
+            if (find_weight.start_date) {
+              new_data_detail[i].start_date = moment(new Date(find_weight.start_date)).format(
+                formatDate.shortType,
+              )
+            }
+            let details = [...find_weight.details]
+            for (let j = 0; j < details.length; j++) {
+              details[j].detail_stt = j + 1
+            }
+            new_data_detail[i].details = details
           }
           this.setState({
             data_detail: new_data_detail,
             loadtestfabricweight_done: true,
             isUpdate: true,
           })
-          // console.log('new_data_detail =>' + JSON.stringify(new_data_detail))
         }
       })
       .catch(err => {
@@ -181,7 +194,7 @@ class TestFabricWeight extends Component {
         title: 'START DATE',
         name: 'START DATE',
         render: (text, record) => (
-          <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'start_date')} />
+          <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'start_date')} />
         ),
       },
       {
@@ -190,7 +203,7 @@ class TestFabricWeight extends Component {
         title: 'END DATE',
         name: 'END DATE',
         render: (text, record) => (
-          <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'end_date')} />
+          <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'end_date')} />
         ),
       },
     ]
@@ -211,7 +224,7 @@ class TestFabricWeight extends Component {
           ),
         },
         {
-          title: 'WEIGHT',
+          title: 'WEIGHT (KG)',
           dataIndex: 'weight',
           key: 'weight',
           render: (text, record, index) => (
@@ -300,8 +313,6 @@ class TestFabricWeight extends Component {
       )
     }
     const { data_detail } = this.state
-
-    console.log('weight render =>' + JSON.stringify(data_detail))
     return (
       <Form>
         <Table
