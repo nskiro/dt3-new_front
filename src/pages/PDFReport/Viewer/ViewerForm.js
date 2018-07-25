@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Row, Col, Card, Icon, Tree, Spin, Select, message, Calendar } from 'antd'
+import { Row, Col, Card, Icon, Tree, Spin, Select, message, Calendar, Alert, Tag, Divider } from 'antd'
 import axios from 'axiosInst'
 import _ from 'lodash'
 import config from 'CommonConfig'
@@ -7,6 +7,7 @@ import { Element, scroller } from 'react-scroll'
 
 const TreeNode = Tree.TreeNode
 const Option = Select.Option
+const { Meta } = Card
 class ViewerForm extends Component {
   state = {
     reportCategories: [],
@@ -14,10 +15,14 @@ class ViewerForm extends Component {
     loadingReport: false,
     reportList: [],
     selectedFile: '',
+    selectedDept: null
   }
 
   componentDidMount() {
     this.setState({ loadingCategory: true })
+    axios.get('/api/admin/dept', { params: { id: this.props.dept } }).then(res => {
+      this.setState({ selectedDept: res.data[0] })
+    })
     axios
       .get(`api/pdf/category/${this.props.dept}`)
       .then(res => {
@@ -93,37 +98,57 @@ class ViewerForm extends Component {
       loadingReport,
       reportList,
       selectedFile,
+      selectedDept
     } = this.state
     return (
       <div>
-        <Row type="flex" justify="start">
-          <Col span={5}>
-            <Calendar fullscreen={false} style={{ width: '95%' }} />
-          </Col>
-          <Col span={5}>
-            <Card title="Report Category" style={{ width: '90%' }}>
-              {!loadingCategory ? (
-                <Tree autoExpandParent={true} showIcon={true} onSelect={this.onCategorySelect}>
-                  {reportCategories ? this.renderTreeNodes(reportCategories) : null}
-                </Tree>
-              ) : (
-                <Spin />
-              )}
+        <Row>
+          <Col span={6}>
+            <Card
+              hoverable
+              style={{ width: '90%', display: 'block', margin: 'auto' }}
+              cover={
+                selectedDept ?
+                  <img
+                    alt="Avatar"
+                    src={`data:${selectedDept.avatar.mimetype};base64,${selectedDept.avatar.data}`}
+                  /> : null
+              }>
+              <Meta
+                title={selectedDept ? (<Tag color="#108ee9"> {selectedDept.name}</Tag>) : ''} />
             </Card>
           </Col>
-          <Col span={5}>
-            <Spin spinning={loadingReport}>
-              <label>Select report file:</label>
-              <Select style={{ width: '90%' }} onSelect={this.onSelectReport}>
-                {reportList.map(o => {
-                  return (
-                    <Option key={o._id} value={o._id}>
-                      {o.reportName}
-                    </Option>
-                  )
-                })}
-              </Select>
-            </Spin>
+          <Col span={12}>
+            {selectedDept && selectedDept.note ? (<span><Alert message="Note" description={selectedDept.note} type="info" showIcon /><Divider /></span>) : null}
+            <Row type="flex" justify="start">
+              <Col span={10}>
+                <label>Select report category:</label>
+                {!loadingCategory ? (
+                  <Tree autoExpandParent={true} showIcon={true} onSelect={this.onCategorySelect}>
+                    {reportCategories ? this.renderTreeNodes(reportCategories) : null}
+                  </Tree>
+                ) : (
+                    <Spin />
+                  )}
+              </Col>
+              <Col span={10}>
+                <Spin spinning={loadingReport}>
+                  <label>Select report file:</label>
+                  <Select style={{ width: '90%' }} onSelect={this.onSelectReport}>
+                    {reportList.map(o => {
+                      return (
+                        <Option key={o._id} value={o._id}>
+                          {o.reportName}
+                        </Option>
+                      )
+                    })}
+                  </Select>
+                </Spin>
+              </Col>
+            </Row>
+          </Col>
+          <Col span={6}>
+            <Calendar fullscreen={false} style={{ width: '95%' }} />
           </Col>
         </Row>
         <Row>
@@ -136,8 +161,7 @@ class ViewerForm extends Component {
                     config.baseURL
                   }api/pdf/report/read/${selectedFile}`}
                   width="100%"
-                  height="600px"
-                />
+                  height="600px" />
               ) : null}
             </Element>
           </Col>

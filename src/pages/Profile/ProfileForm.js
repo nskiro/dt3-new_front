@@ -124,7 +124,8 @@ class ProfileForm extends Component {
                       const status = info.file.status
                       if (status === 'done') {
                         const temp = { ...user }
-                        temp.dept = { ...res }
+                        temp.dept.splice(_.findIndex(temp.dept,{_id: selectedDept._id}),1,{...res})
+                        this.setState({selectedDept: res})
                         this.props.updateUser(temp)
                       } else if (status === 'error') {
                         console.log(res)
