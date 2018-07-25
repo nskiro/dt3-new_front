@@ -44,11 +44,10 @@ const fabric_import_getdetail_link = 'api/fabric/import/getdetails'
 const test_fabric_relax_get_add = '/api/testfabric/relax/add'
 const test_fabric_relax_get_update = '/api/testfabric/relax/update'
 
-const test_fabric_weight_get = '/api/testfabric/weight/get'
 const test_fabric_weight_save = '/api/testfabric/weight/save'
-const test_fabric_fourpoint_save = '/api/testfabric/fourpoint/save'
-
 const test_fabric_colorshard_save = '/api/testfabric/colorshard/save'
+const test_fabric_fourpoint_save = '/api/testfabric/fourpoint/save'
+const test_fabric_skew_save = '/api/testfabric/skew/save'
 
 class TestFabricProcessView extends Component {
   constructor(props) {
@@ -121,6 +120,9 @@ class TestFabricProcessView extends Component {
         // kiem tra 4 diem
         this.onSaveFourPoint()
         break
+      case 4:
+        // this.onSaveSkew()
+        break
       default:
         break
     }
@@ -174,7 +176,7 @@ class TestFabricProcessView extends Component {
   onSaveSkew = () => {
     const { data_detail } = this.skewChild.state
     axios
-      .post(test_fabric_weight_save, data_detail)
+      .post(test_fabric_skew_save, data_detail)
       .then(res => {
         let rs = res.data
         if (!rs.valid) {
@@ -315,8 +317,6 @@ class TestFabricProcessView extends Component {
           />
         ),
       },
-
-      { title: 'Tổng Kết', content: 'Last-content' },
     ]
 
     const { buttonBackClick, buttonDoneClick } = this.props
@@ -357,7 +357,7 @@ class TestFabricProcessView extends Component {
               </Button>
             )}
             {current === steps.length - 1 && (
-              <Button type="primary" onClick={() => message.success('Processing complete!')}>
+              <Button type="primary" onClick={() => buttonDoneClick}>
                 Done
               </Button>
             )}

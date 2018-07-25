@@ -23,16 +23,8 @@ import axios from '../../../axiosInst' //'../../../../../axiosInst'
 
 import { formItemLayout, tailFormItemLayout } from '../../Common/FormStyle'
 
-import TestFabricRelax from './relax'
-import TestFabricWeight from './weight'
-
-import TestFabricSkewShrinlege from './skewshrinlege'
-import TestFabricFourPoint from './fourpoints'
-
-import { combineAll } from 'rxjs/operator/combineAll'
 import moment from 'moment'
 import _ from 'lodash'
-import { isMoment } from '../../../../node_modules/moment/moment'
 
 const FormItem = Form.Item
 const Option = Select.Option
@@ -42,8 +34,6 @@ const TabPane = Tabs.TabPane
 const FORMAT_SHORT_DATE = 'MM/DD/YYYY'
 const FORMAT_LONG_DATE = 'MM/DD/YYYY HH:mm:ss'
 const button_size = 'small'
-
-const Step = Steps.Step
 
 const fabric_type_get_link = 'api/fabric/type/get'
 const fabric_color_get_link = 'api/fabric/color/get'
@@ -73,12 +63,12 @@ class TestFabricListView extends Component {
 
   showHideDetail = () => {
     const { show_detail } = this.state
+    this.setState({ show_detail: !show_detail })
+  }
 
-    /*
-    if (!show_detail) {
-      this.load_fabric_detail()
-    }
-*/
+  buttonDoneClick = () => {
+    message.success('Processing complete!')
+    const { show_detail } = this.state
     this.setState({ show_detail: !show_detail })
   }
 
