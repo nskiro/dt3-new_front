@@ -22,7 +22,7 @@ import { formItemLayout, tailFormItemLayout } from '../../Common/FormStyle'
 import { combineAll } from 'rxjs/operator/combineAll'
 import moment from 'moment'
 import _ from 'lodash'
- 
+
 import TestFabricRelax from './relax'
 import TestFabricWeight from './weight'
 import TestFabricColorShard from './colorshard'
