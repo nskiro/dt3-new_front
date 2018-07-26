@@ -13,6 +13,7 @@ class DeptInfoForm extends Component {
   render() {
     const { deptInfo } = this.props
     const { getFieldDecorator } = this.props.form
+    console.log(deptInfo)
     return (
       <Form layout="horizontal" onSubmit={this.props.onSubmit}>
         <FormItem label="" {...formItemLayout}>

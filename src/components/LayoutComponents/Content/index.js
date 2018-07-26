@@ -38,7 +38,7 @@ class AppContent extends React.Component {
       <div className="utils__loadingPage" />
     ) : (
       <div className="utils__content">
-        <Breadcrumb name={pathName} />
+        {/* <Breadcrumb name={pathName} /> */}
         {content}
       </div>
     )
