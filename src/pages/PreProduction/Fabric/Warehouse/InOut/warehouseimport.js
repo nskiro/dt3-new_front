@@ -711,10 +711,7 @@ class WarehouseImport extends Component {
                 >
                   <FormItem {...formItemLayout} label={'SUPPLIER'}>
                     {getFieldDecorator('provider_name', {})(
-                      <Select
-                        style={{ width: '100%' }}
-                        placeholder="Chọn nhà cung cấp"
-                      >
+                      <Select style={{ width: '100%' }} placeholder="Chọn nhà cung cấp">
                         {this.state.data_providers}
                       </Select>,
                     )}
