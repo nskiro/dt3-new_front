@@ -714,7 +714,6 @@ class WarehouseImport extends Component {
                       <Select
                         style={{ width: '100%' }}
                         placeholder="Chọn nhà cung cấp"
-                        size={this.state.data_providers_size}
                       >
                         {this.state.data_providers}
                       </Select>,

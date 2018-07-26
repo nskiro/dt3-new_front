@@ -76,7 +76,6 @@ class TestFabricFourPoint extends Component {
             isUpdate: false,
           })
         } else {
-          console.log('four point co data')
           for (let i = 0; i < new_data_detail.length; i++) {
             const find_weight = _.find(data.data, { _id: new_data_detail[i]._id })
             new_data_detail[i].test_no = find_weight.test_no

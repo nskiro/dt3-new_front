@@ -67,7 +67,6 @@ class TestFabricColorShard extends Component {
           }
           this.setState({ data_detail: new_data_detail, isUpdate: false })
         } else {
-          console.log('co data')
           for (let i = 0; i < new_data_detail.length; i++) {
             const find_shard = _.find(data.data, { _id: new_data_detail[i]._id })
             new_data_detail[i].test_no = find_shard.test_no

@@ -121,7 +121,7 @@ class TestFabricProcessView extends Component {
         this.onSaveFourPoint()
         break
       case 4:
-        // this.onSaveSkew()
+        this.onSaveSkew()
         break
       default:
         break
@@ -357,7 +357,7 @@ class TestFabricProcessView extends Component {
               </Button>
             )}
             {current === steps.length - 1 && (
-              <Button type="primary" onClick={() => buttonDoneClick}>
+              <Button type="primary" onClick={buttonDoneClick}>
                 Done
               </Button>
             )}
