@@ -13,8 +13,16 @@ const uuidv1 = require('uuid/v1')
 
 const test_fabric_fourpoint = '/api/testfabric/fourpoint/get'
 
-const defect_items = ['slub_nep', 'fly_spot', 'hole_spliy', 'stain_oil', 'vline', 'bare', 'crease_mark', 'uneven_dyed']
-
+const defect_items = [
+  'slub_nep',
+  'fly_spot',
+  'hole_spliy',
+  'stain_oil',
+  'vline',
+  'bare',
+  'crease_mark',
+  'uneven_dyed',
+]
 
 class TestFabricFourPoint extends Component {
   constructor(props) {
@@ -181,25 +189,25 @@ class TestFabricFourPoint extends Component {
         target.details[row_index][dataIndex] = value
 
         const group_row = Math.floor(row_index / 4)
-        const start_line = (group_row * 4)
+        const start_line = group_row * 4
         if (dataIndex === 'length_actual') {
           const yard_actual = value / 0.9144
           target.details[start_line]['yard_actual'] = yard_actual.toFixed(6)
         }
 
-        let total_point = 0;
+        let total_point = 0
         for (let i = 0; i < defect_items.length; i++) {
           const defect_key = defect_items[i]
           total_point += parseFloat(target.details[start_line][defect_key])
-          total_point += (parseFloat(target.details[start_line + 1][defect_key]) * 2)
-          total_point += (parseFloat(target.details[start_line + 2][defect_key]) * 3)
-          total_point += (parseFloat(target.details[start_line + 3][defect_key]) * 4)
+          total_point += parseFloat(target.details[start_line + 1][defect_key]) * 2
+          total_point += parseFloat(target.details[start_line + 2][defect_key]) * 3
+          total_point += parseFloat(target.details[start_line + 3][defect_key]) * 4
         }
         target.details[start_line]['total_point'] = total_point
         const width_actual = parseFloat(target.details[start_line]['width_actual'])
         const yard_actual = parseFloat(target.details[start_line]['yard_actual'])
 
-        const defective_point = (total_point * 3600 / width_actual / yard_actual)
+        const defective_point = (total_point * 3600) / width_actual / yard_actual
 
         target.details[start_line]['defective_point'] = defective_point.toFixed(2)
 
@@ -213,8 +221,7 @@ class TestFabricFourPoint extends Component {
     }
   }
 
-
-  onNewRow = (e) => {
+  onNewRow = e => {
     if (e.target) {
       let fourpoint_id = e.target.value
       if (fourpoint_id) {
@@ -348,7 +355,6 @@ class TestFabricFourPoint extends Component {
                 } else {
                   return { text }
                 }
-
               },
             },
           ],
@@ -362,9 +368,7 @@ class TestFabricFourPoint extends Component {
               key: 'yard_actual',
               render: (text, record, index) => {
                 if (index % 4 === 0) {
-                  return (
-                    <Tag color='purple'>{text}</Tag>
-                  )
+                  return <Tag color="purple">{text}</Tag>
                 } else {
                   return { text }
                 }
@@ -517,9 +521,7 @@ class TestFabricFourPoint extends Component {
           key: 'total_point',
           render: (text, record, index) => {
             if (index % 4 === 0) {
-              return (
-                <Tag color="green">{text}</Tag>
-              )
+              return <Tag color="green">{text}</Tag>
             } else {
               return ''
             }
@@ -534,20 +536,13 @@ class TestFabricFourPoint extends Component {
               try {
                 const value = parseFloat(text)
                 if (value >= 25) {
-                  return (
-                    <Tag color="red">{text}</Tag>
-                  )
+                  return <Tag color="red">{text}</Tag>
                 } else {
-                  return (
-                    <Tag color="green">{text}</Tag>
-                  )
+                  return <Tag color="green">{text}</Tag>
                 }
               } catch (error) {
-                return (
-                  <Tag color="red">{text}</Tag>
-                )
+                return <Tag color="red">{text}</Tag>
               }
-
             } else {
               return { text }
             }
@@ -560,13 +555,9 @@ class TestFabricFourPoint extends Component {
           render: (text, record, index) => {
             if (index % 4 === 0) {
               if (text === 'FAIL') {
-                return (
-                  <Tag color="#f50">{text}</Tag>
-                )
+                return <Tag color="#f50">{text}</Tag>
               } else {
-                return (
-                  <Tag color="#87d068">{text}</Tag>
-                )
+                return <Tag color="#87d068">{text}</Tag>
               }
             } else {
               return ''
@@ -607,7 +598,13 @@ class TestFabricFourPoint extends Component {
         <div>
           <Row gutter={8}>
             <Col>
-              <Button icon="plus" type="primary" size="small" value={fabricrelax_id} onClick={this.onNewRow}>
+              <Button
+                icon="plus"
+                type="primary"
+                size="small"
+                value={fabricrelax_id}
+                onClick={this.onNewRow}
+              >
                 New row
               </Button>
             </Col>

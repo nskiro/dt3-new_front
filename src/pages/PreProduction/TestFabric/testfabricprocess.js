@@ -14,7 +14,6 @@ import {
   message,
 } from 'antd'
 
-
 import axios from '../../../axiosInst' //'../../../../../axiosInst'
 
 import moment from 'moment'
@@ -45,9 +44,7 @@ const test_fabric_colorshard_save = '/api/testfabric/colorshard/save'
 const test_fabric_fourpoint_save = '/api/testfabric/fourpoint/save'
 const test_fabric_skew_save = '/api/testfabric/skew/save'
 
-
 const fabric_import_updateprocess = 'api/fabric/import/updateprocess/'
-
 
 class TestFabricProcessView extends Component {
   constructor(props) {

@@ -95,7 +95,6 @@ class TestFabricColorShard extends Component {
             }
             this.setState({ data_detail: new_data_detail, isUpdate: true })
           }
-
         }
       })
       .catch(err => {
@@ -136,7 +135,7 @@ class TestFabricColorShard extends Component {
     }
   }
 
-  onNewRow = (e) => {
+  onNewRow = e => {
     if (e.target) {
       let fabricshard_id = e.target.value
       if (fabricshard_id) {
@@ -272,7 +271,13 @@ class TestFabricColorShard extends Component {
         <div>
           <Row gutter={8}>
             <Col>
-              <Button icon="plus" type="primary" size="small" value={fabricshard_id} onClick={this.onNewRow}>
+              <Button
+                icon="plus"
+                type="primary"
+                size="small"
+                value={fabricshard_id}
+                onClick={this.onNewRow}
+              >
                 New row
               </Button>
             </Col>

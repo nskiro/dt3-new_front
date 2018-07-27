@@ -126,7 +126,7 @@ class TestFabricSkewShrinlege extends Component {
         this.setState({ data_detail: [], loadtestfabricweight_done: true })
       })
   }
-  onNewRow = (e) => {
+  onNewRow = e => {
     if (e.target) {
       let fourpoint_id = e.target.value
       if (fourpoint_id) {
@@ -164,7 +164,7 @@ class TestFabricSkewShrinlege extends Component {
         target.details[row_index][dataIndex] = value
 
         const group_row = Math.floor(row_index / 4)
-        const start_line = (group_row * 4)
+        const start_line = group_row * 4
 
         let iron_length_total = 0
         let iron_width_total = 0
@@ -186,17 +186,17 @@ class TestFabricSkewShrinlege extends Component {
         const wash_ac_skew = parseFloat(target.details[start_line]['washing_skew'])
         const wash_bd_skew = parseFloat(target.details[start_line + 1]['washing_skew'])
 
-        const iron_skew_total = (2 * (iron_ac_skew - iron_bd_skew) * 100) / (iron_ac_skew + iron_bd_skew)
-        const washing_skew_total = (2 * (wash_ac_skew - wash_bd_skew) * 100) / (wash_ac_skew + wash_bd_skew)
+        const iron_skew_total =
+          (2 * (iron_ac_skew - iron_bd_skew) * 100) / (iron_ac_skew + iron_bd_skew)
+        const washing_skew_total =
+          (2 * (wash_ac_skew - wash_bd_skew) * 100) / (wash_ac_skew + wash_bd_skew)
 
-
-        const iron_length = (((iron_length_total / 3) - 10) * 10).toFixed(decimal_fix)
-        const iron_width = (((iron_width_total / 3) - 10) * 10).toFixed(decimal_fix)
+        const iron_length = ((iron_length_total / 3 - 10) * 10).toFixed(decimal_fix)
+        const iron_width = ((iron_width_total / 3 - 10) * 10).toFixed(decimal_fix)
         const iron_skew = iron_skew_total.toFixed(1)
 
-
-        const washing_length = (((washing_length_total / 3) - 10) * 10).toFixed(decimal_fix)
-        const washing_width = (((washing_width_total / 3) - 10) * 10).toFixed(decimal_fix)
+        const washing_length = ((washing_length_total / 3 - 10) * 10).toFixed(decimal_fix)
+        const washing_width = ((washing_width_total / 3 - 10) * 10).toFixed(decimal_fix)
         const washing_skew = washing_skew_total.toFixed(decimal_fix)
 
         target.details[start_line + 3]['iron_length'] = iron_length
@@ -207,17 +207,27 @@ class TestFabricSkewShrinlege extends Component {
         target.details[start_line + 3]['washing_width'] = washing_width
         target.details[start_line + 3]['washing_skew'] = washing_skew
 
-        const percent_arr = [iron_length, iron_width, iron_skew, washing_length, washing_width, washing_skew]
+        const percent_arr = [
+          iron_length,
+          iron_width,
+          iron_skew,
+          washing_length,
+          washing_width,
+          washing_skew,
+        ]
         const condition = target['condition']
         let ispass = ''
         if (condition) {
           ispass = 'PASS'
           const condition_down = -1.0 * Math.abs(parseFloat(condition))
           const condition_up = Math.abs(parseFloat(condition))
-          console.log('condition_down = '+condition_down)
-          console.log('condition_up = '+condition_up)
+          console.log('condition_down = ' + condition_down)
+          console.log('condition_up = ' + condition_up)
           for (let i = 0; i < percent_arr.length; i++) {
-            if (percent_arr >= condition_up || percent_arr <= condition_down) { ispass = 'FAIL'; break }
+            if (percent_arr >= condition_up || percent_arr <= condition_down) {
+              ispass = 'FAIL'
+              break
+            }
           }
         }
 
@@ -240,7 +250,11 @@ class TestFabricSkewShrinlege extends Component {
         title: 'CONDITION',
         name: 'CONDITION',
         render: (text, record) => (
-          <EditableNumberCell value={text} suffix='%' onChange={this.onCellChange(record.key, 'condition')} />
+          <EditableNumberCell
+            value={text}
+            suffix="%"
+            onChange={this.onCellChange(record.key, 'condition')}
+          />
         ),
       },
       {
@@ -306,15 +320,16 @@ class TestFabricSkewShrinlege extends Component {
                   key: 'iron_length',
                   render: (text, record, index) => {
                     if (index % 4 !== 3) {
-                      return <EditableNumberCell
-                        value={text}
-                        onChange={this.onCellDetailChange('iron_length', index, fabricrelax_id)}
-                      />
+                      return (
+                        <EditableNumberCell
+                          value={text}
+                          onChange={this.onCellDetailChange('iron_length', index, fabricrelax_id)}
+                        />
+                      )
                     } else {
-                      return <Tag color='#147BAB'>{text}%</Tag>
+                      return <Tag color="#147BAB">{text}%</Tag>
                     }
-
-                  }
+                  },
                 },
                 {
                   title: 'Width',
@@ -322,14 +337,16 @@ class TestFabricSkewShrinlege extends Component {
                   key: 'iron_width',
                   render: (text, record, index) => {
                     if (index % 4 !== 3) {
-                      return <EditableNumberCell
-                        value={text}
-                        onChange={this.onCellDetailChange('iron_width', index, fabricrelax_id)}
-                      />
+                      return (
+                        <EditableNumberCell
+                          value={text}
+                          onChange={this.onCellDetailChange('iron_width', index, fabricrelax_id)}
+                        />
+                      )
                     } else {
-                      return <Tag color='#147BAB'>{text}%</Tag>
+                      return <Tag color="#147BAB">{text}%</Tag>
                     }
-                  }
+                  },
                 },
               ],
             },
@@ -339,18 +356,22 @@ class TestFabricSkewShrinlege extends Component {
               key: 'iron_skew',
               render: (text, record, index) => {
                 if (index % 4 < 2) {
-                  return <EditableNumberCell
-                    value={text}
-                    prefix={(index % 4 === 0) ? 'AC' : 'BD'}
-                    onChange={this.onCellDetailChange('iron_skew', index, fabricrelax_id)}
-                  />
+                  return (
+                    <EditableNumberCell
+                      value={text}
+                      prefix={index % 4 === 0 ? 'AC' : 'BD'}
+                      onChange={this.onCellDetailChange('iron_skew', index, fabricrelax_id)}
+                    />
+                  )
                 } else {
-                  if (index % 4 === 3) { return <Tag color='#042E60'>{text}%</Tag> }
-                  else { return { text } }
+                  if (index % 4 === 3) {
+                    return <Tag color="#042E60">{text}%</Tag>
+                  } else {
+                    return { text }
+                  }
                 }
-              }
-
-            }
+              },
+            },
           ],
         },
 
@@ -366,14 +387,20 @@ class TestFabricSkewShrinlege extends Component {
                   key: 'washing_length',
                   render: (text, record, index) => {
                     if (index % 4 !== 3) {
-                      return <EditableNumberCell
-                        value={text}
-                        onChange={this.onCellDetailChange('washing_length', index, fabricrelax_id)}
-                      />
+                      return (
+                        <EditableNumberCell
+                          value={text}
+                          onChange={this.onCellDetailChange(
+                            'washing_length',
+                            index,
+                            fabricrelax_id,
+                          )}
+                        />
+                      )
                     } else {
-                      return <Tag color='#147BAB'>{text}%</Tag>
+                      return <Tag color="#147BAB">{text}%</Tag>
                     }
-                  }
+                  },
                 },
                 {
                   title: 'Width',
@@ -381,14 +408,16 @@ class TestFabricSkewShrinlege extends Component {
                   key: 'washing_width',
                   render: (text, record, index) => {
                     if (index % 4 !== 3) {
-                      return <EditableNumberCell
-                        value={text}
-                        onChange={this.onCellDetailChange('washing_width', index, fabricrelax_id)}
-                      />
+                      return (
+                        <EditableNumberCell
+                          value={text}
+                          onChange={this.onCellDetailChange('washing_width', index, fabricrelax_id)}
+                        />
+                      )
                     } else {
-                      return <Tag color='#147BAB'>{text}%</Tag>
+                      return <Tag color="#147BAB">{text}%</Tag>
                     }
-                  }
+                  },
                 },
               ],
             },
@@ -398,15 +427,20 @@ class TestFabricSkewShrinlege extends Component {
               key: 'washing_skew',
               render: (text, record, index) => {
                 if (index % 4 < 2) {
-                  return <EditableNumberCell
-                    value={text}
-                    onChange={this.onCellDetailChange('washing_skew', index, fabricrelax_id)}
-                  />
+                  return (
+                    <EditableNumberCell
+                      value={text}
+                      onChange={this.onCellDetailChange('washing_skew', index, fabricrelax_id)}
+                    />
+                  )
                 } else {
-                  if (index % 4 === 3) { return <Tag color='#042E60'>{text}%</Tag> }
-                  else { return { text } }
+                  if (index % 4 === 3) {
+                    return <Tag color="#042E60">{text}%</Tag>
+                  } else {
+                    return { text }
+                  }
                 }
-              }
+              },
             },
           ],
         },
@@ -417,11 +451,11 @@ class TestFabricSkewShrinlege extends Component {
           render: (text, record, index) => {
             if (index % 4 === 3) {
               if (text === 'PASS') {
-                return <Tag color='green'>{text}</Tag>
+                return <Tag color="green">{text}</Tag>
               } else if (text === 'FAIL') {
-                return <Tag color='red'>{text}</Tag>
+                return <Tag color="red">{text}</Tag>
               } else {
-                return <Tag color='#f50'>{text}</Tag>
+                return <Tag color="#f50">{text}</Tag>
               }
             } else {
               return ''
@@ -451,7 +485,13 @@ class TestFabricSkewShrinlege extends Component {
         <div>
           <Row gutter={8}>
             <Col>
-              <Button icon="plus" type="primary" size="small" value={fabricrelax_id} onClick={this.onNewRow}>
+              <Button
+                icon="plus"
+                type="primary"
+                size="small"
+                value={fabricrelax_id}
+                onClick={this.onNewRow}
+              >
                 New row
               </Button>
             </Col>

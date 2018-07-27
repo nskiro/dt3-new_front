@@ -75,11 +75,15 @@ class TestFabricRelax extends Component {
               new_data_detail[i].condition_hours = find_relax.condition_hours
               new_data_detail[i].note = find_relax.note
               if (find_relax.end_date) {
-                new_data_detail[i].end_date = moment(new Date(find_relax.end_date)).format(formatDate.shortType)
+                new_data_detail[i].end_date = moment(new Date(find_relax.end_date)).format(
+                  formatDate.shortType,
+                )
               }
 
               if (find_relax.start_date) {
-                new_data_detail[i].start_date = moment(new Date(find_relax.start_date)).format(formatDate.shortType)
+                new_data_detail[i].start_date = moment(new Date(find_relax.start_date)).format(
+                  formatDate.shortType,
+                )
               }
 
               let details = [...find_relax.details]
@@ -92,12 +96,10 @@ class TestFabricRelax extends Component {
         }
 
         this.setState({ data_detail: new_data_detail, loadtestfabricrelax_done: true })
-
       })
       .catch(err => {
         console.log(err)
         this.setState({ data_detail: [], loadtestfabricrelax_done: true })
-
       })
   }
 
@@ -133,7 +135,7 @@ class TestFabricRelax extends Component {
     }
   }
 
-  onNewRow = (e) => {
+  onNewRow = e => {
     if (e.target) {
       let fabricrelax_id = e.target.value
       if (fabricrelax_id) {
@@ -254,7 +256,13 @@ class TestFabricRelax extends Component {
         <div>
           <Row gutter={8}>
             <Col>
-              <Button icon="plus" type="primary" size="small" value={fabricrelax_id} onClick={this.onNewRow}>
+              <Button
+                icon="plus"
+                type="primary"
+                size="small"
+                value={fabricrelax_id}
+                onClick={this.onNewRow}
+              >
                 New row
               </Button>
             </Col>

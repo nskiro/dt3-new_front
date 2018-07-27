@@ -156,7 +156,7 @@ class TestFabricWeight extends Component {
     }
   }
 
-  onNewRow = (e) => {
+  onNewRow = e => {
     if (e.target) {
       let fabricweight_id = e.target.value
       if (fabricweight_id) {
@@ -167,13 +167,12 @@ class TestFabricWeight extends Component {
           if (target) {
             let new_item = this.createDataNewRow(target.details.length)
             target.details.push(new_item)
-            data_detail[row_index]=target
+            data_detail[row_index] = target
             this.setState({ data_detail })
           }
         }
       }
     }
-
   }
 
   render() {
@@ -312,7 +311,13 @@ class TestFabricWeight extends Component {
         <div>
           <Row gutter={8}>
             <Col>
-              <Button icon="plus" value={fabricrelax_id} type="primary" size="small" onClick={this.onNewRow}>
+              <Button
+                icon="plus"
+                value={fabricrelax_id}
+                type="primary"
+                size="small"
+                onClick={this.onNewRow}
+              >
                 New row
               </Button>
             </Col>

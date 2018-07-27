@@ -47,12 +47,19 @@ class EditableNumberCell extends Component {
             suffix={<Icon type="check" className="editable-cell-icon-check" onClick={this.check} />}
           />
         ) : (
-            <div style={{ paddingRight: 24 }}>
-              {value ? <Tag color='#2db7f5'>{prefix_render}{value}{suffix_render}</Tag> : '0'}
-              <Icon type="edit" className="editable-cell-icon" onClick={this.edit} />
-            </div>
-          )
-        }
+          <div style={{ paddingRight: 24 }}>
+            {value ? (
+              <Tag color="#2db7f5">
+                {prefix_render}
+                {value}
+                {suffix_render}
+              </Tag>
+            ) : (
+              '0'
+            )}
+            <Icon type="edit" className="editable-cell-icon" onClick={this.edit} />
+          </div>
+        )}
       </div>
     )
   }
