@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Table, Button, Icon, Row, Col } from 'antd'
+import { Table, Button, Form, Icon, Row, Col } from 'antd'
 import EditableInputCell from '../../../Common/editableinputcell'
 import EditableNumberCell from '../../../Common/editablenumbercell'
 import EditableDateCell from '../../../Common/editabledatecell'
@@ -10,6 +10,9 @@ import axios from '../../../../axiosInst' //'../../../../../axiosInst'
 import _ from 'lodash'
 import moment from 'moment'
 import { isBuffer } from 'util'
+
+import '../testfabric.css'
+
 const uuidv1 = require('uuid/v1')
 const test_fabric_relax_get_link = '/api/testfabric/relax/get'
 
@@ -20,10 +23,6 @@ class TestFabricRelax extends Component {
       data_received: [],
       data_detail_id: [],
       data_detail: [],
-
-      isMouted: false,
-      isUpdate: false,
-      isNewRow: false,
     }
   }
 
@@ -42,22 +41,9 @@ class TestFabricRelax extends Component {
     return null
   }
 
-  shouldComponentUpdate = (nextProps, nextState) => {
-    if (this.state.loadtestfabricrelax_done === false) {
-      this.loadtestfabricrelax(nextState.data_received, nextState.data_detail_id)
-      return true
-    }
-    return false
-  }
-
   componentDidMount = () => {
-    this.setState({ isMouted: true })
     let { data_received, data_detail_id } = this.state
     this.loadtestfabricrelax(data_received, data_detail_id)
-  }
-
-  componentWillUnmount = () => {
-    this.setState({ isMouted: false })
   }
 
   loadtestfabricrelax = (data_received, data_detail_id) => {
@@ -65,84 +51,53 @@ class TestFabricRelax extends Component {
       .get(test_fabric_relax_get_link, { params: { detail_ids: data_detail_id } })
       .then(res => {
         let data = res.data
-        let new_data_detail = []
-        let isUpdate = false
+        let new_data_detail = [...data_received]
         if (_.isEmpty(data.data)) {
           for (let i = 0; i < data_received.length; i++) {
-            let d = data_received[i]
-            let r = {
-              _id: d._id,
-              orderid: d.orderid,
-              fabric_type: d.fabric_type,
-              fabric_color: d.fabric_color,
-              met: d.met,
-              roll: d.roll,
-              importid: d.importid,
-              fabricimportdetail_id: d._id,
-            }
+            let r = data_received[i]
             r.relax = 0
             r.note = ''
             r.condition_hours = 0
             r.start_date = moment(new Date()).format(formatDate.shortType)
             r.end_date = moment(new Date()).format(formatDate.shortType)
             let details = []
-            for (let j = 0; j < 5; j++) {
-              details.push({
-                _id: uuidv1(),
-                detail_stt: j + 1,
-                no_roll: 0,
-                no_met: 0,
-                detail_note: '',
-                fabricrelax_id: r._id,
-              })
+            for (let j = 0; j < 3; j++) {
+              details.push(this.createDataNewRow(j))
             }
-            r.fabric_relax_detail_id = details
-            new_data_detail.push(r)
+            r.details = details
+            new_data_detail[i] = r
           }
         } else {
-          for (let i = 0; i < data_received.length; i++) {
-            let d = data_received[i]
-            let r = {
-              orderid: d.orderid,
-              fabric_type: d.fabric_type,
-              fabric_color: d.fabric_color,
-              met: d.met,
-              roll: d.roll,
-              importid: d.importid,
-              fabricimportdetail_id: d._id,
-            }
-            let find_relax = _.find(data.data, { fabricimportdetail_id: r.fabricimportdetail_id })
+          for (let i = 0; i < new_data_detail.length; i++) {
+            let find_relax = _.find(data.data, { _id: new_data_detail[i]._id })
             if (find_relax) {
-              r._id = find_relax._id
-              r.relax = find_relax.relax
-              r.condition_hours = find_relax.condition_hours
-              r.note = find_relax.note
-              try {
-                r.end_date = moment(new Date(find_relax.end_date)).format(formatDate.shortType)
-                r.start_date = moment(new Date(find_relax.start_date)).format(formatDate.shortType)
-              } catch (e) {}
-
-              let details = []
-              for (let j = 0; j < find_relax.fabric_relax_detail_id.length; j++) {
-                let n_row = { ...find_relax.fabric_relax_detail_id[j] }
-                n_row.detail_stt = j + 1
-                details.push(n_row)
+              new_data_detail[i].relax = find_relax.relax
+              new_data_detail[i].condition_hours = find_relax.condition_hours
+              new_data_detail[i].note = find_relax.note
+              if (find_relax.end_date) {
+                new_data_detail[i].end_date = moment(new Date(find_relax.end_date)).format(formatDate.shortType)
               }
-              r.fabric_relax_detail_id = details
+
+              if (find_relax.start_date) {
+                new_data_detail[i].start_date = moment(new Date(find_relax.start_date)).format(formatDate.shortType)
+              }
+
+              let details = [...find_relax.details]
+              for (let j = 0; j < details.length; j++) {
+                details[j].detail_stt = j + 1
+              }
+              new_data_detail[i].details = details
             }
-            new_data_detail.push(r)
           }
-          isUpdate = true
         }
-        if (this.state.isMouted) {
-          this.setState({ data_detail: new_data_detail, loadtestfabricrelax_done: true, isUpdate })
-        }
+
+        this.setState({ data_detail: new_data_detail, loadtestfabricrelax_done: true })
+
       })
       .catch(err => {
         console.log(err)
-        if (this.state.isMouted) {
-          this.setState({ data_detail: [], loadtestfabricrelax_done: true })
-        }
+        this.setState({ data_detail: [], loadtestfabricrelax_done: true })
+
       })
   }
 
@@ -162,33 +117,37 @@ class TestFabricRelax extends Component {
       const data_detail = [...this.state.data_detail]
       const target = data_detail.find(item => item._id === fabricrelax_id)
       if (target) {
-        target.fabric_relax_detail_id[row_index][dataIndex] = value
+        target.details[row_index][dataIndex] = value
         this.setState({ data_detail })
       }
     }
   }
 
-  onAddNewRowForDetail = e => {
-    if (e.target.value) {
-      // return () => {
-      const data_detail = [...this.state.data_detail]
-      const fabricrelax_id = e.target.value
-      let index_row_main = _.findIndex(data_detail, { _id: fabricrelax_id })
+  createDataNewRow = i => {
+    return {
+      _id: uuidv1(),
+      detail_stt: i + 1,
+      no_roll: 0,
+      no_met: 0,
+      detail_note: '',
+    }
+  }
 
-      if (index_row_main >= 0) {
-        let row_main = data_detail[index_row_main]
-        let new_row = {
-          _id: uuidv1(),
-          detail_stt: row_main.fabric_relax_detail_id.length + 1,
-          no_roll: 0,
-          no_met: 0,
-          detail_note: '',
-          fabricrelax_id: fabricrelax_id,
+  onNewRow = (e) => {
+    if (e.target) {
+      let fabricrelax_id = e.target.value
+      if (fabricrelax_id) {
+        const data_detail = [...this.state.data_detail]
+        const row_index = _.findIndex(data_detail, { _id: fabricrelax_id })
+        if (row_index >= 0) {
+          const target = data_detail[row_index]
+          if (target) {
+            let new_item = this.createDataNewRow(target.details.length)
+            target.details.push(new_item)
+            data_detail[row_index] = target
+            this.setState({ data_detail })
+          }
         }
-        row_main.fabric_relax_detail_id.push(new_row)
-        data_detail[index_row_main] = row_main
-        this.setState({ data_detail, isNewRow: true })
-        // }
       }
     }
   }
@@ -249,6 +208,7 @@ class TestFabricRelax extends Component {
         ),
       },
     ]
+    const { data_detail } = this.state
 
     const expandedRowRender = r => {
       const fabricrelax_id = r._id
@@ -288,21 +248,14 @@ class TestFabricRelax extends Component {
           ),
         },
       ]
-      const data = r.fabric_relax_detail_id
+      const data = r.details
 
-      this.setState({ isNewRow: false })
       return (
         <div>
           <Row gutter={8}>
             <Col>
-              <Button
-                icon="plus"
-                type="primary"
-                size="small"
-                onClick={this.onAddNewRowForDetail}
-                value={fabricrelax_id}
-              >
-                NEW ROW
+              <Button icon="plus" type="primary" size="small" value={fabricrelax_id} onClick={this.onNewRow}>
+                New row
               </Button>
             </Col>
           </Row>
@@ -323,19 +276,21 @@ class TestFabricRelax extends Component {
       )
     }
     return (
-      <Table
-        rowKey={'_id'}
-        size="small"
-        bordered
-        style={{ marginTop: '5px' }}
-        columns={columns}
-        pagination={false}
-        dataSource={this.state.data_detail}
-        expandedRowRender={expandedRowRender}
-        rowClassName={(record, index) => {
-          return index % 2 === 0 ? 'even-row' : 'old-row'
-        }}
-      />
+      <Form>
+        <Table
+          rowKey={'_id'}
+          size="small"
+          bordered
+          style={{ marginTop: '5px' }}
+          columns={columns}
+          pagination={false}
+          dataSource={data_detail}
+          expandedRowRender={expandedRowRender}
+          rowClassName={(record, index) => {
+            return index % 2 === 0 ? 'even-row' : 'old-row'
+          }}
+        />
+      </Form>
     )
   }
 }

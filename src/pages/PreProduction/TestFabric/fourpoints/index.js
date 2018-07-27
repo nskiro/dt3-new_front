@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Table, Form, Row, Col, Button } from 'antd'
+import { Table, Form, Row, Col, Button, Tag } from 'antd'
 
 import axios from '../../../../axiosInst' //'../../../../../axiosInst'
 import EditableInputCell from '../../../Common/editableinputcell'
@@ -12,6 +12,9 @@ import { formatDate } from '../../../Common/formatdate'
 const uuidv1 = require('uuid/v1')
 
 const test_fabric_fourpoint = '/api/testfabric/fourpoint/get'
+
+const defect_items = ['slub_nep', 'fly_spot', 'hole_spliy', 'stain_oil', 'vline', 'bare', 'crease_mark', 'uneven_dyed']
+
 
 class TestFabricFourPoint extends Component {
   constructor(props) {
@@ -78,6 +81,7 @@ class TestFabricFourPoint extends Component {
         } else {
           for (let i = 0; i < new_data_detail.length; i++) {
             const find_weight = _.find(data.data, { _id: new_data_detail[i]._id })
+            new_data_detail[i].inspect_no = find_weight.inspect_no
             new_data_detail[i].test_no = find_weight.test_no
             new_data_detail[i].fail_no = find_weight.fail_no
             new_data_detail[i].color_dif = find_weight.color_dif
@@ -175,7 +179,57 @@ class TestFabricFourPoint extends Component {
       const target = data_detail.find(item => item._id === fabricrelax_id)
       if (target) {
         target.details[row_index][dataIndex] = value
+
+        const group_row = Math.floor(row_index / 4)
+        const start_line = (group_row * 4)
+        if (dataIndex === 'length_actual') {
+          const yard_actual = value / 0.9144
+          target.details[start_line]['yard_actual'] = yard_actual.toFixed(6)
+        }
+
+        let total_point = 0;
+        for (let i = 0; i < defect_items.length; i++) {
+          const defect_key = defect_items[i]
+          total_point += parseFloat(target.details[start_line][defect_key])
+          total_point += (parseFloat(target.details[start_line + 1][defect_key]) * 2)
+          total_point += (parseFloat(target.details[start_line + 2][defect_key]) * 3)
+          total_point += (parseFloat(target.details[start_line + 3][defect_key]) * 4)
+        }
+        target.details[start_line]['total_point'] = total_point
+        const width_actual = parseFloat(target.details[start_line]['width_actual'])
+        const yard_actual = parseFloat(target.details[start_line]['yard_actual'])
+
+        const defective_point = (total_point * 3600 / width_actual / yard_actual)
+
+        target.details[start_line]['defective_point'] = defective_point.toFixed(2)
+
+        if (defective_point >= 24) {
+          target.details[start_line]['result'] = 'FAIL'
+        } else {
+          target.details[start_line]['result'] = 'PASS'
+        }
         this.setState({ data_detail })
+      }
+    }
+  }
+
+
+  onNewRow = (e) => {
+    if (e.target) {
+      let fourpoint_id = e.target.value
+      if (fourpoint_id) {
+        const data_detail = [...this.state.data_detail]
+        const row_index = _.findIndex(data_detail, { _id: fourpoint_id })
+        if (row_index >= 0) {
+          const target = data_detail[row_index]
+          if (target) {
+            const row_group = Math.floor(target.details.length / 4)
+            let new_item = this.createDataNewRow(row_group)
+            target.details = target.details.concat(new_item)
+            data_detail[row_index] = target
+            this.setState({ data_detail })
+          }
+        }
       }
     }
   }
@@ -191,7 +245,7 @@ class TestFabricFourPoint extends Component {
         dataIndex: 'inspect_no',
         title: 'INSPECT #',
         render: (text, record) => (
-          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'test_no')} />
+          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'inspect_no')} />
         ),
       },
       {
@@ -294,6 +348,7 @@ class TestFabricFourPoint extends Component {
                 } else {
                   return { text }
                 }
+
               },
             },
           ],
@@ -308,10 +363,7 @@ class TestFabricFourPoint extends Component {
               render: (text, record, index) => {
                 if (index % 4 === 0) {
                   return (
-                    <EditableNumberCell
-                      value={text}
-                      onChange={this.onCellDetailChange('yard_actual', index, fabricrelax_id)}
-                    />
+                    <Tag color='purple'>{text}</Tag>
                   )
                 } else {
                   return { text }
@@ -362,6 +414,7 @@ class TestFabricFourPoint extends Component {
 
         {
           title: 'DEFECT',
+          width: 150,
           children: [
             {
               title: 'Point',
@@ -465,13 +518,10 @@ class TestFabricFourPoint extends Component {
           render: (text, record, index) => {
             if (index % 4 === 0) {
               return (
-                <EditableNumberCell
-                  value={text}
-                  onChange={this.onCellDetailChange('total_point', index, fabricrelax_id)}
-                />
+                <Tag color="green">{text}</Tag>
               )
             } else {
-              return { text }
+              return ''
             }
           },
         },
@@ -481,12 +531,23 @@ class TestFabricFourPoint extends Component {
           key: 'defective_point',
           render: (text, record, index) => {
             if (index % 4 === 0) {
-              return (
-                <EditableNumberCell
-                  value={text}
-                  onChange={this.onCellDetailChange('defective_point', index, fabricrelax_id)}
-                />
-              )
+              try {
+                const value = parseFloat(text)
+                if (value >= 25) {
+                  return (
+                    <Tag color="red">{text}</Tag>
+                  )
+                } else {
+                  return (
+                    <Tag color="green">{text}</Tag>
+                  )
+                }
+              } catch (error) {
+                return (
+                  <Tag color="red">{text}</Tag>
+                )
+              }
+
             } else {
               return { text }
             }
@@ -498,14 +559,17 @@ class TestFabricFourPoint extends Component {
           key: 'result',
           render: (text, record, index) => {
             if (index % 4 === 0) {
-              return (
-                <EditableInputCell
-                  value={text}
-                  onChange={this.onCellDetailChange('result', index, fabricrelax_id)}
-                />
-              )
+              if (text === 'FAIL') {
+                return (
+                  <Tag color="#f50">{text}</Tag>
+                )
+              } else {
+                return (
+                  <Tag color="#87d068">{text}</Tag>
+                )
+              }
             } else {
-              return { text }
+              return ''
             }
           },
         },
@@ -543,13 +607,13 @@ class TestFabricFourPoint extends Component {
         <div>
           <Row gutter={8}>
             <Col>
-              <Button icon="plus" type="primary" size="small">
+              <Button icon="plus" type="primary" size="small" value={fabricrelax_id} onClick={this.onNewRow}>
                 New row
               </Button>
             </Col>
           </Row>
           <Row gutter={8}>
-            <Col span={12}>
+            <Col span={24}>
               <Table
                 size="small"
                 bordered

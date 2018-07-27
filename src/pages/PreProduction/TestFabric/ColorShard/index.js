@@ -59,7 +59,7 @@ class TestFabricColorShard extends Component {
             r.end_date = moment(new Date()).format(formatDate.shortType)
             r.start_date = moment(new Date()).format(formatDate.shortType)
             let details = []
-            for (let j = 0; j < 5; j++) {
+            for (let j = 0; j < 3; j++) {
               details.push(this.createDataNewRow(j))
             }
             r.details = details
@@ -69,28 +69,33 @@ class TestFabricColorShard extends Component {
         } else {
           for (let i = 0; i < new_data_detail.length; i++) {
             const find_shard = _.find(data.data, { _id: new_data_detail[i]._id })
-            new_data_detail[i].test_no = find_shard.test_no
-            new_data_detail[i].fail_no = find_shard.fail_no
-            new_data_detail[i].note = find_shard.note
+            if (find_shard) {
+              new_data_detail[i].test_no = find_shard.test_no
+              new_data_detail[i].roll_no = find_shard.roll_no
+              new_data_detail[i].shard_no = find_shard.shard_no
+              new_data_detail[i].group_no = find_shard.group_no
+              new_data_detail[i].note = find_shard.note
 
-            if (find_shard.start_date) {
-              const start_date = moment(new Date(find_shard.start_date)).format(
-                formatDate.shortType,
-              )
-              new_data_detail[i].start_date = start_date
-            }
-            if (find_shard.end_date) {
-              const end_date = moment(new Date(find_shard.end_date)).format(formatDate.shortType)
-              new_data_detail[i].end_date = end_date
-            }
+              if (find_shard.start_date) {
+                const start_date = moment(new Date(find_shard.start_date)).format(
+                  formatDate.shortType,
+                )
+                new_data_detail[i].start_date = start_date
+              }
+              if (find_shard.end_date) {
+                const end_date = moment(new Date(find_shard.end_date)).format(formatDate.shortType)
+                new_data_detail[i].end_date = end_date
+              }
 
-            let details = [...find_shard.details]
-            for (let j = 0; j < details.length; j++) {
-              details[j].detail_stt = j + 1
+              let details = [...find_shard.details]
+              for (let j = 0; j < details.length; j++) {
+                details[j].detail_stt = j + 1
+              }
+              new_data_detail[i].details = details
             }
-            new_data_detail[i].details = details
+            this.setState({ data_detail: new_data_detail, isUpdate: true })
           }
-          this.setState({ data_detail: new_data_detail, isUpdate: true })
+
         }
       })
       .catch(err => {
@@ -130,6 +135,26 @@ class TestFabricColorShard extends Component {
       }
     }
   }
+
+  onNewRow = (e) => {
+    if (e.target) {
+      let fabricshard_id = e.target.value
+      if (fabricshard_id) {
+        const data_detail = [...this.state.data_detail]
+        const row_index = _.findIndex(data_detail, { _id: fabricshard_id })
+        if (row_index >= 0) {
+          const target = data_detail[row_index]
+          if (target) {
+            let new_item = this.createDataNewRow(target.details.length)
+            target.details.push(new_item)
+            data_detail[row_index] = target
+            this.setState({ data_detail })
+          }
+        }
+      }
+    }
+  }
+
   render() {
     const columns = [
       {
@@ -147,7 +172,7 @@ class TestFabricColorShard extends Component {
         dataIndex: 'roll_no',
         key: 'roll_no',
         render: (text, record, index) => (
-          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'test_no')} />
+          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'roll_no')} />
         ),
       },
       {
@@ -247,8 +272,8 @@ class TestFabricColorShard extends Component {
         <div>
           <Row gutter={8}>
             <Col>
-              <Button icon="plus" type="primary" size="small">
-                NEW ROW
+              <Button icon="plus" type="primary" size="small" value={fabricshard_id} onClick={this.onNewRow}>
+                New row
               </Button>
             </Col>
           </Row>

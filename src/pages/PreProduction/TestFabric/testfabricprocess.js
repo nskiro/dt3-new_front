@@ -13,13 +13,10 @@ import {
   Divider,
   message,
 } from 'antd'
-import Page from 'components/LayoutComponents/Page'
-import Helmet from 'react-helmet'
+
 
 import axios from '../../../axiosInst' //'../../../../../axiosInst'
 
-import { formItemLayout, tailFormItemLayout } from '../../Common/FormStyle'
-import { combineAll } from 'rxjs/operator/combineAll'
 import moment from 'moment'
 import _ from 'lodash'
 
@@ -41,13 +38,16 @@ const Step = Steps.Step
 
 const fabric_import_getdetail_link = 'api/fabric/import/getdetails'
 
-const test_fabric_relax_get_add = '/api/testfabric/relax/add'
-const test_fabric_relax_get_update = '/api/testfabric/relax/update'
+const test_fabric_relax_save = '/api/testfabric/relax/save'
 
 const test_fabric_weight_save = '/api/testfabric/weight/save'
 const test_fabric_colorshard_save = '/api/testfabric/colorshard/save'
 const test_fabric_fourpoint_save = '/api/testfabric/fourpoint/save'
 const test_fabric_skew_save = '/api/testfabric/skew/save'
+
+
+const fabric_import_updateprocess = 'api/fabric/import/updateprocess/'
+
 
 class TestFabricProcessView extends Component {
   constructor(props) {
@@ -65,18 +65,6 @@ class TestFabricProcessView extends Component {
     return nextState
   }
 
-  /*
-  shouldComponentUpdate = (nextProps, nextState) => {
-   // console.log('shouldComponentUpdate =>')
-    //console.log('nextState.import_row_selected =>' + JSON.stringify(nextState.import_row_selected))
-   // console.log('this.state.import_row_selected =>' + JSON.stringify(this.state.import_row_selected))
-    if (nextState.import_row_selected !== this.state.import_row_selected) {
-        console.log('reload page')
-      return true
-    }
-    return false
-  }
-*/
   componentDidMount = () => {
     this.load_fabric_detail()
   }
@@ -105,6 +93,7 @@ class TestFabricProcessView extends Component {
   next = () => {
     switch (this.state.current) {
       case 0:
+        this.onUpdateProcess()
         // xa vai
         this.onSaveRelax()
         break
@@ -131,31 +120,17 @@ class TestFabricProcessView extends Component {
   }
   onSaveRelax = () => {
     const { data_detail, isUpdate } = this.relaxChild.state
-    if (isUpdate) {
-      axios
-        .post(test_fabric_relax_get_update, data_detail)
-        .then(res => {
-          let rs = res.data
-          if (!rs.valid) {
-            alert('Error ' + rs.message)
-          }
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    } else {
-      axios
-        .post(test_fabric_relax_get_add, data_detail)
-        .then(res => {
-          let rs = res.data
-          if (!rs.valid) {
-            alert('Error ' + rs.message)
-          }
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    }
+    axios
+      .post(test_fabric_relax_save, data_detail)
+      .then(res => {
+        let rs = res.data
+        if (!rs.valid) {
+          alert('Error ' + rs.message)
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   onSaveColorShard = () => {
@@ -216,6 +191,31 @@ class TestFabricProcessView extends Component {
       .catch(err => {
         console.log(err)
       })
+  }
+
+  onUpdateProcess = () => {
+    const { import_row_selected } = this.state
+    if (_.isEmpty(import_row_selected)) {
+      alert('Not import data selected. Please try again.!')
+      return
+    } else {
+      let id = import_row_selected._id
+      axios
+        .post(fabric_import_updateprocess + `${id}`, {})
+        .then(res => {
+          let data = res.data
+          if (!data.valid) {
+            alert('update data failed. Error=> ' + data.message)
+          } else {
+            message.success('Process data starting!')
+            const { show_detail } = this.state
+            this.setState({ show_detail: !show_detail })
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
   }
 
   prev = () => {
@@ -316,6 +316,10 @@ class TestFabricProcessView extends Component {
             wrappedComponentRef={ref => (this.skewChild = ref)}
           />
         ),
+      },
+      {
+        title: 'Tổng kết',
+        content: '',
       },
     ]
 

@@ -76,7 +76,7 @@ class TestFabricWeight extends Component {
             r.end_date = moment(new Date()).format(formatDate.shortType)
             r.start_date = moment(new Date()).format(formatDate.shortType)
             let details = []
-            for (let j = 0; j < 5; j++) {
+            for (let j = 0; j < 3; j++) {
               details.push(this.createDataNewRow(j))
             }
             r.details = details
@@ -155,6 +155,27 @@ class TestFabricWeight extends Component {
       }
     }
   }
+
+  onNewRow = (e) => {
+    if (e.target) {
+      let fabricweight_id = e.target.value
+      if (fabricweight_id) {
+        const data_detail = [...this.state.data_detail]
+        const row_index = _.findIndex(data_detail, { _id: fabricweight_id })
+        if (row_index >= 0) {
+          const target = data_detail[row_index]
+          if (target) {
+            let new_item = this.createDataNewRow(target.details.length)
+            target.details.push(new_item)
+            data_detail[row_index]=target
+            this.setState({ data_detail })
+          }
+        }
+      }
+    }
+
+  }
+
   render() {
     const columns = [
       { key: 'fabric_type', dataIndex: 'fabric_type', title: 'TYPE', name: 'TYPE' },
@@ -291,8 +312,8 @@ class TestFabricWeight extends Component {
         <div>
           <Row gutter={8}>
             <Col>
-              <Button icon="plus" type="primary" size="small">
-                NEW ROW
+              <Button icon="plus" value={fabricrelax_id} type="primary" size="small" onClick={this.onNewRow}>
+                New row
               </Button>
             </Col>
           </Row>
