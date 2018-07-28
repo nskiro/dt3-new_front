@@ -11,7 +11,7 @@ import _ from 'lodash'
 import moment from 'moment'
 
 import '../../TestFabric/testfabric.css'
-import { isBuffer } from 'util';
+import { isBuffer } from 'util'
 
 const uuidv1 = require('uuid/v1')
 const decimal_fix = 1
@@ -223,7 +223,6 @@ class TestFabricSkewShrinlege extends Component {
             }
             target.details[start_line + 3]['isPass'] = ispass
           }
-
         }
 
         this.setState({ data_detail })
