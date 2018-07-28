@@ -11,6 +11,7 @@ import _ from 'lodash'
 import moment from 'moment'
 
 import '../../TestFabric/testfabric.css'
+import { isBuffer } from 'util';
 
 const uuidv1 = require('uuid/v1')
 const decimal_fix = 1
@@ -151,6 +152,80 @@ class TestFabricSkewShrinlege extends Component {
       const target = data_detail.find(item => item.key === key)
       if (target) {
         target[dataIndex] = value
+
+        if (dataIndex === 'condition') {
+          const size = Math.floor(target.details.length / 4)
+          for (let i = 0; i < size; i++) {
+            const start_line = size * i
+
+            let iron_length_total = 0
+            let iron_width_total = 0
+
+            let washing_length_total = 0
+            let washing_width_total = 0
+
+            for (let j = start_line; j < start_line + 3; j++) {
+              iron_length_total += parseFloat(target.details[j]['iron_length'])
+              iron_width_total += parseFloat(target.details[j]['iron_width'])
+
+              washing_length_total += parseFloat(target.details[j]['washing_length'])
+              washing_width_total += parseFloat(target.details[j]['washing_width'])
+            }
+
+            const iron_ac_skew = parseFloat(target.details[start_line]['iron_skew'])
+            const iron_bd_skew = parseFloat(target.details[start_line + 1]['iron_skew'])
+
+            const wash_ac_skew = parseFloat(target.details[start_line]['washing_skew'])
+            const wash_bd_skew = parseFloat(target.details[start_line + 1]['washing_skew'])
+
+            const iron_skew_total =
+              (2 * (iron_ac_skew - iron_bd_skew) * 100) / (iron_ac_skew + iron_bd_skew)
+            const washing_skew_total =
+              (2 * (wash_ac_skew - wash_bd_skew) * 100) / (wash_ac_skew + wash_bd_skew)
+
+            const iron_length = ((iron_length_total / 3 - 10) * 10).toFixed(decimal_fix)
+            const iron_width = ((iron_width_total / 3 - 10) * 10).toFixed(decimal_fix)
+            const iron_skew = iron_skew_total.toFixed(1)
+
+            const washing_length = ((washing_length_total / 3 - 10) * 10).toFixed(decimal_fix)
+            const washing_width = ((washing_width_total / 3 - 10) * 10).toFixed(decimal_fix)
+            const washing_skew = washing_skew_total.toFixed(decimal_fix)
+
+            target.details[start_line + 3]['iron_length'] = iron_length
+            target.details[start_line + 3]['iron_width'] = iron_width
+            target.details[start_line + 3]['iron_skew'] = iron_skew
+
+            target.details[start_line + 3]['washing_length'] = washing_length
+            target.details[start_line + 3]['washing_width'] = washing_width
+            target.details[start_line + 3]['washing_skew'] = washing_skew
+
+            const percent_arr = [
+              iron_length,
+              iron_width,
+              iron_skew,
+              washing_length,
+              washing_width,
+              washing_skew,
+            ]
+            const condition = target.condition
+            let ispass = ''
+            if (condition) {
+              ispass = 'PASS'
+              const condition_down = -1.0 * Math.abs(parseFloat(condition))
+              const condition_up = Math.abs(parseFloat(condition))
+              for (let i = 0; i < percent_arr.length; i++) {
+                let value = parseFloat(percent_arr[i])
+                if (value >= condition_up || value <= condition_down) {
+                  ispass = 'FAIL'
+                  break
+                }
+              }
+            }
+            target.details[start_line + 3]['isPass'] = ispass
+          }
+
+        }
+
         this.setState({ data_detail })
       }
     }
@@ -215,16 +290,15 @@ class TestFabricSkewShrinlege extends Component {
           washing_width,
           washing_skew,
         ]
-        const condition = target['condition']
+        const condition = target.condition
         let ispass = ''
         if (condition) {
           ispass = 'PASS'
           const condition_down = -1.0 * Math.abs(parseFloat(condition))
           const condition_up = Math.abs(parseFloat(condition))
-          console.log('condition_down = ' + condition_down)
-          console.log('condition_up = ' + condition_up)
           for (let i = 0; i < percent_arr.length; i++) {
-            if (percent_arr >= condition_up || percent_arr <= condition_down) {
+            let value = parseFloat(percent_arr[i])
+            if (value >= condition_up || value <= condition_down) {
               ispass = 'FAIL'
               break
             }
