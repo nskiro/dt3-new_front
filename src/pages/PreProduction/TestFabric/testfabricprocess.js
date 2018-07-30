@@ -363,7 +363,10 @@ class TestFabricProcessView extends Component {
               </Button>
             )}
             {current > 0 && (
-              <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}> Previous</Button>
+              <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
+                {' '}
+                Previous
+              </Button>
             )}
           </div>
         </Row>
