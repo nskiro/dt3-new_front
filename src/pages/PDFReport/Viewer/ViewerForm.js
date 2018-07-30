@@ -135,7 +135,12 @@ class ViewerForm extends Component {
           <Col span={12}>
             {selectedDept && selectedDept.note ? (
               <span>
-                <Alert message="Note" description={selectedDept.note.replace('\\n','<br>')} type="info" showIcon />
+                <Alert
+                  message="Note"
+                  description={selectedDept.note.replace('\\n', '<br>')}
+                  type="info"
+                  showIcon
+                />
                 <Divider />
               </span>
             ) : null}
