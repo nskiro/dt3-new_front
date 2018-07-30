@@ -350,9 +350,9 @@ class TestFabricWeight extends Component {
           pagination={false}
           dataSource={data_detail}
           expandedRowRender={expandedRowRender}
-          rowClassName={(record, index) => {
-            return index % 2 === 0 ? 'even-row' : 'old-row'
-          }}
+          //rowClassName={(record, index) => {
+          //  return index % 2 === 0 ? 'even-row' : 'old-row'
+         // }}
         />
       </Form>
     )

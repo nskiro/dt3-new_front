@@ -11,8 +11,6 @@ import _ from 'lodash'
 import moment from 'moment'
 import { isBuffer } from 'util'
 
-import '../testfabric.css'
-
 const uuidv1 = require('uuid/v1')
 const test_fabric_relax_get_link = '/api/testfabric/relax/get'
 
@@ -294,9 +292,9 @@ class TestFabricRelax extends Component {
           pagination={false}
           dataSource={data_detail}
           expandedRowRender={expandedRowRender}
-          rowClassName={(record, index) => {
-            return index % 2 === 0 ? 'even-row' : 'old-row'
-          }}
+         // rowClassName={(record, index) => {
+         ////   return index % 2 === 0 ? 'even-row' : 'old-row'
+         // }}
         />
       </Form>
     )

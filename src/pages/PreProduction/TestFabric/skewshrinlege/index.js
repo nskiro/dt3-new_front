@@ -10,7 +10,6 @@ import axios from '../../../../axiosInst' //'../../../../../axiosInst'
 import _ from 'lodash'
 import moment from 'moment'
 
-import '../../TestFabric/testfabric.css'
 import { isBuffer } from 'util'
 
 const uuidv1 = require('uuid/v1')
@@ -596,9 +595,9 @@ class TestFabricSkewShrinlege extends Component {
         pagination={false}
         dataSource={this.state.data_detail}
         expandedRowRender={expandedRowRender}
-        rowClassName={(record, index) => {
-          return index % 2 === 0 ? 'even-row' : 'old-row'
-        }}
+        //rowClassName={(record, index) => {
+        //  return index % 2 === 0 ? 'even-row' : 'old-row'
+        //}}
       />
     )
   }
