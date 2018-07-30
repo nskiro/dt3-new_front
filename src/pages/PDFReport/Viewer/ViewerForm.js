@@ -135,7 +135,7 @@ class ViewerForm extends Component {
           <Col span={12}>
             {selectedDept && selectedDept.note ? (
               <span>
-                <Alert message="Note" description={selectedDept.note} type="info" showIcon />
+                <Alert message="Note" description={selectedDept.note.replace('\\n','<br>')} type="info" showIcon />
                 <Divider />
               </span>
             ) : null}
@@ -143,7 +143,7 @@ class ViewerForm extends Component {
               <Col span={10}>
                 <label>Select report category:</label>
                 {!loadingCategory ? (
-                  <Tree autoExpandParent={true} showIcon={true} onSelect={this.onCategorySelect}>
+                  <Tree defaultExpandAll showIcon={true} onSelect={this.onCategorySelect}>
                     {reportCategories ? this.renderTreeNodes(reportCategories) : null}
                   </Tree>
                 ) : (

@@ -29,7 +29,7 @@ const columns = [
     dataIndex: 'category',
     key: 'category',
     render: (text, record) => {
-      return <p>{text.categoryName}</p>
+      return text ? <p>{text.categoryName}</p> : ''
     },
   },
 ]
