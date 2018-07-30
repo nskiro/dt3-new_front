@@ -63,11 +63,9 @@ class TestFabricFourPoint extends Component {
         let data = res.data
         let new_data_detail = [...data_received]
         if (_.isEmpty(data.data)) {
-          console.log('four point khong co data')
-
           for (let i = 0; i < new_data_detail.length; i++) {
             let r = new_data_detail[i]
-            r.test_no = 0
+            r.inspect_no = 0
             r.fail_no = 0
             r.note = ''
             r.color_dif = '0/0'
@@ -211,11 +209,31 @@ class TestFabricFourPoint extends Component {
 
         target.details[start_line]['defective_point'] = defective_point.toFixed(2)
 
+        let ispass = ''
         if (defective_point >= 24) {
-          target.details[start_line]['result'] = 'FAIL'
+          ispass = 'FAIL'
         } else {
-          target.details[start_line]['result'] = 'PASS'
+          ispass = 'PASS'
         }
+
+        target.details[start_line]['result'] = ispass
+
+        if (ispass === 'PASS' || ispass === 'FAIL') {
+          let fail_no = 0
+          let inspect_no = 0
+          let group_size = Math.floor(target.details.length / 4)
+          for (let i = 0; i < group_size; i++) {
+            if (target.details[group_size * i]['result'] === 'FAIL') {
+              fail_no += 1
+              inspect_no += 1
+            } else if (target.details[group_size * i]['result'] === 'PASS') {
+              inspect_no += 1
+            }
+          }
+          target.fail_no = fail_no
+          target.inspect_no = inspect_no
+        }
+
         this.setState({ data_detail })
       }
     }
@@ -251,17 +269,13 @@ class TestFabricFourPoint extends Component {
         key: 'inspect_no',
         dataIndex: 'inspect_no',
         title: 'INSPECT #',
-        render: (text, record) => (
-          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'inspect_no')} />
-        ),
+        render: (text, record) => <Tag color="blue">{text}</Tag>,
       },
       {
         key: 'fail_no',
         dataIndex: 'fail_no',
         title: 'FAIL #',
-        render: (text, record) => (
-          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'fail_no')} />
-        ),
+        render: (text, record) => <Tag color="blue">{text}</Tag>,
       },
       {
         key: 'color_dif',

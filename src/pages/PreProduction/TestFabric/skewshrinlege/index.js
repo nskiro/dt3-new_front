@@ -221,9 +221,23 @@ class TestFabricSkewShrinlege extends Component {
               }
             }
             target.details[start_line + 3]['isPass'] = ispass
+
+            let fail_no = 0
+            let test_no = 0
+
+            let group_size = Math.floor(target.details.length / 4)
+            for (let i = 0; i < group_size; i++) {
+              if (target.details[group_size * i + 3]['isPass'] === 'FAIL') {
+                fail_no += 1
+                test_no += 1
+              } else if (target.details[group_size * i + 3]['isPass'] === 'PASS') {
+                test_no += 1
+              }
+            }
+            target.fail_no = fail_no
+            target.test_no = test_no
           }
         }
-
         this.setState({ data_detail })
       }
     }
@@ -305,6 +319,23 @@ class TestFabricSkewShrinlege extends Component {
 
         target.details[start_line + 3]['isPass'] = ispass
 
+        if (ispass === 'PASS' || ispass === 'FAIL') {
+          let fail_no = 0
+          let test_no = 0
+
+          let group_size = Math.floor(target.details.length / 4)
+          for (let i = 0; i < group_size; i++) {
+            if (target.details[group_size * i + 3]['isPass'] === 'FAIL') {
+              fail_no += 1
+              test_no += 1
+            } else if (target.details[group_size * i + 3]['isPass'] === 'PASS') {
+              test_no += 1
+            }
+          }
+          target.fail_no = fail_no
+          target.test_no = test_no
+        }
+
         this.setState({ data_detail })
       }
     }
@@ -334,18 +365,14 @@ class TestFabricSkewShrinlege extends Component {
         dataIndex: 'test_no',
         title: 'TEST #',
         name: 'TEST #',
-        render: (text, record) => (
-          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'test_no')} />
-        ),
+        render: (text, record) => <Tag color="blue">{text}</Tag>,
       },
       {
         key: 'fail_no',
         dataIndex: 'fail_no',
         title: 'FAIL #',
         name: 'FAIL #',
-        render: (text, record) => (
-          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'fail_no')} />
-        ),
+        render: (text, record) => <Tag color="blue">{text}</Tag>,
       },
       {
         key: 'note',

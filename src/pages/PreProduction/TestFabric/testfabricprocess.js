@@ -233,7 +233,7 @@ class TestFabricProcessView extends Component {
           <span>{text === null ? '' : moment(new Date(text)).format(FORMAT_SHORT_DATE)}</span>
         ),
       },
-      { key: 'invoice_no', dataIndex: 'invoice_no', title: 'STK', name: 'STK' },
+      { key: 'declare_no', dataIndex: 'declare_no', title: 'STK', name: 'STK' },
       {
         key: 'create_date',
         dataIndex: 'create_date',
@@ -364,6 +364,7 @@ class TestFabricProcessView extends Component {
             )}
             {current > 0 && (
               <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
+                {' '}
                 Previous
               </Button>
             )}
