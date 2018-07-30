@@ -210,8 +210,11 @@ class TestFabricFourPoint extends Component {
         target.details[start_line]['defective_point'] = defective_point.toFixed(2)
 
         let ispass = ''
-        if (defective_point >= 24) { ispass = 'FAIL' }
-        else { ispass = 'PASS' }
+        if (defective_point >= 24) {
+          ispass = 'FAIL'
+        } else {
+          ispass = 'PASS'
+        }
 
         target.details[start_line]['result'] = ispass
 
@@ -220,10 +223,10 @@ class TestFabricFourPoint extends Component {
           let inspect_no = 0
           let group_size = Math.floor(target.details.length / 4)
           for (let i = 0; i < group_size; i++) {
-            if (target.details[(group_size * i)]['result'] === 'FAIL') {
+            if (target.details[group_size * i]['result'] === 'FAIL') {
               fail_no += 1
               inspect_no += 1
-            } else if (target.details[(group_size * i)]['result'] === 'PASS') {
+            } else if (target.details[group_size * i]['result'] === 'PASS') {
               inspect_no += 1
             }
           }
@@ -266,13 +269,13 @@ class TestFabricFourPoint extends Component {
         key: 'inspect_no',
         dataIndex: 'inspect_no',
         title: 'INSPECT #',
-        render: (text, record) => (<Tag color="blue">{text}</Tag>)
+        render: (text, record) => <Tag color="blue">{text}</Tag>,
       },
       {
         key: 'fail_no',
         dataIndex: 'fail_no',
         title: 'FAIL #',
-        render: (text, record) => (<Tag color="blue">{text}</Tag>)
+        render: (text, record) => <Tag color="blue">{text}</Tag>,
       },
       {
         key: 'color_dif',
@@ -648,9 +651,9 @@ class TestFabricFourPoint extends Component {
           pagination={false}
           dataSource={data_detail}
           expandedRowRender={expandedRowRender}
-        //rowClassName={(record, index) => {
-        //  return index % 2 === 0 ? 'even-row' : 'old-row'
-        //}}
+          //rowClassName={(record, index) => {
+          //  return index % 2 === 0 ? 'even-row' : 'old-row'
+          //}}
         />
       </Form>
     )

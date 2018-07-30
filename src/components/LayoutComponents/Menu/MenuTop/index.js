@@ -140,8 +140,8 @@ class MenuTop extends React.Component {
           onClick={
             this.props.isMobile
               ? () => {
-                dispatch(setLayoutState({ menuCollapsed: false }))
-              }
+                  dispatch(setLayoutState({ menuCollapsed: false }))
+                }
               : undefined
           }
         >
@@ -150,11 +150,11 @@ class MenuTop extends React.Component {
         </Link>
       </Menu.Item>
     ) : (
-          <Menu.Item key={key} disabled={disabled}>
-            <span className="menuTop__item-title">{title}</span>
-            {icon && <span className={icon + ' menuTop__icon'} />}
-          </Menu.Item>
-        )
+      <Menu.Item key={key} disabled={disabled}>
+        <span className="menuTop__item-title">{title}</span>
+        {icon && <span className={icon + ' menuTop__icon'} />}
+      </Menu.Item>
+    )
   }
 
   componentWillReceiveProps(newProps) {
@@ -198,7 +198,7 @@ class MenuTop extends React.Component {
           className="menuTop__navigation"
         >
           {menuItems}
-            <ProfileMenu />
+          <ProfileMenu />
           {/* <Menu.Item key={'settings'}>
             <span className="menuTop__item-title">Settings</span>
             <span className={'icmn icmn-cog menuTop__icon utils__spin-delayed--pseudo-selector'} />

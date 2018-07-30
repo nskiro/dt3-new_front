@@ -219,7 +219,7 @@ class TestFabricSkewShrinlege extends Component {
                   break
                 }
               }
-             }
+            }
             target.details[start_line + 3]['isPass'] = ispass
 
             let fail_no = 0
@@ -227,10 +227,10 @@ class TestFabricSkewShrinlege extends Component {
 
             let group_size = Math.floor(target.details.length / 4)
             for (let i = 0; i < group_size; i++) {
-              if (target.details[(group_size * i) + 3]['isPass'] === 'FAIL') {
+              if (target.details[group_size * i + 3]['isPass'] === 'FAIL') {
                 fail_no += 1
                 test_no += 1
-              } else if (target.details[(group_size * i) + 3]['isPass'] === 'PASS') {
+              } else if (target.details[group_size * i + 3]['isPass'] === 'PASS') {
                 test_no += 1
               }
             }
@@ -318,17 +318,17 @@ class TestFabricSkewShrinlege extends Component {
         }
 
         target.details[start_line + 3]['isPass'] = ispass
-        
+
         if (ispass === 'PASS' || ispass === 'FAIL') {
           let fail_no = 0
           let test_no = 0
 
           let group_size = Math.floor(target.details.length / 4)
           for (let i = 0; i < group_size; i++) {
-            if (target.details[(group_size * i) + 3]['isPass'] === 'FAIL') {
+            if (target.details[group_size * i + 3]['isPass'] === 'FAIL') {
               fail_no += 1
               test_no += 1
-            } else if (target.details[(group_size * i) + 3]['isPass'] === 'PASS') {
+            } else if (target.details[group_size * i + 3]['isPass'] === 'PASS') {
               test_no += 1
             }
           }
@@ -365,14 +365,14 @@ class TestFabricSkewShrinlege extends Component {
         dataIndex: 'test_no',
         title: 'TEST #',
         name: 'TEST #',
-        render: (text, record) => (<Tag color="blue">{text}</Tag>),
+        render: (text, record) => <Tag color="blue">{text}</Tag>,
       },
       {
         key: 'fail_no',
         dataIndex: 'fail_no',
         title: 'FAIL #',
         name: 'FAIL #',
-        render: (text, record) => (<Tag color="blue">{text}</Tag>)
+        render: (text, record) => <Tag color="blue">{text}</Tag>,
       },
       {
         key: 'note',
@@ -622,9 +622,9 @@ class TestFabricSkewShrinlege extends Component {
         pagination={false}
         dataSource={this.state.data_detail}
         expandedRowRender={expandedRowRender}
-      //rowClassName={(record, index) => {
-      //  return index % 2 === 0 ? 'even-row' : 'old-row'
-      //}}
+        //rowClassName={(record, index) => {
+        //  return index % 2 === 0 ? 'even-row' : 'old-row'
+        //}}
       />
     )
   }
