@@ -55,17 +55,19 @@ class ProfileMenu extends React.Component {
       </Menu>
     )
     return (
-      <div className="topbar__dropdown d-inline-block">
-        <Dropdown
-          overlay={menu}
-          trigger={['click']}
-          placement="bottomLeft"
-          onVisibleChange={this.addCount}
-        >
-          <a className="ant-dropdown-link" href="#">
-            <Avatar className="topbar__avatar" shape="square" size="large" icon="user" />
-          </a>
-        </Dropdown>
+      <div className="menuTop__profile">
+        <div className="topbar__dropdown d-inline-block">
+          <Dropdown
+            overlay={menu}
+            trigger={['click']}
+            placement="bottomLeft"
+            onVisibleChange={this.addCount}
+          >
+            <a className="ant-dropdown-link" href="#">
+              <Avatar className="topbar__avatar" shape="square" size="large" icon="user" />
+            </a>
+          </Dropdown>
+        </div>
       </div>
     )
   }
