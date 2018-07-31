@@ -30,7 +30,6 @@ const FormItem = Form.Item
 const Option = Select.Option
 const Panel = Collapse.Panel
 
-
 const FORMAT_SHORT_DATE = 'MM/DD/YYYY'
 const FORMAT_LONG_DATE = 'MM/DD/YYYY HH:mm:ss'
 const button_size = 'small'
@@ -217,8 +216,6 @@ class TestFabricProcessView extends Component {
     }
   }
 
-
-
   prev = () => {
     const current = this.state.current - 1
     this.setState({ current })
@@ -342,9 +339,9 @@ class TestFabricProcessView extends Component {
             columns={columns}
             pagination={false}
             dataSource={[this.state.import_row_selected]}
-          //rowClassName={(record, index) => {
-          //  return index % 2 === 0 ? 'even-row' : 'old-row'
-          //}}
+            //rowClassName={(record, index) => {
+            //  return index % 2 === 0 ? 'even-row' : 'old-row'
+            //}}
           />
         </Row>
         <Divider />
@@ -355,17 +352,31 @@ class TestFabricProcessView extends Component {
           <div className="steps-content">{steps[this.state.current].content}</div>
           <div className="steps-action">
             {current > 0 && (
-              <Button icon='caret-left' type="primary" style={{ marginTop: 5 }} onClick={() => this.prev()}>
+              <Button
+                icon="caret-left"
+                type="primary"
+                style={{ marginTop: 5 }}
+                onClick={() => this.prev()}
+              >
                 Previous
               </Button>
             )}
             {current < steps.length - 1 && (
-              <Button icon='caret-right' type="primary" style={{ marginLeft: 8, marginTop: 5 }} onClick={() => this.next()}>
+              <Button
+                icon="caret-right"
+                type="primary"
+                style={{ marginLeft: 8, marginTop: 5 }}
+                onClick={() => this.next()}
+              >
                 Next
               </Button>
             )}
             {current === steps.length - 1 && (
-              <Button type="primary" style={{ marginLeft: 8, marginTop: 5 }} onClick={buttonDoneClick}>
+              <Button
+                type="primary"
+                style={{ marginLeft: 8, marginTop: 5 }}
+                onClick={buttonDoneClick}
+              >
                 Done
               </Button>
             )}

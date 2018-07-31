@@ -428,7 +428,7 @@ class TestFabricListView extends Component {
                 dataSource={this.state.fabricimport_data}
                 //rowClassName={(record, index) => {
                 //  return index % 2 === 0 ? 'even-row' : 'old-row'
-               // }}
+                // }}
                 onRow={record => {
                   return {
                     onClick: () => {

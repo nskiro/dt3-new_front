@@ -10,7 +10,7 @@ import _ from 'lodash'
 import moment from 'moment'
 
 import { formatDate } from '../../../Common/formatdate'
-import EditableDateCell from '../../../Common/editabledatecell';
+import EditableDateCell from '../../../Common/editabledatecell'
 const uuidv1 = require('uuid/v1')
 
 const test_fabric_fourpoint = '/api/testfabric/fourpoint/get'
@@ -26,7 +26,7 @@ const defect_items = [
   'uneven_dyed',
 ]
 
-const exportDataset = (data_detail) => {
+const exportDataset = data_detail => {
   let dataset = []
   dataset.push({
     xSteps: 2,
@@ -39,7 +39,17 @@ const exportDataset = (data_detail) => {
     xSteps: 0,
     ySteps: 2,
     columns: [
-      "DATE", "STK", "TYPE", "COLOR", "ROLL #", "INSPECT #", "FAIL #", "COLOR DIF", "NOTE", "START TIME", "END TIME"
+      'DATE',
+      'STK',
+      'TYPE',
+      'COLOR',
+      'ROLL #',
+      'INSPECT #',
+      'FAIL #',
+      'COLOR DIF',
+      'NOTE',
+      'START TIME',
+      'END TIME',
     ],
   }
   let data_row = []
@@ -72,7 +82,7 @@ const exportDataset = (data_detail) => {
   return multiDataSet
 }
 
-const exportDatasetDetail = (data_detail) => {
+const exportDatasetDetail = data_detail => {
   let dataset = []
   dataset.push({
     xSteps: 2,
@@ -81,14 +91,23 @@ const exportDatasetDetail = (data_detail) => {
     data: [[]],
   })
 
-  const rgb_value = "ff00cce6"
+  const rgb_value = 'ff00cce6'
   for (let i = 0; i < data_detail.length; i++) {
-
     let data = {
       xSteps: 0,
       ySteps: 2,
       columns: [
-        "DATE", "STK", "TYPE", "COLOR", "ROLL #", "INSPECT #", "FAIL #", "COLOR DIF", "NOTE", "START TIME", "END TIME"
+        'DATE',
+        'STK',
+        'TYPE',
+        'COLOR',
+        'ROLL #',
+        'INSPECT #',
+        'FAIL #',
+        'COLOR DIF',
+        'NOTE',
+        'START TIME',
+        'END TIME',
       ],
     }
     let data_row = []
@@ -116,10 +135,8 @@ const exportDatasetDetail = (data_detail) => {
     let detail_group = {
       xSteps: 3,
       ySteps: 1,
-      columns: [
-        'LENGTH (MET)', '', 'YARD', 'WIDTH (khổ vải)', '', 'DEFECT ( HÀNG HƯ )'
-      ],
-      data: []
+      columns: ['LENGTH (MET)', '', 'YARD', 'WIDTH (khổ vải)', '', 'DEFECT ( HÀNG HƯ )'],
+      data: [],
     }
     dataset.push(detail_group)
 
@@ -147,7 +164,7 @@ const exportDatasetDetail = (data_detail) => {
         'DEFECTIVE POINT ( số lỗi hư )',
         'RESULT',
         'NOTE',
-        'PHOTO OF DEFECT'
+        'PHOTO OF DEFECT',
       ],
     }
     let details_data = []
@@ -163,9 +180,10 @@ const exportDatasetDetail = (data_detail) => {
         row.push(d.yard_actual)
         row.push(d.width_stick)
         row.push(d.width_actual)
-      }
-      else {
-        for (let k = 0; k < 7; k++) { row.push('') }
+      } else {
+        for (let k = 0; k < 7; k++) {
+          row.push('')
+        }
       }
 
       row.push(d.points)
@@ -184,7 +202,9 @@ const exportDatasetDetail = (data_detail) => {
         row.push(d.detail_note)
         row.push(d.photo_defect)
       } else {
-        for (let k = 0; k < 5; k++) { row.push('') }
+        for (let k = 0; k < 5; k++) {
+          row.push('')
+        }
       }
       details_data.push(row)
     }
@@ -194,7 +214,6 @@ const exportDatasetDetail = (data_detail) => {
 
   return dataset
 }
-
 
 class TestFabricFourPoint extends Component {
   constructor(props) {
@@ -250,7 +269,7 @@ class TestFabricFourPoint extends Component {
             new_data_detail[i] = r
           }
           this.setState({
-            data_detail: new_data_detail
+            data_detail: new_data_detail,
           })
         } else {
           for (let i = 0; i < new_data_detail.length; i++) {
