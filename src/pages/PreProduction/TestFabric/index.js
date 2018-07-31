@@ -263,7 +263,7 @@ class TestFabricListView extends Component {
                         xl={{ span: 8 }}
                       >
                         <FormItem {...formItemLayout} label="Stk">
-                          {getFieldDecorator('invoice_no', {}, {})(<Input />)}
+                          {getFieldDecorator('declare_no', {}, {})(<Input />)}
                         </FormItem>
                       </Col>
                       <Col
@@ -426,9 +426,9 @@ class TestFabricListView extends Component {
                 style={{ marginTop: '5px' }}
                 columns={columns}
                 dataSource={this.state.fabricimport_data}
-                rowClassName={(record, index) => {
-                  return index % 2 === 0 ? 'even-row' : 'old-row'
-                }}
+                //rowClassName={(record, index) => {
+                //  return index % 2 === 0 ? 'even-row' : 'old-row'
+               // }}
                 onRow={record => {
                   return {
                     onClick: () => {

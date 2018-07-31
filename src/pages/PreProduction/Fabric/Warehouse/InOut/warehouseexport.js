@@ -217,7 +217,7 @@ class WarehouseExportForm extends Component {
         onOk={onCreate}
         maskClosable={false}
         onCancel={onCancel}
-        width={1300}
+        width={1200}
         style={{ top: 5 }}
       >
         <Form className="ant-advanced-search-panel">

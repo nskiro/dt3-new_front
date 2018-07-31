@@ -4,11 +4,13 @@ import { Table, Form, Row, Col, Button, Tag } from 'antd'
 import axios from '../../../../axiosInst' //'../../../../../axiosInst'
 import EditableInputCell from '../../../Common/editableinputcell'
 import EditableNumberCell from '../../../Common/editablenumbercell'
-//import EditableDateCell from '../../../Common/editabledatecell'
+import ExportToExcel from '../../../Common/exportToExcel'
+
 import _ from 'lodash'
 import moment from 'moment'
 
 import { formatDate } from '../../../Common/formatdate'
+import EditableDateCell from '../../../Common/editabledatecell';
 const uuidv1 = require('uuid/v1')
 
 const test_fabric_fourpoint = '/api/testfabric/fourpoint/get'
@@ -24,6 +26,176 @@ const defect_items = [
   'uneven_dyed',
 ]
 
+const exportDataset = (data_detail) => {
+  let dataset = []
+  dataset.push({
+    xSteps: 2,
+    ySteps: 0,
+    columns: ['KIỂM TRA HỆ THỐNG 4 ĐIỂM'],
+    data: [[]],
+  })
+
+  let data = {
+    xSteps: 0,
+    ySteps: 2,
+    columns: [
+      "DATE", "STK", "TYPE", "COLOR", "ROLL #", "INSPECT #", "FAIL #", "COLOR DIF", "NOTE", "START TIME", "END TIME"
+    ],
+  }
+  let data_row = []
+
+  for (let i = 0; i < data_detail.length; i++) {
+    let row = []
+    let r = data_detail[i]
+    row.push(moment().format('MM/DD/YYYY'))
+    row.push(r.declare_date)
+    row.push(r.fabric_type)
+    row.push(r.fabric_color)
+    row.push(r.roll)
+    row.push(r.inspect_no)
+    row.push(r.fail_no)
+    row.push(r.color_dif)
+    row.push(r.note)
+    row.push(r.start_date)
+    row.push(r.end_date)
+
+    data_row.push(row)
+  }
+  data.data = data_row
+  dataset.push(data)
+
+  const dataDetail = exportDatasetDetail(data_detail)
+  const multiDataSet = [
+    { data: dataset, sheetname: 'Sheet1' },
+    { data: dataDetail, sheetname: 'Sheet2' },
+  ]
+  return multiDataSet
+}
+
+const exportDatasetDetail = (data_detail) => {
+  let dataset = []
+  dataset.push({
+    xSteps: 2,
+    ySteps: 0,
+    columns: ['KIỂM TRA HỆ THỐNG 4 ĐIỂM'],
+    data: [[]],
+  })
+
+  const rgb_value = "ff00cce6"
+  for (let i = 0; i < data_detail.length; i++) {
+
+    let data = {
+      xSteps: 0,
+      ySteps: 2,
+      columns: [
+        "DATE", "STK", "TYPE", "COLOR", "ROLL #", "INSPECT #", "FAIL #", "COLOR DIF", "NOTE", "START TIME", "END TIME"
+      ],
+    }
+    let data_row = []
+
+    let row = []
+    let r = data_detail[i]
+    row.push(moment().format('MM/DD/YYYY'))
+    row.push(r.declare_date)
+    row.push(r.fabric_type)
+    row.push(r.fabric_color)
+    row.push(r.roll)
+    row.push(r.inspect_no)
+    row.push(r.fail_no)
+    row.push(r.color_dif)
+    row.push(r.note)
+    row.push(r.start_date)
+    row.push(r.end_date)
+
+    data_row.push(row)
+
+    data.data = data_row
+    dataset.push(data)
+
+    //details
+    let detail_group = {
+      xSteps: 3,
+      ySteps: 1,
+      columns: [
+        'LENGTH (MET)', '', 'YARD', 'WIDTH (khổ vải)', '', 'DEFECT ( HÀNG HƯ )'
+      ],
+      data: []
+    }
+    dataset.push(detail_group)
+
+    let details = {
+      xSteps: 1,
+      ySteps: 0,
+      columns: [
+        'NO.',
+        'ROLL',
+        'Sticker (trên nhãn)',
+        'Actual ( thực tế)',
+        'Actual( thực tế)',
+        'Sticker (trên nhãn)',
+        'Actual ( thực tế)',
+        'POINT (ĐIỂM)',
+        'Slub/Nep( Lỗi sợi )',
+        'Fly/Spot (Đốm)',
+        'Hole/Split (Lủng/rách)',
+        'Stain/Oil (Dơ/dầu)',
+        'V.Line( sọc đứng)',
+        'Bare ( Sợi ngang do kim móc)',
+        'Crease/Mark (Gấp nếp)',
+        'Uneven/Dyed (Màu nhuộm)',
+        'TOTAL POINT (Tổng số điểm)',
+        'DEFECTIVE POINT ( số lỗi hư )',
+        'RESULT',
+        'NOTE',
+        'PHOTO OF DEFECT'
+      ],
+    }
+    let details_data = []
+    for (let j = 0; j < r.details.length; j++) {
+      const d = r.details[j]
+      const row = []
+      if (j % 4 === 0) {
+        row.push(d.detail_stt)
+        row.push(d.no_roll)
+        row.push(d.length_stick)
+        row.push(d.length_actual)
+
+        row.push(d.yard_actual)
+        row.push(d.width_stick)
+        row.push(d.width_actual)
+      }
+      else {
+        for (let k = 0; k < 7; k++) { row.push('') }
+      }
+
+      row.push(d.points)
+      row.push(d.slub_nep === 0 ? '' : d.slub_nep)
+      row.push(d.fly_spot === 0 ? '' : d.fly_spot)
+      row.push(d.hole_spliy === 0 ? '' : d.hole_spliy)
+      row.push(d.stain_oil === 0 ? '' : d.stain_oil)
+      row.push(d.vline === 0 ? '' : d.vline)
+      row.push(d.bare === 0 ? '' : d.bare)
+      row.push(d.crease_mark === 0 ? '' : d.crease_mark)
+      row.push(d.uneven_dyed === 0 ? '' : d.uneven_dyed)
+      if (j % 4 === 0) {
+        row.push(d.total_point)
+        row.push(d.defective_point)
+        row.push(d.result)
+        row.push(d.detail_note)
+        row.push(d.photo_defect)
+      } else {
+        for (let k = 0; k < 5; k++) { row.push('') }
+      }
+      details_data.push(row)
+    }
+    details.data = details_data
+    dataset.push(details)
+  }
+
+  return dataset
+}
+
+
 class TestFabricFourPoint extends Component {
   constructor(props) {
     super(props)
@@ -31,7 +203,6 @@ class TestFabricFourPoint extends Component {
       data_received: [],
       data_detail: [],
       data_detail_id: [],
-      loadtestfabricweight_done: false,
       isUpdate: false,
     }
   }
@@ -45,7 +216,6 @@ class TestFabricFourPoint extends Component {
       let nextState = { ...state }
       nextState.data_received = nextProps.data
       nextState.data_detail_id = data_detail_id
-      nextState.loadtestfabricweight_done = false
       return nextState
     }
     return null
@@ -72,7 +242,7 @@ class TestFabricFourPoint extends Component {
             r.end_date = moment().format(formatDate.shortType)
             r.start_date = moment().format(formatDate.shortType)
             let details = []
-            for (let j = 0; j < 2; j++) {
+            for (let j = 0; j < 1; j++) {
               details = details.concat(this.createDataNewRow(j))
             }
 
@@ -80,9 +250,7 @@ class TestFabricFourPoint extends Component {
             new_data_detail[i] = r
           }
           this.setState({
-            data_detail: new_data_detail,
-            loadtestfabricweight_done: true,
-            isUpdate: false,
+            data_detail: new_data_detail
           })
         } else {
           for (let i = 0; i < new_data_detail.length; i++) {
@@ -105,14 +273,12 @@ class TestFabricFourPoint extends Component {
           }
           this.setState({
             data_detail: new_data_detail,
-            loadtestfabricweight_done: true,
-            isUpdate: true,
           })
         }
       })
       .catch(err => {
         console.log(err)
-        this.setState({ data_detail: [], loadtestfabricweight_done: true })
+        this.setState({ data_detail: [] })
       })
   }
 
@@ -299,7 +465,7 @@ class TestFabricFourPoint extends Component {
         title: 'START DATE',
         name: 'START DATE',
         render: (text, record) => (
-          <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'start_date')} />
+          <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'start_date')} />
         ),
       },
       {
@@ -308,7 +474,7 @@ class TestFabricFourPoint extends Component {
         title: 'END DATE',
         name: 'END DATE',
         render: (text, record) => (
-          <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'end_date')} />
+          <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'end_date')} />
         ),
       },
     ]
@@ -640,8 +806,11 @@ class TestFabricFourPoint extends Component {
       )
     }
     const { data_detail } = this.state
+    const multiDataSet = exportDataset(data_detail)
+    const filename = '4foint - ' + moment().format('MM/DD/YYYY h:mm:ss')
     return (
       <Form>
+        <ExportToExcel dataset={multiDataSet} filename={filename} />
         <Table
           rowKey={'_id'}
           size="small"
@@ -651,9 +820,6 @@ class TestFabricFourPoint extends Component {
           pagination={false}
           dataSource={data_detail}
           expandedRowRender={expandedRowRender}
-          //rowClassName={(record, index) => {
-          //  return index % 2 === 0 ? 'even-row' : 'old-row'
-          //}}
         />
       </Form>
     )

@@ -87,7 +87,7 @@ class TestFabricSkewShrinlege extends Component {
             r.end_date = moment().format(formatDate.shortType)
             r.start_date = moment().format(formatDate.shortType)
             let details = []
-            for (let j = 0; j < 2; j++) {
+            for (let j = 0; j < 1; j++) {
               details = details.concat(this.createDataNewRow(j))
             }
             r.details = details

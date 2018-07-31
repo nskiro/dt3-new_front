@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import ExcelFileSheet from 'react-data-export'
+import ReactExport from 'react-data-export'
 
 import { Input, Form, Modal, Button, DatePicker, Select, Table, Row, Col } from 'antd'
 import { formItemLayout, tailFormItemLayout } from '../../../../Common/FormStyle'
@@ -13,7 +13,9 @@ const Option = Select.Option
 
 const FormItem = Form.Item
 
-const { ExcelFile, ExcelSheet } = ExcelFileSheet
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+//const { ExcelFile, ExcelSheet } = ExcelFileSheet
 
 const FORMAT_SHORT_DATE = 'MM/DD/YYYY'
 const FORMAT_LONG_DATE = 'MM/DD/YYYY HH:mm:ss'
@@ -555,7 +557,6 @@ if (i >= 0 && i < this.state.data_inventory.length) {
   }
 
   loadFabricTypes = () => {
-    console.log('loadFabricTypes')
     axios
       .get('api/fabric/type/get', { params: {} })
       .then(res => {
