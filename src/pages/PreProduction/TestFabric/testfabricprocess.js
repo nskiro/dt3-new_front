@@ -275,6 +275,7 @@ class TestFabricProcessView extends Component {
         content: (
           <TestFabricRelaxWapper
             data={this.state.import_row_selected_details}
+            
             wrappedComponentRef={ref => (this.relaxChild = ref)}
           />
         ),
@@ -302,6 +303,7 @@ class TestFabricProcessView extends Component {
         content: (
           <TestFabricFourPointWapper
             data={this.state.import_row_selected_details}
+            data_parent ={this.state.import_row_selected}
             wrappedComponentRef={ref => (this.fourPointChild = ref)}
           />
         ),
