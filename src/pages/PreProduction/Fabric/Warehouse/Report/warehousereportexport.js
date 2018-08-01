@@ -25,14 +25,12 @@ const Option = Select.Option
 
 const FormItem = Form.Item
 //const { ExcelFile, ExcelSheet } = ExcelFileSheet
-const ExcelFile = ReactExport.ExcelFile;
-const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelFile = ReactExport.ExcelFile
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet
 
 const dateFormat = 'MM/DD/YYYY'
 const button_size = 'small'
 const tab_size = 'small'
-
-
 
 class WarehouseReportExport extends Component {
   constructor(props) {
@@ -214,7 +212,7 @@ class WarehouseReportExport extends Component {
                 fab_qty: detail.fab_qty,
                 note: detail.note,
 
-                _id: detail._id
+                _id: detail._id,
               })
             }
           }
@@ -584,7 +582,11 @@ class WarehouseReportExport extends Component {
                 }
                 filename={'Export - ' + moment().format('MM/DD/YYYY h:mm:ss')}
               >
-                <ExcelSheet dataSet={this.exportDataset()} name="Export" key={moment().format('MM/DD/YYYY h:mm:ss')} />
+                <ExcelSheet
+                  dataSet={this.exportDataset()}
+                  name="Export"
+                  key={moment().format('MM/DD/YYYY h:mm:ss')}
+                />
               </ExcelFile>
             </div>
             <Table
@@ -600,7 +602,7 @@ class WarehouseReportExport extends Component {
                   onClick: () => {
                     this.setState({ selected_fabrictype: record })
                   },
-                  onMouseEnter: () => { },
+                  onMouseEnter: () => {},
                 }
               }}
               size="small"

@@ -10,8 +10,8 @@ import '../views.css'
 
 const Option = Select.Option
 const FormItem = Form.Item
-const ExcelFile = ReactExport.ExcelFile;
-const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelFile = ReactExport.ExcelFile
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet
 //const { ExcelFile, ExcelSheet } = ExcelFileSheet
 
 const FORMAT_SHORT_DATE = 'MM/DD/YYYY'
@@ -189,7 +189,7 @@ class WarehouseReportImport extends Component {
             for (let j = 0; j < row.details.length; j++) {
               let detail = row.details[j]
               data.push({
-                _id:detail._id,
+                _id: detail._id,
                 inputdate_no: row.inputdate_no,
                 invoice_no: row.invoice_no,
                 provider_name: row.provider_name,
@@ -485,7 +485,11 @@ class WarehouseReportImport extends Component {
                 }
                 filename={'Import - ' + moment().format('MM/DD/YYYY h:mm:ss')}
               >
-                <ExcelSheet dataSet={dataset} name="Imports" key={moment().format('MM/DD/YYYY h:mm:ss')} />
+                <ExcelSheet
+                  dataSet={dataset}
+                  name="Imports"
+                  key={moment().format('MM/DD/YYYY h:mm:ss')}
+                />
               </ExcelFile>
             </div>
             <Table

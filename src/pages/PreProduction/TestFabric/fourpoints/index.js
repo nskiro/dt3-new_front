@@ -10,7 +10,7 @@ import _ from 'lodash'
 import moment from 'moment'
 
 import { formatDate } from '../../../Common/formatdate'
-import EditableDateCell from '../../../Common/editabledatecell';
+import EditableDateCell from '../../../Common/editabledatecell'
 const uuidv1 = require('uuid/v1')
 
 const test_fabric_fourpoint = '/api/testfabric/fourpoint/get'
@@ -26,7 +26,7 @@ const defect_items = [
   'uneven_dyed',
 ]
 
-const exportDataset = (data_detail) => {
+const exportDataset = (data_detail, data_parent) => {
   let dataset = []
   dataset.push({
     xSteps: 2,
@@ -39,7 +39,17 @@ const exportDataset = (data_detail) => {
     xSteps: 0,
     ySteps: 2,
     columns: [
-      "DATE", "STK", "TYPE", "COLOR", "ROLL #", "INSPECT #", "FAIL #", "COLOR DIF", "NOTE", "START TIME", "END TIME"
+      'DATE',
+      'STK',
+      'TYPE',
+      'COLOR',
+      'ROLL #',
+      'INSPECT #',
+      'FAIL #',
+      'COLOR DIF',
+      'NOTE',
+      'START TIME',
+      'END TIME',
     ],
   }
   let data_row = []
@@ -64,7 +74,7 @@ const exportDataset = (data_detail) => {
   data.data = data_row
   dataset.push(data)
 
-  const dataDetail = exportDatasetDetail(data_detail)
+  const dataDetail = exportDatasetDetail(data_detail, data_parent)
   const multiDataSet = [
     { data: dataset, sheetname: 'Sheet1' },
     { data: dataDetail, sheetname: 'Sheet2' },
@@ -72,7 +82,7 @@ const exportDataset = (data_detail) => {
   return multiDataSet
 }
 
-const exportDatasetDetail = (data_detail) => {
+const exportDatasetDetail = (data_detail, data_parent) => {
   let dataset = []
   dataset.push({
     xSteps: 2,
@@ -81,22 +91,31 @@ const exportDatasetDetail = (data_detail) => {
     data: [[]],
   })
 
-  const rgb_value = "ff00cce6"
+  const rgb_value = 'ff00cce6'
   for (let i = 0; i < data_detail.length; i++) {
-
     let data = {
       xSteps: 0,
       ySteps: 2,
       columns: [
-        "DATE", "STK", "TYPE", "COLOR", "ROLL #", "INSPECT #", "FAIL #", "COLOR DIF", "NOTE", "START TIME", "END TIME"
+        'DATE',
+        'STK',
+        'TYPE',
+        'COLOR',
+        'ROLL #',
+        'INSPECT #',
+        'FAIL #',
+        'COLOR DIF',
+        'NOTE',
+        'START TIME',
+        'END TIME',
       ],
     }
     let data_row = []
 
     let row = []
     let r = data_detail[i]
-    row.push(moment().format('MM/DD/YYYY'))
-    row.push(r.declare_date)
+    row.push(moment(new Date(data_parent.declare_date)).format('MM/DD/YYYY'))
+    row.push(data_parent.declare_no)
     row.push(r.fabric_type)
     row.push(r.fabric_color)
     row.push(r.roll)
@@ -116,10 +135,8 @@ const exportDatasetDetail = (data_detail) => {
     let detail_group = {
       xSteps: 3,
       ySteps: 1,
-      columns: [
-        'LENGTH (MET)', '', 'YARD', 'WIDTH (khổ vải)', '', 'DEFECT ( HÀNG HƯ )'
-      ],
-      data: []
+      columns: ['LENGTH (MET)', '', 'YARD', 'WIDTH (khổ vải)', '', 'DEFECT ( HÀNG HƯ )'],
+      data: [],
     }
     dataset.push(detail_group)
 
@@ -147,7 +164,7 @@ const exportDatasetDetail = (data_detail) => {
         'DEFECTIVE POINT ( số lỗi hư )',
         'RESULT',
         'NOTE',
-        'PHOTO OF DEFECT'
+        'PHOTO OF DEFECT',
       ],
     }
     let details_data = []
@@ -163,9 +180,10 @@ const exportDatasetDetail = (data_detail) => {
         row.push(d.yard_actual)
         row.push(d.width_stick)
         row.push(d.width_actual)
-      }
-      else {
-        for (let k = 0; k < 7; k++) { row.push('') }
+      } else {
+        for (let k = 0; k < 7; k++) {
+          row.push('')
+        }
       }
 
       row.push(d.points)
@@ -184,7 +202,9 @@ const exportDatasetDetail = (data_detail) => {
         row.push(d.detail_note)
         row.push(d.photo_defect)
       } else {
-        for (let k = 0; k < 5; k++) { row.push('') }
+        for (let k = 0; k < 5; k++) {
+          row.push('')
+        }
       }
       details_data.push(row)
     }
@@ -194,7 +214,6 @@ const exportDatasetDetail = (data_detail) => {
 
   return dataset
 }
-
 
 class TestFabricFourPoint extends Component {
   constructor(props) {
@@ -215,7 +234,9 @@ class TestFabricFourPoint extends Component {
       })
       let nextState = { ...state }
       nextState.data_received = nextProps.data
+      nextState.data_parent = nextProps.data_parent
       nextState.data_detail_id = data_detail_id
+      console.log('data_parent ==' + JSON.stringify(nextState.data_parent))
       return nextState
     }
     return null
@@ -250,7 +271,7 @@ class TestFabricFourPoint extends Component {
             new_data_detail[i] = r
           }
           this.setState({
-            data_detail: new_data_detail
+            data_detail: new_data_detail,
           })
         } else {
           for (let i = 0; i < new_data_detail.length; i++) {
@@ -805,8 +826,8 @@ class TestFabricFourPoint extends Component {
         </div>
       )
     }
-    const { data_detail } = this.state
-    const multiDataSet = exportDataset(data_detail)
+    const { data_detail, data_parent } = this.state
+    const multiDataSet = exportDataset(data_detail, data_parent)
     const filename = '4foint - ' + moment().format('MM/DD/YYYY h:mm:ss')
     return (
       <Form>

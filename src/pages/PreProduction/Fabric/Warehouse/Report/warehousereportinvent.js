@@ -13,8 +13,8 @@ const Option = Select.Option
 
 const FormItem = Form.Item
 
-const ExcelFile = ReactExport.ExcelFile;
-const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelFile = ReactExport.ExcelFile
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet
 //const { ExcelFile, ExcelSheet } = ExcelFileSheet
 
 const FORMAT_SHORT_DATE = 'MM/DD/YYYY'
