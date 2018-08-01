@@ -26,7 +26,7 @@ const defect_items = [
   'uneven_dyed',
 ]
 
-const exportDataset = (data_detail,data_parent) => {
+const exportDataset = (data_detail, data_parent) => {
   let dataset = []
   dataset.push({
     xSteps: 2,
@@ -74,7 +74,7 @@ const exportDataset = (data_detail,data_parent) => {
   data.data = data_row
   dataset.push(data)
 
-  const dataDetail = exportDatasetDetail(data_detail,data_parent)
+  const dataDetail = exportDatasetDetail(data_detail, data_parent)
   const multiDataSet = [
     { data: dataset, sheetname: 'Sheet1' },
     { data: dataDetail, sheetname: 'Sheet2' },
@@ -82,7 +82,7 @@ const exportDataset = (data_detail,data_parent) => {
   return multiDataSet
 }
 
-const exportDatasetDetail = (data_detail,data_parent) => {
+const exportDatasetDetail = (data_detail, data_parent) => {
   let dataset = []
   dataset.push({
     xSteps: 2,
@@ -236,7 +236,7 @@ class TestFabricFourPoint extends Component {
       nextState.data_received = nextProps.data
       nextState.data_parent = nextProps.data_parent
       nextState.data_detail_id = data_detail_id
-      console.log('data_parent ==' +JSON.stringify(nextState.data_parent))
+      console.log('data_parent ==' + JSON.stringify(nextState.data_parent))
       return nextState
     }
     return null
@@ -826,8 +826,8 @@ class TestFabricFourPoint extends Component {
         </div>
       )
     }
-    const { data_detail,data_parent } = this.state
-    const multiDataSet = exportDataset(data_detail,data_parent)
+    const { data_detail, data_parent } = this.state
+    const multiDataSet = exportDataset(data_detail, data_parent)
     const filename = '4foint - ' + moment().format('MM/DD/YYYY h:mm:ss')
     return (
       <Form>
