@@ -10,8 +10,6 @@ import DateFormatter from '../dateformatter'
 
 import moment from 'moment'
 import axios from '../../../../../axiosInst'
-//css
-import '../views.css'
 
 const FormItem = Form.Item
 const Panel = Collapse.Panel

@@ -20,7 +20,6 @@ import _ from 'lodash'
 import { formItemLayout, tailFormItemLayout } from '../../../../Common/FormStyle'
 
 //css
-import '../views.css'
 const Option = Select.Option
 
 const FormItem = Form.Item
@@ -318,7 +317,6 @@ class WarehouseReportExport extends Component {
     return dataset
   }
   handleChange = (pagination, filters, sorter) => {
-    console.log('Various parameters', pagination, filters, sorter)
     this.setState({
       filteredInfo: filters,
       sortedInfo: sorter,

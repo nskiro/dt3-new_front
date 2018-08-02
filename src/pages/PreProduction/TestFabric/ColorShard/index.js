@@ -8,10 +8,140 @@ import EditableInputCell from '../../../Common/editableinputcell'
 import EditableNumberCell from '../../../Common/editablenumbercell'
 import EditableDateCell from '../../../Common/editabledatecell'
 import { formatDate } from '../../../Common/formatdate'
+import ExportToExcel from '../../../Common/exportToExcel'
 
 const uuidv1 = require('uuid/v1')
 
 const test_fabric_colorshard_get = '/api/testfabric/colorshard/get'
+
+const BORDER_STYLE = 'thin'
+const COLOR_SPEC = 'FF000000'
+
+const exportDataset = (data_detail, data_parent) => {
+  let dataset = []
+  dataset.push({
+    xSteps: 2,
+    ySteps: 0,
+    columns: ['PHÂN TÁCH NHÓM MÀU 100%'],
+    data: [],
+  })
+
+  let data = {
+    xSteps: 0,
+    ySteps: 2,
+    columns: ['DATE', 'STK', 'TYPE', 'COLOR', 'ROLL #', 'SHADING #', 'GROUP#', 'NOTE', 'START TIME', 'END TIME'],
+  }
+  let data_row = []
+
+  for (let i = 0; i < data_detail.length; i++) {
+    let row = []
+    let r = data_detail[i]
+    row.push(moment(new Date(data_parent.declare_date)).format('MM/DD/YYYY'))
+    row.push(data_parent.declare_no)
+    row.push(r.fabric_type)
+    row.push(r.fabric_color)
+    row.push(r.roll)
+    row.push(r.shard_no === 0 ? '' : r.shard_no)
+    row.push(r.group_no === 0 ? '' : r.group_no)
+    row.push(r.note)
+    row.push(r.start_date)
+    row.push(r.end_date)
+
+    for (let j = 0; j < row.length; j++) {
+      if (i % 2 === 0) {
+        let j_value = { value: row[j] + '', style: { border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } }, fill: { patternType: "solid", fgColor: { rgb: "FFFFFF00" } } } }
+        row[j] = j_value
+      } else {
+        let j_value = { value: row[j] + '', style: { border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } } } }
+        row[j] = j_value
+      }
+    }
+
+    data_row.push(row)
+  }
+  data.data = data_row
+  dataset.push(data)
+
+  const dataDetail = exportDatasetDetail(data_detail, data_parent)
+  const multiDataSet = [
+    { data: dataset, sheetname: 'Sheet1' },
+    { data: dataDetail, sheetname: 'Sheet2' },
+  ]
+  return multiDataSet
+}
+
+const exportDatasetDetail = (data_detail, data_parent) => {
+  let dataset = []
+  dataset.push({
+    xSteps: 2,
+    ySteps: 0,
+    columns: ['PHÂN TÁCH NHÓM MÀU 100%'],
+    data: [],
+  })
+
+  const rgb_value = 'ff00cce6'
+  for (let i = 0; i < data_detail.length; i++) {
+    let data = {
+      xSteps: 0,
+      ySteps: 2,
+      columns: ['DATE', 'STK', 'TYPE', 'COLOR', 'ROLL #', 'SHADING #', 'GROUP#', 'NOTE', 'START TIME', 'END TIME'],
+    }
+    let data_row = []
+
+    let row = []
+    let r = data_detail[i]
+    row.push(moment(new Date(data_parent.declare_date)).format('MM/DD/YYYY'))
+    row.push(data_parent.declare_no)
+    row.push(r.fabric_type)
+    row.push(r.fabric_color)
+    row.push(r.roll)
+    row.push(r.shard_no === 0 ? '' : r.shard_no)
+    row.push(r.group_no === 0 ? '' : r.group_no)
+    row.push(r.note)
+    row.push(r.start_date)
+    row.push(r.end_date)
+
+    for (let j = 0; j < row.length; j++) {
+      let j_value = { value: row[j] + '', style: { auto: 1, fill: { patternType: "solid", fgColor: { rgb: "FFFFFF00" } } } }
+      row[j] = j_value
+    }
+
+    data_row.push(row)
+
+    data.data = data_row
+    dataset.push(data)
+
+    let details = {
+      xSteps: 0,
+      ySteps: 1,
+      columns: ['STT', 'SỐ ROLL', 'SỐ MÉT', 'NHÓM', 'GHI CHÚ'],
+    }
+    let details_data = []
+    for (let j = 0; j < r.details.length; j++) {
+      const d = r.details[j]
+      const row = []
+      row.push(d.detail_stt)
+      row.push(d.roll_no)
+      row.push(d.met_no === 0 ? '' : d.met_no)
+      row.push(d.group_no_detail === 0 ? '' : d.group_no_detail)
+      row.push(d.detail_note)
+      for (let k = 0; k < row.length; k++) {
+        if (j % 2 === 0) {
+          let k_value = { value: row[k] + '', style: { auto: 1, border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } }, fill: { patternType: "solid", fgColor: { rgb: "FFCCEEFF" } } } }
+          row[k] = k_value
+        } else {
+          let k_value = { value: row[k] + '', style: { auto: 1, border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } } } }
+          row[k] = k_value
+        }
+      }
+      details_data.push(row)
+    }
+    details.data = details_data
+    dataset.push(details)
+  }
+
+  return dataset
+}
 
 class TestFabricColorShard extends Component {
   constructor(props) {
@@ -31,6 +161,7 @@ class TestFabricColorShard extends Component {
       })
       let nextState = { ...state }
       nextState.data_received = nextProps.data
+      nextState.data_parent = nextProps.data_parent
       nextState.data_detail_id = data_detail_id
       return nextState
     }
@@ -51,10 +182,8 @@ class TestFabricColorShard extends Component {
         if (_.isEmpty(data.data)) {
           for (let i = 0; i < new_data_detail.length; i++) {
             let r = new_data_detail[i]
-            r.met_no = 0
-            r.roll_no = 0
             r.shard_no = 0
-            r.group_no = ''
+            r.group_no = 0
             r.note = ''
             r.end_date = moment(new Date()).format(formatDate.shortType)
             r.start_date = moment(new Date()).format(formatDate.shortType)
@@ -70,8 +199,6 @@ class TestFabricColorShard extends Component {
           for (let i = 0; i < new_data_detail.length; i++) {
             const find_shard = _.find(data.data, { _id: new_data_detail[i]._id })
             if (find_shard) {
-              new_data_detail[i].test_no = find_shard.test_no
-              new_data_detail[i].roll_no = find_shard.roll_no
               new_data_detail[i].shard_no = find_shard.shard_no
               new_data_detail[i].group_no = find_shard.group_no
               new_data_detail[i].note = find_shard.note
@@ -168,11 +295,8 @@ class TestFabricColorShard extends Component {
       },
       {
         title: 'ROLL #',
-        dataIndex: 'roll_no',
-        key: 'roll_no',
-        render: (text, record, index) => (
-          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'roll_no')} />
-        ),
+        dataIndex: 'roll',
+        key: 'roll'
       },
       {
         title: 'SHARDING #',
@@ -215,8 +339,9 @@ class TestFabricColorShard extends Component {
         ),
       },
     ]
-    const { data_detail } = this.state
-
+    const { data_detail, data_parent } = this.state
+    const multiDataSet = exportDataset(data_detail, data_parent)
+    const filename = data_parent.declare_no + '-colorshard-' + moment().format('MMDDYYYYhhmmss')
     const expandedRowRender = r => {
       const fabricshard_id = r._id
       const columns = [
@@ -301,6 +426,7 @@ class TestFabricColorShard extends Component {
 
     return (
       <Form>
+        <ExportToExcel dataset={multiDataSet} filename={filename} />
         <Table
           rowKey={'_id'}
           size="small"
@@ -310,9 +436,9 @@ class TestFabricColorShard extends Component {
           pagination={false}
           dataSource={data_detail}
           expandedRowRender={expandedRowRender}
-          // rowClassName={(record, index) => {
-          //   return index % 2 === 0 ? 'even-row' : 'old-row'
-          // }}
+        // rowClassName={(record, index) => {
+        //   return index % 2 === 0 ? 'even-row' : 'old-row'
+        // }}
         />
       </Form>
     )

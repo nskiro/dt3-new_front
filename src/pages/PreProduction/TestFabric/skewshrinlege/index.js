@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { Table, Button, Tag, Icon, Row, Col } from 'antd'
+import { Table, Button, Tag, Form, Icon, Row, Col } from 'antd'
 import EditableInputCell from '../../../Common/editableinputcell'
 import EditableNumberCell from '../../../Common/editablenumbercell'
 import EditableDateCell from '../../../Common/editabledatecell'
 import { formItemLayout, tailFormItemLayout } from '../../../Common/FormStyle'
 import { formatDate } from '../../../Common/formatdate'
+import ExportToExcel from '../../../Common/exportToExcel'
 
 import axios from '../../../../axiosInst' //'../../../../../axiosInst'
 import _ from 'lodash'
@@ -15,6 +16,172 @@ import { isBuffer } from 'util'
 const uuidv1 = require('uuid/v1')
 const decimal_fix = 1
 const test_fabric_skew_get = '/api/testfabric/skew/get'
+
+const BORDER_STYLE = 'thin'
+const COLOR_SPEC = 'FF000000'
+
+const exportDataset = (data_detail, data_parent) => {
+  let dataset = []
+  dataset.push({
+    xSteps: 2,
+    ySteps: 0,
+    columns: ['KIỂM TRA ĐỘ CO RÚT'],
+    data: [],
+  })
+
+  let data = {
+    xSteps: 0,
+    ySteps: 2,
+    columns: ['DATE', 'STK', 'TYPE', 'COLOR', 'ROLL #', 'TEST #', 'FAIL #', 'NOTE', 'START TIME', 'END TIME'],
+  }
+  let data_row = []
+
+  for (let i = 0; i < data_detail.length; i++) {
+    let row = []
+    let r = data_detail[i]
+    row.push(moment(new Date(data_parent.declare_date)).format('MM/DD/YYYY'))
+    row.push(data_parent.declare_no)
+    row.push(r.fabric_type)
+    row.push(r.fabric_color)
+    row.push(r.roll)
+    row.push(r.test_no)
+    row.push(r.fail_no)
+    row.push(r.condition)
+    row.push(r.note)
+    row.push(r.start_date)
+    row.push(r.end_date)
+
+    for (let j = 0; j < row.length; j++) {
+      if (i % 2 === 0) {
+        let j_value = { value: row[j] + '', style: { border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } }, fill: { patternType: "solid", fgColor: { rgb: "FFFFFF00" } } } }
+        row[j] = j_value
+      } else {
+        let j_value = { value: row[j] + '', style: { border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } } } }
+        row[j] = j_value
+      }
+    }
+
+
+    data_row.push(row)
+  }
+  data.data = data_row
+  dataset.push(data)
+
+  const dataDetail = exportDatasetDetail(data_detail, data_parent)
+  const multiDataSet = [
+    { data: dataset, sheetname: 'Sheet1' },
+    { data: dataDetail, sheetname: 'Sheet2' },
+  ]
+  return multiDataSet
+}
+const exportDatasetDetail = (data_detail, data_parent) => {
+  let dataset = []
+  dataset.push({
+    xSteps: 2,
+    ySteps: 0,
+    columns: ['KIỂM TRA ĐỘ CO RÚT'],
+    data: [],
+  })
+
+  const rgb_value = 'ff00cce6'
+  for (let i = 0; i < data_detail.length; i++) {
+    let data = {
+      xSteps: 0,
+      ySteps: 2,
+      columns: ['DATE', 'STK', 'TYPE', 'COLOR', 'ROLL #', 'TEST #', 'FAIL #', 'NOTE', 'START TIME', 'END TIME'],
+    }
+    let data_row = []
+
+
+
+    let row = []
+    let r = data_detail[i]
+    row.push(moment(new Date(data_parent.declare_date)).format('MM/DD/YYYY'))
+    row.push(data_parent.declare_no)
+    row.push(r.fabric_type)
+    row.push(r.fabric_color)
+    row.push(r.roll)
+    row.push(r.test_no)
+    row.push(r.fail_no)
+    row.push(r.note)
+    row.push(r.start_date)
+    row.push(r.end_date)
+
+    for (let j = 0; j < row.length; j++) {
+      let j_value = { value: row[j] + '', style: { fill: { patternType: "solid", fgColor: { rgb: "FFFFFF00" } } } }
+      row[j] = j_value
+    }
+
+    data_row.push(row)
+
+    data.data = data_row
+    dataset.push(data)
+
+    dataset.push({
+      xSteps: 0,
+      ySteps: 1,
+      columns: ['', 'After Iron( Sau khi ủi )', '', '', 'After Washing( Sau khi giặt )', '', '', 'Pass/Fail(Đạt/Không đạt)', 'Remarks (Ghi chú )'],
+      data: [],
+    })
+    dataset.push({
+      xSteps: 0,
+      ySteps: 0,
+      columns: ['', 'Shrinkage(Độ rút )', '', 'Skew (Độ xéo)', 'Shrinkage (Độ rút )', '', 'Skew (Độ xéo)', '', ''],
+      data: [],
+    })
+    let details = {
+      xSteps: 0,
+      ySteps: 0,
+      columns: ['', 'Length (Dài )', 'Width (Rộng)', '', 'Length (Dài )', 'Width (Rộng)', '', '', ''],
+    }
+    let details_data = []
+    for (let j = 0; j < r.details.length; j++) {
+      const d = r.details[j]
+      const row = []
+      row.push(d.detail_stt)
+      if (j % 4 === 3) {
+        row.push(d.iron_length === 0 ? '' : d.iron_length + "%")
+        row.push(d.iron_width === 0 ? '' : d.iron_width + "%")
+        row.push(d.iron_skew === 0 ? '' : d.iron_skew + "%")
+
+        row.push(d.washing_length === 0 ? '' : d.washing_length + "%")
+        row.push(d.washing_width === 0 ? '' : d.washing_width + "%")
+        row.push(d.washing_skew === 0 ? '' : d.washing_skew + "%")
+      } else {
+        row.push(d.iron_length === 0 ? '' : d.iron_length)
+        row.push(d.iron_width === 0 ? '' : d.iron_width)
+        if (j % 4 === 0) { row.push(d.iron_skew === 0 ? '' : 'AC:' + d.iron_skew) }
+        else if (j % 4 === 1) { row.push(d.iron_skew === 0 ? '' : 'BD:' + d.iron_skew) }
+        else { row.push('') }
+
+        row.push(d.washing_length === 0 ? '' : d.washing_length)
+        row.push(d.washing_width === 0 ? '' : d.washing_width)
+        if (j % 4 === 0) { row.push(d.washing_skew === 0 ? '' : 'AC:' + d.washing_skew) }
+        else if (j % 4 === 1) { row.push(d.washing_skew === 0 ? '' : 'BD:' + d.washing_skew) }
+        else { row.push('') }
+      }
+
+      row.push(d.isPass)
+      row.push(d.remark)
+
+      for (let k = 0; k < row.length; k++) {
+        if (j % 4 === 3) {
+          let k_value = { value: row[k] ? row[k] + '' : '', style: { auto: 1, border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } }, fill: { patternType: "solid", fgColor: { rgb: "FFCCEEFF" } } } }
+          row[k] = k_value
+        } else {
+          let k_value = { value: row[k] ? row[k] + '' : '', style: { auto: 1, border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } } } }
+          row[k] = k_value
+        }
+      }
+
+      details_data.push(row)
+    }
+    details.data = details_data
+    dataset.push(details)
+  }
+
+  return dataset
+}
 
 class TestFabricSkewShrinlege extends Component {
   constructor(props) {
@@ -35,6 +202,7 @@ class TestFabricSkewShrinlege extends Component {
       })
       let nextState = { ...state }
       nextState.data_received = nextProps.data
+      nextState.data_parent = nextProps.data_parent
       nextState.data_detail_id = data_detail_id
       nextState.loadtestfabricskew_done = false
       return nextState
@@ -155,7 +323,7 @@ class TestFabricSkewShrinlege extends Component {
         if (dataIndex === 'condition') {
           const size = Math.floor(target.details.length / 4)
           for (let i = 0; i < size; i++) {
-            const start_line = size * i
+            const start_line = i * 4
 
             let iron_length_total = 0
             let iron_width_total = 0
@@ -227,10 +395,10 @@ class TestFabricSkewShrinlege extends Component {
 
             let group_size = Math.floor(target.details.length / 4)
             for (let i = 0; i < group_size; i++) {
-              if (target.details[group_size * i + 3]['isPass'] === 'FAIL') {
+              if (target.details[(4 * i) + 3]['isPass'] === 'FAIL') {
                 fail_no += 1
                 test_no += 1
-              } else if (target.details[group_size * i + 3]['isPass'] === 'PASS') {
+              } else if (target.details[(4 * i) + 3]['isPass'] === 'PASS') {
                 test_no += 1
               }
             }
@@ -248,11 +416,12 @@ class TestFabricSkewShrinlege extends Component {
       const data_detail = [...this.state.data_detail]
       const target = data_detail.find(item => item._id === fabricrelax_id)
       if (target) {
+        console.log('row_index ==' + row_index + ',dataIndex ==' + dataIndex)
         target.details[row_index][dataIndex] = value
 
         const group_row = Math.floor(row_index / 4)
         const start_line = group_row * 4
-
+        console.log('start_line ==' + start_line)
         let iron_length_total = 0
         let iron_width_total = 0
 
@@ -325,10 +494,10 @@ class TestFabricSkewShrinlege extends Component {
 
           let group_size = Math.floor(target.details.length / 4)
           for (let i = 0; i < group_size; i++) {
-            if (target.details[group_size * i + 3]['isPass'] === 'FAIL') {
+            if (target.details[(4 * i) + 3]['isPass'] === 'FAIL') {
               fail_no += 1
               test_no += 1
-            } else if (target.details[group_size * i + 3]['isPass'] === 'PASS') {
+            } else if (target.details[(4 * i) + 3]['isPass'] === 'PASS') {
               test_no += 1
             }
           }
@@ -611,21 +780,23 @@ class TestFabricSkewShrinlege extends Component {
         </div>
       )
     }
-
+    const { data_detail, data_parent } = this.state
+    const multiDataSet = exportDataset(data_detail, data_parent)
+    const filename = data_parent.declare_no + '-skewshrinlege-' + moment().format('MMDDYYYYhhmmss')
     return (
-      <Table
-        rowKey={'_id'}
-        size="small"
-        bordered
-        style={{ marginTop: '5px' }}
-        columns={columns}
-        pagination={false}
-        dataSource={this.state.data_detail}
-        expandedRowRender={expandedRowRender}
-        //rowClassName={(record, index) => {
-        //  return index % 2 === 0 ? 'even-row' : 'old-row'
-        //}}
-      />
+      <Form>
+        <ExportToExcel dataset={multiDataSet} filename={filename} />
+        <Table
+          rowKey={'_id'}
+          size="small"
+          bordered
+          style={{ marginTop: '5px' }}
+          columns={columns}
+          pagination={false}
+          dataSource={data_detail}
+          expandedRowRender={expandedRowRender}
+        />
+      </Form>
     )
   }
 }

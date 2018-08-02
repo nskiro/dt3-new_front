@@ -8,8 +8,7 @@ import DateFormatter from '../dateformatter'
 
 import moment from 'moment'
 import axios from '../../../../../axiosInst'
-//css
-import '../views.css'
+
 const FORMAT_LONG_DATE = 'MM/DD/YYYY HH:mm:ss'
 
 const FormItem = Form.Item

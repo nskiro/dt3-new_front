@@ -15,6 +15,9 @@ const uuidv1 = require('uuid/v1')
 
 const test_fabric_fourpoint = '/api/testfabric/fourpoint/get'
 
+const BORDER_STYLE = 'thin'
+const COLOR_SPEC = 'FF000000'
+
 const defect_items = [
   'slub_nep',
   'fly_spot',
@@ -57,8 +60,8 @@ const exportDataset = (data_detail, data_parent) => {
   for (let i = 0; i < data_detail.length; i++) {
     let row = []
     let r = data_detail[i]
-    row.push(moment().format('MM/DD/YYYY'))
-    row.push(r.declare_date)
+    row.push(moment(new Date(data_parent.declare_date)).format('MM/DD/YYYY'))
+    row.push(data_parent.declare_no)
     row.push(r.fabric_type)
     row.push(r.fabric_color)
     row.push(r.roll)
@@ -68,6 +71,15 @@ const exportDataset = (data_detail, data_parent) => {
     row.push(r.note)
     row.push(r.start_date)
     row.push(r.end_date)
+    for (let j = 0; j < row.length; j++) {
+      if (i % 2 === 0) {
+        let j_value = { value: row[j] + '', style: { border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } }, fill: { patternType: "solid", fgColor: { rgb: "FFFFFF00" } } } }
+        row[j] = j_value
+      } else {
+        let j_value = { value: row[j] + '', style: { border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } } } }
+        row[j] = j_value
+      }
+    }
 
     data_row.push(row)
   }
@@ -126,6 +138,10 @@ const exportDatasetDetail = (data_detail, data_parent) => {
     row.push(r.start_date)
     row.push(r.end_date)
 
+    for (let j = 0; j < row.length; j++) {
+      let j_value = { value: row[j] + '', style: { auto: 1, fill: { patternType: "solid", fgColor: { rgb: "FFFFFF00" } } } }
+      row[j] = j_value
+    }
     data_row.push(row)
 
     data.data = data_row
@@ -206,6 +222,17 @@ const exportDatasetDetail = (data_detail, data_parent) => {
           row.push('')
         }
       }
+
+      for (let k = 0; k < row.length; k++) {
+        if (j % 2 === 0) {
+          let k_value = { value: row[k] + '', style: { auto: 1, border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } }, fill: { patternType: "solid", fgColor: { rgb: "FFCCEEFF" } } } }
+          row[k] = k_value
+        } else {
+          let k_value = { value: row[k] + '', style: { auto: 1, border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } } } }
+          row[k] = k_value
+        }
+      }
+
       details_data.push(row)
     }
     details.data = details_data
@@ -236,7 +263,6 @@ class TestFabricFourPoint extends Component {
       nextState.data_received = nextProps.data
       nextState.data_parent = nextProps.data_parent
       nextState.data_detail_id = data_detail_id
-      console.log('data_parent ==' + JSON.stringify(nextState.data_parent))
       return nextState
     }
     return null
@@ -410,11 +436,12 @@ class TestFabricFourPoint extends Component {
           let inspect_no = 0
           let group_size = Math.floor(target.details.length / 4)
           for (let i = 0; i < group_size; i++) {
-            if (target.details[group_size * i]['result'] === 'FAIL') {
+            if (target.details[(4 * i)]['result'] === 'FAIL') {
               fail_no += 1
               inspect_no += 1
-            } else if (target.details[group_size * i]['result'] === 'PASS') {
+            } else if (target.details[(4 * i)]['result'] === 'PASS') {
               inspect_no += 1
+              
             }
           }
           target.fail_no = fail_no
@@ -828,7 +855,7 @@ class TestFabricFourPoint extends Component {
     }
     const { data_detail, data_parent } = this.state
     const multiDataSet = exportDataset(data_detail, data_parent)
-    const filename = '4foint - ' + moment().format('MM/DD/YYYY h:mm:ss')
+    const filename = data_parent.declare_no +'-4foint - ' + moment().format('MMDDYYYYhmmss')
     return (
       <Form>
         <ExportToExcel dataset={multiDataSet} filename={filename} />

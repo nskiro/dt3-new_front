@@ -275,6 +275,7 @@ class TestFabricProcessView extends Component {
         content: (
           <TestFabricRelaxWapper
             data={this.state.import_row_selected_details}
+            data_parent={this.state.import_row_selected}
             wrappedComponentRef={ref => (this.relaxChild = ref)}
           />
         ),
@@ -284,6 +285,7 @@ class TestFabricProcessView extends Component {
         content: (
           <TestFabricWeightWapper
             data={this.state.import_row_selected_details}
+            data_parent={this.state.import_row_selected}
             wrappedComponentRef={ref => (this.weightChild = ref)}
           />
         ),
@@ -293,6 +295,7 @@ class TestFabricProcessView extends Component {
         content: (
           <TestFabricColorShardWapper
             data={this.state.import_row_selected_details}
+            data_parent={this.state.import_row_selected}
             wrappedComponentRef={ref => (this.colorShardChild = ref)}
           />
         ),
@@ -312,6 +315,7 @@ class TestFabricProcessView extends Component {
         content: (
           <TestFabricSkewWapper
             data={this.state.import_row_selected_details}
+            data_parent={this.state.import_row_selected}
             wrappedComponentRef={ref => (this.skewChild = ref)}
           />
         ),
@@ -340,9 +344,9 @@ class TestFabricProcessView extends Component {
             columns={columns}
             pagination={false}
             dataSource={[this.state.import_row_selected]}
-            //rowClassName={(record, index) => {
-            //  return index % 2 === 0 ? 'even-row' : 'old-row'
-            //}}
+            rowClassName={(record, index) => {
+              return index % 2 === 0 ? 'even-row' : 'old-row'
+            }}
           />
         </Row>
         <Divider />
@@ -363,15 +367,25 @@ class TestFabricProcessView extends Component {
               </Button>
             )}
             {current < steps.length - 1 && (
-              <Button
-                icon="caret-right"
-                type="primary"
-                style={{ marginLeft: 8, marginTop: 5 }}
-                onClick={() => this.next()}
-              >
-                Next
+              current === 0 ?
+                <Button
+                  icon="caret-right"
+                  type="primary"
+                  style={{ marginTop: 5 }}
+                  onClick={() => this.next()}
+                >
+                  Next
               </Button>
+                : <Button
+                  icon="caret-right"
+                  type="primary"
+                  style={{ marginLeft: 8, marginTop: 5 }}
+                  onClick={() => this.next()}
+                >
+                  Next
+            </Button>
             )}
+
             {current === steps.length - 1 && (
               <Button
                 type="primary"

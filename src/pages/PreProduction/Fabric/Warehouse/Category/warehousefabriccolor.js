@@ -6,8 +6,6 @@ import DateFormatter from '../dateformatter'
 
 //import moment from 'moment';
 import axios from '../../../../../axiosInst' //'../../../../../axiosInst'
-//css
-import '../views.css' //'./views.css'
 import { formItemLayout, tailFormItemLayout } from '../../../../Common/FormStyle'
 
 const FormItem = Form.Item

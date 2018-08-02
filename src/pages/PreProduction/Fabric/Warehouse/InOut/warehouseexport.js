@@ -23,8 +23,7 @@ import moment from 'moment'
 
 //import moment from 'moment';
 import axios from '../../../../../axiosInst' //'../../../../../axiosInst'
-//css
-import '../views.css' //'./views.css'
+
 
 const { Editors } = require('react-data-grid-addons')
 const { AutoComplete: AutoCompleteEditor } = Editors
@@ -450,7 +449,6 @@ class WarehouseExport extends Component {
       }
 
       if (values.id) {
-        console.log('call update')
         axios
           .post(`api/fabric/export/update/${values.id}`, { data: data, detail: data_collect.data })
           .then(res => {
@@ -463,7 +461,6 @@ class WarehouseExport extends Component {
             alert(err.error)
           })
       } else {
-        console.log('call add')
         axios
           .post('api/fabric/export/add', { data: data, detail: data_collect.data })
           .then(res => {

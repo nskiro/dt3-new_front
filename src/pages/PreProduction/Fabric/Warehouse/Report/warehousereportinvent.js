@@ -8,7 +8,6 @@ import moment from 'moment'
 import _ from 'lodash'
 import axios from '../../../../../axiosInst'
 //css
-import '../views.css'
 const Option = Select.Option
 
 const FormItem = Form.Item
@@ -57,7 +56,6 @@ class FormTransDetail extends Component {
         .get('api/fabric/warehouse/getinventorytrans', { params: values })
         .then(res => {
           this.setState({ data_trans: res.data })
-          console.log('values search data_trans: =>' + JSON.stringify(res.data))
         })
         .catch(err => {
           console.log(err)
@@ -245,7 +243,6 @@ class FormTransDetail extends Component {
         name: 'EX DATE',
         resizable: true,
         render: (text, record, index) => {
-          console.log('Text=>' + text)
           return (
             <span>
               {text === null || text === undefined

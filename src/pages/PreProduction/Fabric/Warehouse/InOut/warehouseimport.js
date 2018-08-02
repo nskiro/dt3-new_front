@@ -23,8 +23,6 @@ import moment from 'moment'
 
 //import moment from 'moment';
 import axios from '../../../../../axiosInst'
-//css
-import '../views.css'
 
 const { Editors } = require('react-data-grid-addons')
 const { AutoComplete: AutoCompleteEditor } = Editors
@@ -58,7 +56,6 @@ class WarehouseImportForm extends Component {
       rows: !this.props.data.details ? [] : this.props.data.details,
       columns: [],
     }
-    console.log('props => ' + JSON.stringify(this.props.data))
   }
 
   componentWillReceiveProps = nextProps => {
@@ -557,7 +554,6 @@ class WarehouseImport extends Component {
             console.log(err)
           })
       } else {
-        console.log('call add')
         axios
           .post('api/fabric/import/add', { data: data, detail: data_collect.data })
           .then(res => {

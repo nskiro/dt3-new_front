@@ -3,7 +3,7 @@ import { Table, Button, Form, Icon, Row, Col } from 'antd'
 import EditableInputCell from '../../../Common/editableinputcell'
 import EditableNumberCell from '../../../Common/editablenumbercell'
 import EditableDateCell from '../../../Common/editabledatecell'
-
+import ExportToExcel from '../../../Common/exportToExcel'
 import { formatDate } from '../../../Common/formatdate'
 
 import axios from '../../../../axiosInst' //'../../../../../axiosInst'
@@ -14,6 +14,135 @@ import { isBuffer } from 'util'
 const uuidv1 = require('uuid/v1')
 const test_fabric_relax_get_link = '/api/testfabric/relax/get'
 
+const BORDER_STYLE = 'thin'
+const COLOR_SPEC = 'FF000000'
+
+const exportDataset = (data_detail, data_parent) => {
+  let dataset = []
+  dataset.push({
+    xSteps: 2,
+    ySteps: 0,
+    columns: ['XẢ VẢI TRƯỚC SẢN XUẤT'],
+    data: [],
+  })
+
+  let data = {
+    xSteps: 0,
+    ySteps: 2,
+    columns: ['DATE', 'STK', 'TYPE', 'COLOR', 'ROLL #', 'RELAX', 'CONDITION(H)', 'NOTE', 'START TIME', 'END TIME'],
+  }
+  let data_row = []
+
+  for (let i = 0; i < data_detail.length; i++) {
+    let row = []
+    let r = data_detail[i]
+    row.push(moment(new Date(data_parent.declare_date)).format('MM/DD/YYYY'))
+    row.push(data_parent.declare_no)
+    row.push(r.fabric_type)
+    row.push(r.fabric_color)
+    row.push(r.roll)
+    row.push(r.relax)
+    row.push(r.condition_hours)
+    row.push(r.note)
+    row.push(r.start_date)
+    row.push(r.end_date)
+
+    for (let j = 0; j < row.length; j++) {
+      if (i % 2 === 0) {
+        let j_value = { value: row[j] + '', style: { border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } }, fill: { patternType: "solid", fgColor: { rgb: "FFFFFF00" } } } }
+        row[j] = j_value
+      } else {
+        let j_value = { value: row[j] + '', style: { border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } } } }
+        row[j] = j_value
+      }
+    }
+
+    data_row.push(row)
+  }
+  data.data = data_row
+  dataset.push(data)
+
+  const dataDetail = exportDatasetDetail(data_detail, data_parent)
+  const multiDataSet = [
+    { data: dataset, sheetname: 'Sheet1' },
+    { data: dataDetail, sheetname: 'Sheet2' },
+  ]
+  return multiDataSet
+}
+const exportDatasetDetail = (data_detail, data_parent) => {
+
+  let dataset = []
+  dataset.push({
+    xSteps: 2,
+    ySteps: 0,
+    columns: ['XẢ VẢI TRƯỚC SẢN XUẤT'],
+    data: [],
+  })
+
+  const rgb_value = 'ff00cce6'
+  for (let i = 0; i < data_detail.length; i++) {
+    let data = {
+      xSteps: 0,
+      ySteps: 2,
+      columns: ['DATE', 'STK', 'TYPE', 'COLOR', 'ROLL #', 'RELAX', 'CONDITION(H)', 'NOTE', 'START TIME', 'END TIME'],
+    }
+    let data_row = []
+
+    let row = []
+    let r = data_detail[i]
+    row.push(moment(new Date(data_parent.declare_date)).format('MM/DD/YYYY'))
+    row.push(data_parent.declare_no)
+    row.push(r.fabric_type)
+    row.push(r.fabric_color)
+    row.push(r.roll)
+    row.push(r.relax)
+    row.push(r.condition_hours)
+    row.push(r.note)
+    row.push(r.start_date)
+    row.push(r.end_date)
+
+    for (let j = 0; j < row.length; j++) {
+      let j_value = { value: row[j] + '', style: { auto: 1, fill: { patternType: "solid", fgColor: { rgb: "FFFFFF00" } } } }
+      row[j] = j_value
+    }
+
+    data_row.push(row)
+
+    data.data = data_row
+    dataset.push(data)
+
+    let details = {
+      xSteps: 0,
+      ySteps: 1,
+      columns: ['STT', 'NO.ROLL', 'MET', 'NOTE'],
+    }
+    let details_data = []
+    for (let j = 0; j < r.details.length; j++) {
+      const d = r.details[j]
+      const row = []
+      row.push(d.detail_stt)
+      row.push(d.no_roll === 0 ? '' : d.no_roll)
+      row.push(d.no_met === 0 ? '' : d.no_met)
+      row.push(d.detail_note)
+
+      for (let k = 0; k < row.length; k++) {
+        if (j % 2 === 0) {
+          let k_value = { value: row[k] + '', style: { auto: 1, border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } }, fill: { patternType: "solid", fgColor: { rgb: "FFCCEEFF" } } } }
+          row[k] = k_value
+        } else {
+          let k_value = { value: row[k] + '', style: { auto: 1, border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } } } }
+          row[k] = k_value
+        }
+      }
+
+      details_data.push(row)
+    }
+    details.data = details_data
+    dataset.push(details)
+  }
+
+  return dataset
+}
 class TestFabricRelax extends Component {
   constructor(props) {
     super(props)
@@ -32,6 +161,7 @@ class TestFabricRelax extends Component {
       })
       let nextState = { ...state }
       nextState.data_received = nextProps.data
+      nextState.data_parent = nextProps.data_parent
       nextState.data_detail_id = data_detail_id
       nextState.loadtestfabricrelax_done = false
       return nextState
@@ -208,7 +338,9 @@ class TestFabricRelax extends Component {
         ),
       },
     ]
-    const { data_detail } = this.state
+    const { data_detail, data_parent } = this.state
+    const multiDataSet = exportDataset(data_detail, data_parent)
+    const filename = data_parent.declare_no + '-relax-' + moment().format('MMDDYYYYhhmmss')
 
     const expandedRowRender = r => {
       const fabricrelax_id = r._id
@@ -283,6 +415,7 @@ class TestFabricRelax extends Component {
     }
     return (
       <Form>
+        <ExportToExcel dataset={multiDataSet} filename={filename} />
         <Table
           rowKey={'_id'}
           size="small"
@@ -292,9 +425,9 @@ class TestFabricRelax extends Component {
           pagination={false}
           dataSource={data_detail}
           expandedRowRender={expandedRowRender}
-          // rowClassName={(record, index) => {
-          ////   return index % 2 === 0 ? 'even-row' : 'old-row'
-          // }}
+        // rowClassName={(record, index) => {
+        ////   return index % 2 === 0 ? 'even-row' : 'old-row'
+        // }}
         />
       </Form>
     )

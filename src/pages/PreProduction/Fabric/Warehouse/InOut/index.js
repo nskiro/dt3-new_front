@@ -3,9 +3,6 @@ import { Tabs, Form, Icon } from 'antd'
 import Page from 'components/LayoutComponents/Page'
 import Helmet from 'react-helmet'
 
-//css
-import '../views.css'
-//import { constants } from 'zlib';
 
 import WarehouseImport from './warehouseimport'
 import WarehouseExport from './warehouseexport'
