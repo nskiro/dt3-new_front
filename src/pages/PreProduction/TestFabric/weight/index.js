@@ -30,7 +30,18 @@ const exportDataset = (data_detail, data_parent) => {
   let data = {
     xSteps: 0,
     ySteps: 2,
-    columns: ['DATE', 'STK', 'TYPE', 'COLOR', 'ROLL #', 'TEST #', 'FAIL #', 'NOTE', 'START TIME', 'END TIME'],
+    columns: [
+      'DATE',
+      'STK',
+      'TYPE',
+      'COLOR',
+      'ROLL #',
+      'TEST #',
+      'FAIL #',
+      'NOTE',
+      'START TIME',
+      'END TIME',
+    ],
   }
   let data_row = []
 
@@ -50,10 +61,27 @@ const exportDataset = (data_detail, data_parent) => {
 
     for (let j = 0; j < row.length; j++) {
       if (i % 2 === 0) {
-        let j_value = { value: row[j] + '', style: { border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } }, fill: { patternType: "solid", fgColor: { rgb: "FFFFFF00" } } } }
+        let j_value = {
+          value: row[j] + '',
+          style: {
+            border: {
+              top: { style: BORDER_STYLE, color: COLOR_SPEC },
+              bottom: { style: BORDER_STYLE, color: COLOR_SPEC },
+            },
+            fill: { patternType: 'solid', fgColor: { rgb: 'FFFFFF00' } },
+          },
+        }
         row[j] = j_value
       } else {
-        let j_value = { value: row[j] + '', style: { border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } } } }
+        let j_value = {
+          value: row[j] + '',
+          style: {
+            border: {
+              top: { style: BORDER_STYLE, color: COLOR_SPEC },
+              bottom: { style: BORDER_STYLE, color: COLOR_SPEC },
+            },
+          },
+        }
         row[j] = j_value
       }
     }
@@ -83,7 +111,18 @@ const exportDatasetDetail = (data_detail, data_parent) => {
     let data = {
       xSteps: 0,
       ySteps: 2,
-      columns: ['DATE', 'STK', 'TYPE', 'COLOR', 'ROLL #', 'TEST #', 'FAIL #', 'NOTE', 'START TIME', 'END TIME'],
+      columns: [
+        'DATE',
+        'STK',
+        'TYPE',
+        'COLOR',
+        'ROLL #',
+        'TEST #',
+        'FAIL #',
+        'NOTE',
+        'START TIME',
+        'END TIME',
+      ],
     }
     let data_row = []
 
@@ -100,7 +139,10 @@ const exportDatasetDetail = (data_detail, data_parent) => {
     row.push(r.start_date)
     row.push(r.end_date)
     for (let j = 0; j < row.length; j++) {
-      let j_value = { value: row[j] + '', style: { auto: 1, fill: { patternType: "solid", fgColor: { rgb: "FFFFFF00" } } } }
+      let j_value = {
+        value: row[j] + '',
+        style: { auto: 1, fill: { patternType: 'solid', fgColor: { rgb: 'FFFFFF00' } } },
+      }
       row[j] = j_value
     }
     data_row.push(row)
@@ -133,10 +175,29 @@ const exportDatasetDetail = (data_detail, data_parent) => {
 
       for (let k = 0; k < row.length; k++) {
         if (j % 2 === 0) {
-          let k_value = { value: row[k] + '', style: { auto: 1, border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } }, fill: { patternType: "solid", fgColor: { rgb: "FFCCEEFF" } } } }
+          let k_value = {
+            value: row[k] + '',
+            style: {
+              auto: 1,
+              border: {
+                top: { style: BORDER_STYLE, color: COLOR_SPEC },
+                bottom: { style: BORDER_STYLE, color: COLOR_SPEC },
+              },
+              fill: { patternType: 'solid', fgColor: { rgb: 'FFCCEEFF' } },
+            },
+          }
           row[k] = k_value
         } else {
-          let k_value = { value: row[k] + '', style: { auto: 1, border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } } } }
+          let k_value = {
+            value: row[k] + '',
+            style: {
+              auto: 1,
+              border: {
+                top: { style: BORDER_STYLE, color: COLOR_SPEC },
+                bottom: { style: BORDER_STYLE, color: COLOR_SPEC },
+              },
+            },
+          }
           row[k] = k_value
         }
       }

@@ -5,7 +5,6 @@ import moment from 'moment'
 import axios from '../../../../../axiosInst'
 import { formItemLayout, tailFormItemLayout } from '../../../../Common/FormStyle'
 
-
 const Option = Select.Option
 const FormItem = Form.Item
 const ExcelFile = ReactExport.ExcelFile

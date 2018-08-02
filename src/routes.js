@@ -58,7 +58,7 @@ class Routes extends React.Component {
         <Route exact path={'/login'} component={Login} />
         <Route exact path={'/profile'} component={Profile} />
         <Route exact path={'/testfabric'} component={TestFabric} />
-        
+
         {Object.keys(loadableRoutes).map(path => {
           const { exact, component, ...props } = loadableRoutes[path]
           props.exact = exact === void 0 || exact || false // set true as default

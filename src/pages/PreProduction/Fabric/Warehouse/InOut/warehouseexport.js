@@ -24,7 +24,6 @@ import moment from 'moment'
 //import moment from 'moment';
 import axios from '../../../../../axiosInst' //'../../../../../axiosInst'
 
-
 const { Editors } = require('react-data-grid-addons')
 const { AutoComplete: AutoCompleteEditor } = Editors
 //const { WeekPicker } = DatePicker;

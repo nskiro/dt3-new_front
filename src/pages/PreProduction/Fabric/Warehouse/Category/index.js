@@ -3,7 +3,6 @@ import { Tabs, Form, Icon } from 'antd'
 import Page from 'components/LayoutComponents/Page'
 import Helmet from 'react-helmet'
 
-
 import WarehouseFabricProvider from './warehousefabricprovider'
 import WarehouseFabricType from './warehousefabrictype'
 import WarehouseFabricColor from './warehousefabriccolor'

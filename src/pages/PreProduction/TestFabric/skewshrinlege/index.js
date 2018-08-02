@@ -32,7 +32,18 @@ const exportDataset = (data_detail, data_parent) => {
   let data = {
     xSteps: 0,
     ySteps: 2,
-    columns: ['DATE', 'STK', 'TYPE', 'COLOR', 'ROLL #', 'TEST #', 'FAIL #', 'NOTE', 'START TIME', 'END TIME'],
+    columns: [
+      'DATE',
+      'STK',
+      'TYPE',
+      'COLOR',
+      'ROLL #',
+      'TEST #',
+      'FAIL #',
+      'NOTE',
+      'START TIME',
+      'END TIME',
+    ],
   }
   let data_row = []
 
@@ -53,14 +64,30 @@ const exportDataset = (data_detail, data_parent) => {
 
     for (let j = 0; j < row.length; j++) {
       if (i % 2 === 0) {
-        let j_value = { value: row[j] + '', style: { border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } }, fill: { patternType: "solid", fgColor: { rgb: "FFFFFF00" } } } }
+        let j_value = {
+          value: row[j] + '',
+          style: {
+            border: {
+              top: { style: BORDER_STYLE, color: COLOR_SPEC },
+              bottom: { style: BORDER_STYLE, color: COLOR_SPEC },
+            },
+            fill: { patternType: 'solid', fgColor: { rgb: 'FFFFFF00' } },
+          },
+        }
         row[j] = j_value
       } else {
-        let j_value = { value: row[j] + '', style: { border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } } } }
+        let j_value = {
+          value: row[j] + '',
+          style: {
+            border: {
+              top: { style: BORDER_STYLE, color: COLOR_SPEC },
+              bottom: { style: BORDER_STYLE, color: COLOR_SPEC },
+            },
+          },
+        }
         row[j] = j_value
       }
     }
-
 
     data_row.push(row)
   }
@@ -88,11 +115,20 @@ const exportDatasetDetail = (data_detail, data_parent) => {
     let data = {
       xSteps: 0,
       ySteps: 2,
-      columns: ['DATE', 'STK', 'TYPE', 'COLOR', 'ROLL #', 'TEST #', 'FAIL #', 'NOTE', 'START TIME', 'END TIME'],
+      columns: [
+        'DATE',
+        'STK',
+        'TYPE',
+        'COLOR',
+        'ROLL #',
+        'TEST #',
+        'FAIL #',
+        'NOTE',
+        'START TIME',
+        'END TIME',
+      ],
     }
     let data_row = []
-
-
 
     let row = []
     let r = data_detail[i]
@@ -108,7 +144,10 @@ const exportDatasetDetail = (data_detail, data_parent) => {
     row.push(r.end_date)
 
     for (let j = 0; j < row.length; j++) {
-      let j_value = { value: row[j] + '', style: { fill: { patternType: "solid", fgColor: { rgb: "FFFFFF00" } } } }
+      let j_value = {
+        value: row[j] + '',
+        style: { fill: { patternType: 'solid', fgColor: { rgb: 'FFFFFF00' } } },
+      }
       row[j] = j_value
     }
 
@@ -120,19 +159,49 @@ const exportDatasetDetail = (data_detail, data_parent) => {
     dataset.push({
       xSteps: 0,
       ySteps: 1,
-      columns: ['', 'After Iron( Sau khi ủi )', '', '', 'After Washing( Sau khi giặt )', '', '', 'Pass/Fail(Đạt/Không đạt)', 'Remarks (Ghi chú )'],
+      columns: [
+        '',
+        'After Iron( Sau khi ủi )',
+        '',
+        '',
+        'After Washing( Sau khi giặt )',
+        '',
+        '',
+        'Pass/Fail(Đạt/Không đạt)',
+        'Remarks (Ghi chú )',
+      ],
       data: [],
     })
     dataset.push({
       xSteps: 0,
       ySteps: 0,
-      columns: ['', 'Shrinkage(Độ rút )', '', 'Skew (Độ xéo)', 'Shrinkage (Độ rút )', '', 'Skew (Độ xéo)', '', ''],
+      columns: [
+        '',
+        'Shrinkage(Độ rút )',
+        '',
+        'Skew (Độ xéo)',
+        'Shrinkage (Độ rút )',
+        '',
+        'Skew (Độ xéo)',
+        '',
+        '',
+      ],
       data: [],
     })
     let details = {
       xSteps: 0,
       ySteps: 0,
-      columns: ['', 'Length (Dài )', 'Width (Rộng)', '', 'Length (Dài )', 'Width (Rộng)', '', '', ''],
+      columns: [
+        '',
+        'Length (Dài )',
+        'Width (Rộng)',
+        '',
+        'Length (Dài )',
+        'Width (Rộng)',
+        '',
+        '',
+        '',
+      ],
     }
     let details_data = []
     for (let j = 0; j < r.details.length; j++) {
@@ -140,25 +209,33 @@ const exportDatasetDetail = (data_detail, data_parent) => {
       const row = []
       row.push(d.detail_stt)
       if (j % 4 === 3) {
-        row.push(d.iron_length === 0 ? '' : d.iron_length + "%")
-        row.push(d.iron_width === 0 ? '' : d.iron_width + "%")
-        row.push(d.iron_skew === 0 ? '' : d.iron_skew + "%")
+        row.push(d.iron_length === 0 ? '' : d.iron_length + '%')
+        row.push(d.iron_width === 0 ? '' : d.iron_width + '%')
+        row.push(d.iron_skew === 0 ? '' : d.iron_skew + '%')
 
-        row.push(d.washing_length === 0 ? '' : d.washing_length + "%")
-        row.push(d.washing_width === 0 ? '' : d.washing_width + "%")
-        row.push(d.washing_skew === 0 ? '' : d.washing_skew + "%")
+        row.push(d.washing_length === 0 ? '' : d.washing_length + '%')
+        row.push(d.washing_width === 0 ? '' : d.washing_width + '%')
+        row.push(d.washing_skew === 0 ? '' : d.washing_skew + '%')
       } else {
         row.push(d.iron_length === 0 ? '' : d.iron_length)
         row.push(d.iron_width === 0 ? '' : d.iron_width)
-        if (j % 4 === 0) { row.push(d.iron_skew === 0 ? '' : 'AC:' + d.iron_skew) }
-        else if (j % 4 === 1) { row.push(d.iron_skew === 0 ? '' : 'BD:' + d.iron_skew) }
-        else { row.push('') }
+        if (j % 4 === 0) {
+          row.push(d.iron_skew === 0 ? '' : 'AC:' + d.iron_skew)
+        } else if (j % 4 === 1) {
+          row.push(d.iron_skew === 0 ? '' : 'BD:' + d.iron_skew)
+        } else {
+          row.push('')
+        }
 
         row.push(d.washing_length === 0 ? '' : d.washing_length)
         row.push(d.washing_width === 0 ? '' : d.washing_width)
-        if (j % 4 === 0) { row.push(d.washing_skew === 0 ? '' : 'AC:' + d.washing_skew) }
-        else if (j % 4 === 1) { row.push(d.washing_skew === 0 ? '' : 'BD:' + d.washing_skew) }
-        else { row.push('') }
+        if (j % 4 === 0) {
+          row.push(d.washing_skew === 0 ? '' : 'AC:' + d.washing_skew)
+        } else if (j % 4 === 1) {
+          row.push(d.washing_skew === 0 ? '' : 'BD:' + d.washing_skew)
+        } else {
+          row.push('')
+        }
       }
 
       row.push(d.isPass)
@@ -166,10 +243,29 @@ const exportDatasetDetail = (data_detail, data_parent) => {
 
       for (let k = 0; k < row.length; k++) {
         if (j % 4 === 3) {
-          let k_value = { value: row[k] ? row[k] + '' : '', style: { auto: 1, border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } }, fill: { patternType: "solid", fgColor: { rgb: "FFCCEEFF" } } } }
+          let k_value = {
+            value: row[k] ? row[k] + '' : '',
+            style: {
+              auto: 1,
+              border: {
+                top: { style: BORDER_STYLE, color: COLOR_SPEC },
+                bottom: { style: BORDER_STYLE, color: COLOR_SPEC },
+              },
+              fill: { patternType: 'solid', fgColor: { rgb: 'FFCCEEFF' } },
+            },
+          }
           row[k] = k_value
         } else {
-          let k_value = { value: row[k] ? row[k] + '' : '', style: { auto: 1, border: { top: { style: BORDER_STYLE, color: COLOR_SPEC }, bottom: { style: BORDER_STYLE, color: COLOR_SPEC } } } }
+          let k_value = {
+            value: row[k] ? row[k] + '' : '',
+            style: {
+              auto: 1,
+              border: {
+                top: { style: BORDER_STYLE, color: COLOR_SPEC },
+                bottom: { style: BORDER_STYLE, color: COLOR_SPEC },
+              },
+            },
+          }
           row[k] = k_value
         }
       }
@@ -395,10 +491,10 @@ class TestFabricSkewShrinlege extends Component {
 
             let group_size = Math.floor(target.details.length / 4)
             for (let i = 0; i < group_size; i++) {
-              if (target.details[(4 * i) + 3]['isPass'] === 'FAIL') {
+              if (target.details[4 * i + 3]['isPass'] === 'FAIL') {
                 fail_no += 1
                 test_no += 1
-              } else if (target.details[(4 * i) + 3]['isPass'] === 'PASS') {
+              } else if (target.details[4 * i + 3]['isPass'] === 'PASS') {
                 test_no += 1
               }
             }
@@ -494,10 +590,10 @@ class TestFabricSkewShrinlege extends Component {
 
           let group_size = Math.floor(target.details.length / 4)
           for (let i = 0; i < group_size; i++) {
-            if (target.details[(4 * i) + 3]['isPass'] === 'FAIL') {
+            if (target.details[4 * i + 3]['isPass'] === 'FAIL') {
               fail_no += 1
               test_no += 1
-            } else if (target.details[(4 * i) + 3]['isPass'] === 'PASS') {
+            } else if (target.details[4 * i + 3]['isPass'] === 'PASS') {
               test_no += 1
             }
           }

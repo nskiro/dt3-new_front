@@ -366,8 +366,8 @@ class TestFabricProcessView extends Component {
                 Previous
               </Button>
             )}
-            {current < steps.length - 1 && (
-              current === 0 ?
+            {current < steps.length - 1 &&
+              (current === 0 ? (
                 <Button
                   icon="caret-right"
                   type="primary"
@@ -375,16 +375,17 @@ class TestFabricProcessView extends Component {
                   onClick={() => this.next()}
                 >
                   Next
-              </Button>
-                : <Button
+                </Button>
+              ) : (
+                <Button
                   icon="caret-right"
                   type="primary"
                   style={{ marginLeft: 8, marginTop: 5 }}
                   onClick={() => this.next()}
                 >
                   Next
-            </Button>
-            )}
+                </Button>
+              ))}
 
             {current === steps.length - 1 && (
               <Button
