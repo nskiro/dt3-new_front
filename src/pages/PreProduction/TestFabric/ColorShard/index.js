@@ -344,21 +344,11 @@ class TestFabricColorShard extends Component {
 
   render() {
     const columns = [
-      {
-        title: 'TYPE',
-        dataIndex: 'fabric_type',
-        key: 'fabric_type',
-      },
-      {
-        title: 'COLOR',
-        dataIndex: 'fabric_color',
-        key: 'fabric_color',
-      },
-      {
-        title: 'ROLL #',
-        dataIndex: 'roll',
-        key: 'roll',
-      },
+      { title: 'TYPE', dataIndex: 'fabric_type', key: 'fabric_type', },
+      { title: 'COLOR', dataIndex: 'fabric_color', key: 'fabric_color', },
+      { title: 'ROLL #', dataIndex: 'roll', key: 'roll', },
+      { title: 'MET #', dataIndex: 'met', key: 'met',},
+      { title: 'ORDER #',dataIndex: 'orderid', key: 'orderid',},
       {
         title: 'SHARDING #',
         dataIndex: 'shard_no',
@@ -497,9 +487,9 @@ class TestFabricColorShard extends Component {
           pagination={false}
           dataSource={data_detail}
           expandedRowRender={expandedRowRender}
-          // rowClassName={(record, index) => {
-          //   return index % 2 === 0 ? 'even-row' : 'old-row'
-          // }}
+        // rowClassName={(record, index) => {
+        //   return index % 2 === 0 ? 'even-row' : 'old-row'
+        // }}
         />
       </Form>
     )
