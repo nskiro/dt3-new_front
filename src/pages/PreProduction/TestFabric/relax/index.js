@@ -348,7 +348,7 @@ class TestFabricRelax extends Component {
       { key: 'fabric_color', dataIndex: 'fabric_color', title: 'COLOR', name: 'COLOR' },
       { key: 'roll', dataIndex: 'roll', title: 'ROLL', name: 'ROLL' },
       { key: 'met', dataIndex: 'met', title: 'MET', name: 'MET' },
-      { key: 'orderid', dataIndex: 'orderid', title: 'ORDER #', },
+      { key: 'orderid', dataIndex: 'orderid', title: 'ORDER #' },
       {
         key: 'relax',
         dataIndex: 'relax',
@@ -486,9 +486,9 @@ class TestFabricRelax extends Component {
           pagination={false}
           dataSource={data_detail}
           expandedRowRender={expandedRowRender}
-        // rowClassName={(record, index) => {
-        ////   return index % 2 === 0 ? 'even-row' : 'old-row'
-        // }}
+          // rowClassName={(record, index) => {
+          ////   return index % 2 === 0 ? 'even-row' : 'old-row'
+          // }}
         />
       </Form>
     )

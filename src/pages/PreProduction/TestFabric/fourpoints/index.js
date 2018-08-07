@@ -517,7 +517,7 @@ class TestFabricFourPoint extends Component {
       { key: 'fabric_color', dataIndex: 'fabric_color', title: 'COLOR', name: 'COLOR' },
       { key: 'roll', dataIndex: 'roll', title: 'ROLL', name: 'ROLL' },
       { key: 'met', dataIndex: 'met', title: 'MET', name: 'MET' },
-      { key: 'orderid', dataIndex: 'orderid', title: 'ORDER #', },
+      { key: 'orderid', dataIndex: 'orderid', title: 'ORDER #' },
       {
         key: 'inspect_no',
         dataIndex: 'inspect_no',

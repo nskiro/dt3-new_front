@@ -313,7 +313,7 @@ class WarehouseExport extends Component {
       modalvisible: false,
     }
   }
-  
+
   handleSearch = e => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
