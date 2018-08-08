@@ -342,6 +342,10 @@ class TestFabricRelax extends Component {
     }
   }
 
+  onDeleteRow =(e)=>{
+
+  }
+
   render() {
     const columns = [
       { key: 'fabric_type', dataIndex: 'fabric_type', title: 'TYPE', name: 'TYPE' },
@@ -440,6 +444,15 @@ class TestFabricRelax extends Component {
             />
           ),
         },
+        /*
+        {
+          title: '',
+          dataIndex: 'actions',
+          key: 'actions',
+          render: (text, record, index) => (<Button type="danger" size='default' value={record._id} onClick={this.onDeleteRow} disabled={record.record_status === 'O' ? false : true} ><Icon type="close-circle" /></Button>
+          )
+
+        }*/
       ]
       const data = r.details
 
@@ -486,9 +499,9 @@ class TestFabricRelax extends Component {
           pagination={false}
           dataSource={data_detail}
           expandedRowRender={expandedRowRender}
-          // rowClassName={(record, index) => {
-          ////   return index % 2 === 0 ? 'even-row' : 'old-row'
-          // }}
+        // rowClassName={(record, index) => {
+        ////   return index % 2 === 0 ? 'even-row' : 'old-row'
+        // }}
         />
       </Form>
     )
