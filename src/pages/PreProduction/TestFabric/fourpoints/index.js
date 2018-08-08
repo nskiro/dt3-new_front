@@ -642,7 +642,6 @@ class TestFabricFourPoint extends Component {
                   } catch (ex) {
                     return <Tag color="purple">{text}</Tag>
                   }
-
                 } else {
                   return { text }
                 }
