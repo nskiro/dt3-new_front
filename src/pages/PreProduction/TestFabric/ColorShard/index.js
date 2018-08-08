@@ -344,21 +344,11 @@ class TestFabricColorShard extends Component {
 
   render() {
     const columns = [
-      {
-        title: 'TYPE',
-        dataIndex: 'fabric_type',
-        key: 'fabric_type',
-      },
-      {
-        title: 'COLOR',
-        dataIndex: 'fabric_color',
-        key: 'fabric_color',
-      },
-      {
-        title: 'ROLL #',
-        dataIndex: 'roll',
-        key: 'roll',
-      },
+      { title: 'TYPE', dataIndex: 'fabric_type', key: 'fabric_type' },
+      { title: 'COLOR', dataIndex: 'fabric_color', key: 'fabric_color' },
+      { title: 'ROLL #', dataIndex: 'roll', key: 'roll' },
+      { title: 'MET #', dataIndex: 'met', key: 'met' },
+      { title: 'ORDER #', dataIndex: 'orderid', key: 'orderid' },
       {
         title: 'SHARDING #',
         dataIndex: 'shard_no',

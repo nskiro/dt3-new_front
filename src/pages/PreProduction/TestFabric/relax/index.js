@@ -342,12 +342,15 @@ class TestFabricRelax extends Component {
     }
   }
 
+  onDeleteRow = e => {}
+
   render() {
     const columns = [
       { key: 'fabric_type', dataIndex: 'fabric_type', title: 'TYPE', name: 'TYPE' },
       { key: 'fabric_color', dataIndex: 'fabric_color', title: 'COLOR', name: 'COLOR' },
       { key: 'roll', dataIndex: 'roll', title: 'ROLL', name: 'ROLL' },
       { key: 'met', dataIndex: 'met', title: 'MET', name: 'MET' },
+      { key: 'orderid', dataIndex: 'orderid', title: 'ORDER #' },
       {
         key: 'relax',
         dataIndex: 'relax',
@@ -439,6 +442,15 @@ class TestFabricRelax extends Component {
             />
           ),
         },
+        /*
+        {
+          title: '',
+          dataIndex: 'actions',
+          key: 'actions',
+          render: (text, record, index) => (<Button type="danger" size='default' value={record._id} onClick={this.onDeleteRow} disabled={record.record_status === 'O' ? false : true} ><Icon type="close-circle" /></Button>
+          )
+
+        }*/
       ]
       const data = r.details
 

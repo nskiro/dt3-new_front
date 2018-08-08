@@ -517,6 +517,7 @@ class TestFabricFourPoint extends Component {
       { key: 'fabric_color', dataIndex: 'fabric_color', title: 'COLOR', name: 'COLOR' },
       { key: 'roll', dataIndex: 'roll', title: 'ROLL', name: 'ROLL' },
       { key: 'met', dataIndex: 'met', title: 'MET', name: 'MET' },
+      { key: 'orderid', dataIndex: 'orderid', title: 'ORDER #' },
       {
         key: 'inspect_no',
         dataIndex: 'inspect_no',
@@ -571,6 +572,7 @@ class TestFabricFourPoint extends Component {
         { title: 'STT', dataIndex: 'detail_stt', key: 'detail_stt' },
         {
           title: 'ROLL',
+          width: 80,
           dataIndex: 'no_roll',
           key: 'no_roll',
           render: (text, record, index) => {
@@ -634,7 +636,12 @@ class TestFabricFourPoint extends Component {
               key: 'yard_actual',
               render: (text, record, index) => {
                 if (index % 4 === 0) {
-                  return <Tag color="purple">{text}</Tag>
+                  try {
+                    const value = parseFloat(record.yard_actual).toFixed(2)
+                    return <Tag color="purple">{value}</Tag>
+                  } catch (ex) {
+                    return <Tag color="purple">{text}</Tag>
+                  }
                 } else {
                   return { text }
                 }
@@ -684,15 +691,17 @@ class TestFabricFourPoint extends Component {
 
         {
           title: 'DEFECT',
-          width: 150,
+          width: 1000,
           children: [
             {
               title: 'Point',
+              width: 100,
               dataIndex: 'points',
               key: 'points',
             },
             {
               title: 'Slub/Nep',
+              width: 100,
               dataIndex: 'slub_nep',
               key: 'slub_nep',
               render: (text, record, index) => (
@@ -704,6 +713,7 @@ class TestFabricFourPoint extends Component {
             },
             {
               title: 'Fly/Spot',
+              width: 100,
               dataIndex: 'fly_spot',
               key: 'fly_spot',
               render: (text, record, index) => (
@@ -715,6 +725,7 @@ class TestFabricFourPoint extends Component {
             },
             {
               title: 'Hole/Split',
+              width: 100,
               dataIndex: 'hole_spliy',
               key: 'hole_spliy',
               render: (text, record, index) => (
@@ -726,6 +737,7 @@ class TestFabricFourPoint extends Component {
             },
             {
               title: 'Stain/Oil',
+              width: 100,
               dataIndex: 'stain_oil',
               key: 'stain_oil',
               render: (text, record, index) => (
@@ -739,6 +751,7 @@ class TestFabricFourPoint extends Component {
               title: 'V.Line',
               dataIndex: 'vline',
               key: 'vline',
+              width: 100,
               render: (text, record, index) => (
                 <EditableNumberCell
                   value={text}
@@ -750,6 +763,7 @@ class TestFabricFourPoint extends Component {
               title: 'Bare',
               dataIndex: 'bare',
               key: 'bare',
+              width: 100,
               render: (text, record, index) => (
                 <EditableNumberCell
                   value={text}
@@ -761,6 +775,7 @@ class TestFabricFourPoint extends Component {
               title: 'Crease/Mark',
               dataIndex: 'crease_mark',
               key: 'crease_mark',
+              width: 100,
               render: (text, record, index) => (
                 <EditableNumberCell
                   value={text}
@@ -772,6 +787,7 @@ class TestFabricFourPoint extends Component {
               title: 'Uneven/Dyed',
               dataIndex: 'uneven_dyed',
               key: 'uneven_dyed',
+              width: 100,
               render: (text, record, index) => (
                 <EditableNumberCell
                   value={text}
@@ -785,6 +801,7 @@ class TestFabricFourPoint extends Component {
           title: 'TOTAL POINT',
           dataIndex: 'total_point',
           key: 'total_point',
+          width: 150,
           render: (text, record, index) => {
             if (index % 4 === 0) {
               return <Tag color="green">{text}</Tag>
@@ -796,6 +813,7 @@ class TestFabricFourPoint extends Component {
         {
           title: 'DEFECT POINT',
           dataIndex: 'defective_point',
+          width: 150,
           key: 'defective_point',
           render: (text, record, index) => {
             if (index % 4 === 0) {
@@ -818,6 +836,7 @@ class TestFabricFourPoint extends Component {
           title: 'RESULT',
           dataIndex: 'result',
           key: 'result',
+          width: 100,
           render: (text, record, index) => {
             if (index % 4 === 0) {
               if (text === 'FAIL') {
@@ -834,6 +853,7 @@ class TestFabricFourPoint extends Component {
           title: 'NOTE',
           dataIndex: 'detail_note',
           key: 'detail_note',
+          width: 250,
           render: (text, record, index) => {
             if (index % 4 === 0) {
               return (
@@ -875,8 +895,8 @@ class TestFabricFourPoint extends Component {
               </Button>
             </Col>
           </Row>
-          <Row gutter={8}>
-            <Col span={24}>
+          <Row gutter={2}>
+            <Col>
               <Table
                 size="small"
                 bordered
@@ -885,6 +905,7 @@ class TestFabricFourPoint extends Component {
                 columns={columns}
                 dataSource={data}
                 pagination={false}
+                scroll={{ x: 1300 }}
               />
             </Col>
           </Row>
@@ -906,6 +927,7 @@ class TestFabricFourPoint extends Component {
           pagination={false}
           dataSource={data_detail}
           expandedRowRender={expandedRowRender}
+          scroll={{ x: 1300 }}
         />
       </Form>
     )

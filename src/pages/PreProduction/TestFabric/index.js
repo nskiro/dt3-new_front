@@ -13,6 +13,7 @@ import {
   Tabs,
   Divider,
   message,
+  Tag,
   AutoComplete,
 } from 'antd'
 import Page from 'components/LayoutComponents/Page'
@@ -73,6 +74,17 @@ class TestFabricListView extends Component {
     const { show_detail } = this.state
     this.setState({ show_detail: !show_detail })
   }
+
+  handleProccess = e => {
+    if (e) {
+      const value = e.target.value
+      const { fabricimport_data } = this.state
+      const item = _.find(fabricimport_data, { _id: value })
+      //const { show_detail, import_row_selected } = this.state
+      this.setState({ show_detail: true, import_row_selected: item })
+    }
+  }
+
   handleReset = () => {
     this.props.form.resetFields()
   }
@@ -226,16 +238,28 @@ class TestFabricListView extends Component {
         name: 'STATUS',
         render: (text, row, index) => {
           if (text === 'O') {
-            return 'Chưa kiểm'
+            return <Tag colors="gray">Chưa kiểm</Tag>
           }
           if (text === 'P') {
-            return 'Đang kiểm'
+            return <Tag color="blue">Đang kiểm</Tag>
           }
           if (text === 'Q') {
-            return 'Đã kiểm xong'
+            return <Tag color="green">Đã kiểm xong</Tag>
           }
-          return 'Không xác định'
+          return <Tag color="red">Không xác định</Tag>
         },
+      },
+      {
+        key: 'actions',
+        dataIndex: 'actions',
+        title: '',
+        name: '',
+        width: 50,
+        render: (text, row, index) => (
+          <Button type="primary" size="default" value={row._id} onClick={this.handleProccess}>
+            <Icon type="edit" />
+          </Button>
+        ),
       },
     ]
     const { fabrictype_data, current } = this.state
@@ -266,6 +290,35 @@ class TestFabricListView extends Component {
                           {getFieldDecorator('declare_no', {}, {})(<Input />)}
                         </FormItem>
                       </Col>
+                      <Col
+                        xs={{ span: 24 }}
+                        sm={{ span: 24 }}
+                        md={{ span: 8 }}
+                        lg={{ span: 8 }}
+                        xl={{ span: 8 }}
+                      >
+                        <FormItem {...formItemLayout} label="From order #">
+                          {getFieldDecorator('from_orderid', {}, {})(
+                            <InputNumber style={{ width: '100%' }} />,
+                          )}
+                        </FormItem>
+                      </Col>
+                      <Col
+                        xs={{ span: 24 }}
+                        sm={{ span: 24 }}
+                        md={{ span: 8 }}
+                        lg={{ span: 8 }}
+                        xl={{ span: 8 }}
+                      >
+                        <FormItem {...formItemLayout} label="To order #">
+                          {getFieldDecorator('to_orderid', {}, {})(
+                            <InputNumber style={{ width: '100%' }} />,
+                          )}
+                        </FormItem>
+                      </Col>
+                    </Row>
+
+                    <Row gutter={2}>
                       <Col
                         xs={{ span: 24 }}
                         sm={{ span: 24 }}
@@ -314,6 +367,7 @@ class TestFabricListView extends Component {
                         </FormItem>
                       </Col>
                     </Row>
+
                     <Row gutter={2}>
                       <Col
                         xs={{ span: 24 }}
@@ -379,44 +433,20 @@ class TestFabricListView extends Component {
                           >
                             Search
                           </Button>
+                          <Button
+                            icon="sync"
+                            size={button_size}
+                            style={{ marginLeft: 8 }}
+                            onClick={this.handleReset}
+                          >
+                            Clean
+                          </Button>
                         </FormItem>
                       </Col>
                     </Row>
                   </Form>
                 </Panel>
               </Collapse>
-            </Row>
-            <Row gutter={2}>
-              <Col
-                xs={{ span: 24 }}
-                sm={{ span: 24 }}
-                md={{ span: 8 }}
-                lg={{ span: 8 }}
-                xl={{ span: 8 }}
-              >
-                {' '}
-                <Form>
-                  <FormItem {...formItemLayout} style={{ marginLeft: '1px' }}>
-                    <Button
-                      type="primary"
-                      icon="search"
-                      size={button_size}
-                      onClick={this.showHideDetail}
-                      disabled={_.isEmpty(this.state.import_row_selected)}
-                    >
-                      Process
-                    </Button>
-                    <Button
-                      icon="sync"
-                      size={button_size}
-                      style={{ marginLeft: 8 }}
-                      onClick={this.handleReset}
-                    >
-                      Clean
-                    </Button>
-                  </FormItem>
-                </Form>
-              </Col>
             </Row>
             <Row>
               <Table
