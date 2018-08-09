@@ -127,12 +127,12 @@ class UploadPDFPage extends Component {
           >
             {user.dept.length > 0
               ? user.dept.map(o => {
-                  return (
-                    <Option key={o._id} value={o._id}>
-                      {o.name}
-                    </Option>
-                  )
-                })
+                return (
+                  <Option key={o._id} value={o._id}>
+                    {o.name}
+                  </Option>
+                )
+              })
               : null}
           </Select>
           <TreeSelect
@@ -160,8 +160,11 @@ class UploadPDFPage extends Component {
               const status = info.file.status
               if (status === 'done') {
                 let temp = [...reportList]
-                temp.push(res)
-                this.setState({ reportList: [...temp] })
+                console.log("temp=>", temp, "res=>", res)
+                if (temp.findIndex(e => { return e.reportName === res.reportName }) === -1) {
+                  temp.push(res)
+                  this.setState({ reportList: [...temp] })
+                }
               } else if (status === 'error') {
                 console.log(res)
               }

@@ -21,7 +21,7 @@ import { Element, scroller } from 'react-scroll'
 const { Meta } = Card
 const { Option } = Select
 const { Selectors } = Data
-const removeCheckItem = /Kh Cắt|Ngày Cắt Vải|Ngày Cắt Lưới|Định Mức|Số Lượng|SL Thực Phát|Ngày Phát|Thông Tin|SL Vải|ĐM|SL|TT/g
+const removeCheckItem = /__EMPTY|Kh Cắt|Ngày Cắt Vải|Ngày Cắt Lưới|Định Mức|Số Lượng|SL Thực Phát|Ngày Phát|Thông Tin|SL Vải|ĐM|SL|TT/g
 
 class ExcelViewer extends Component {
   state = {
