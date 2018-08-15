@@ -11,6 +11,7 @@ import {
   Spin,
   message,
   Checkbox,
+  Collapse
 } from 'antd'
 import _ from 'lodash'
 import axios from 'axiosInst'
@@ -21,7 +22,8 @@ import { Element, scroller } from 'react-scroll'
 const { Meta } = Card
 const { Option } = Select
 const { Selectors } = Data
-const removeCheckItem = /__EMPTY|Kh Cắt|Ngày Cắt Vải|Ngày Cắt Lưới|Định Mức|Số Lượng|SL Thực Phát|Ngày Phát|Thông Tin|SL Vải|ĐM|SL|TT/g
+const { Panel } = Collapse
+const removeCheckItem = /__EMPTY|Kh Cắt|Ngày Cắt Vải|Ngày Cắt Lưới|Định Mức|Số Lượng|SL Thực Phát|Ngày Phát|Thông Tin|SL Vải|ĐM|SL|TT|KH CẮT|NGÀY CẮT VẢI|NGÀY CẮT LƯỚI|ĐỊNH MỨC|SỐ LƯỢNG|SL THỰC PHÁT|NGÀY PHÁT|THÔNG TIN/g
 
 class ExcelViewer extends Component {
   state = {
@@ -34,6 +36,7 @@ class ExcelViewer extends Component {
     filters: {},
     columns: [],
     checkboxColumns: [],
+    checkboxGroup: []
   }
 
   componentDidMount() {
@@ -80,6 +83,7 @@ class ExcelViewer extends Component {
           checkboxColumns: _.filter(res.data.columns, o => {
             return !o.visible && !o.name.match(removeCheckItem)
           }),
+          checkboxGroup: res.data.group
         })
         scroller.scrollTo('viewer', {
           duration: 800,
@@ -131,10 +135,55 @@ class ExcelViewer extends Component {
   }
 
   render() {
-    const { selectedDept, loadingReport, reportList, columns, checkboxColumns } = this.state
+    const { selectedDept, loadingReport, reportList, columns, checkboxColumns, checkboxGroup } = this.state
     const visibleColumns = _.filter(columns, o => {
       return o.visible
     })
+    let checkboxsComp = null
+    if (checkboxGroup.length > 0) {
+      checkboxsComp = (
+        <Collapse defaultActiveKey={['General']} accordion>
+          {
+            checkboxGroup.map(group => {
+              let arrCols = group.group_columns.split(',')
+              return (
+                <Panel header={group.group_name} key={group.group_name}>
+                  <Row>
+                    {
+                      checkboxColumns.map(value => {
+                        if (_.findIndex(arrCols, o => o === value.name) > -1) {
+                          return (
+                            <Col xs={6} sm={3} key={value.key}>
+                              <Checkbox value={value.key} onChange={this.onCheckedChange}>
+                                {value.name}
+                              </Checkbox>
+                            </Col>
+                          )
+                        }
+                        return null
+                      })
+                    }
+                  </Row>
+                </Panel>
+              )
+            })
+          }
+        </Collapse>
+      )
+    }
+    else {
+      checkboxsComp = (
+        checkboxColumns.map(value => {
+            return (
+              <Col xs={6} sm={3} key={value.key}>
+                <Checkbox value={value.key} onChange={this.onCheckedChange}>
+                  {value.name}
+                </Checkbox>
+              </Col>
+            )
+        })
+      )
+    }
 
     return (
       <span>
@@ -188,16 +237,8 @@ class ExcelViewer extends Component {
             <Calendar fullscreen={false} style={{ width: '95%' }} />
           </Col>
         </Row>
-        <Row>
-          {checkboxColumns.map(value => {
-            return (
-              <Col xs={6} sm={3} key={value.key}>
-                <Checkbox value={value.key} onChange={this.onCheckedChange}>
-                  {value.name}
-                </Checkbox>
-              </Col>
-            )
-          })}
+        <Row style={{ marginTop: '5px' }}>
+          {checkboxsComp}
         </Row>
         <Row style={{ marginTop: '5px' }}>
           <Col xs={24} md={24}>
