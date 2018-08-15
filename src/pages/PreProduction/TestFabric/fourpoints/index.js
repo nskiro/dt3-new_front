@@ -423,7 +423,7 @@ class TestFabricFourPoint extends Component {
   onCellChange = (key, dataIndex) => {
     return value => {
       const data_detail = [...this.state.data_detail]
-      const target = data_detail.find(item => item.key === key)
+      const target = data_detail.find(item => item._id === key)
       if (target) {
         target[dataIndex] = value
         this.setState({ data_detail })
@@ -436,8 +436,15 @@ class TestFabricFourPoint extends Component {
       const data_detail = [...this.state.data_detail]
       const target = data_detail.find(item => item._id === fabricrelax_id)
       if (target) {
-        target.details[row_index][dataIndex] = value
-
+        try {
+          target.details[row_index][dataIndex] = value
+        } catch (error) {
+          console.log('row_index =>' + row_index)
+          console.log('target.details =>' + JSON.stringify(target.details))
+          console.log('dataIndex =>' + dataIndex)
+          console.log('value =>' + value)
+          return
+        }
         const group_row = Math.floor(row_index / 4)
         const start_line = group_row * 4
         if (dataIndex === 'length_actual') {
@@ -535,7 +542,7 @@ class TestFabricFourPoint extends Component {
         dataIndex: 'color_dif',
         title: 'COLOR DIF',
         render: (text, record) => (
-          <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'color_dif')} />
+          <EditableInputCell value={text} onChange={this.onCellChange(record._id, 'color_dif')} />
         ),
       },
       {
@@ -543,7 +550,7 @@ class TestFabricFourPoint extends Component {
         dataIndex: 'note',
         title: 'NOTE',
         render: (text, record) => (
-          <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'note')} />
+          <EditableInputCell value={text} onChange={this.onCellChange(record._id, 'note')} />
         ),
       },
       {
@@ -552,7 +559,7 @@ class TestFabricFourPoint extends Component {
         title: 'START DATE',
         name: 'START DATE',
         render: (text, record) => (
-          <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'start_date')} />
+          <EditableDateCell value={text} onChange={this.onCellChange(record._id, 'start_date')} />
         ),
       },
       {
@@ -561,7 +568,7 @@ class TestFabricFourPoint extends Component {
         title: 'END DATE',
         name: 'END DATE',
         render: (text, record) => (
-          <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'end_date')} />
+          <EditableDateCell value={text} onChange={this.onCellChange(record._id, 'end_date')} />
         ),
       },
     ]

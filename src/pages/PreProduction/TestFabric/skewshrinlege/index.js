@@ -412,7 +412,7 @@ class TestFabricSkewShrinlege extends Component {
   onCellChange = (key, dataIndex) => {
     return value => {
       const data_detail = [...this.state.data_detail]
-      const target = data_detail.find(item => item.key === key)
+      const target = data_detail.find(item => item._id === key)
       if (target) {
         target[dataIndex] = value
 
@@ -622,7 +622,7 @@ class TestFabricSkewShrinlege extends Component {
           <EditableNumberCell
             value={text}
             suffix="%"
-            onChange={this.onCellChange(record.key, 'condition')}
+            onChange={this.onCellChange(record._id, 'condition')}
           />
         ),
       },
@@ -646,7 +646,7 @@ class TestFabricSkewShrinlege extends Component {
         title: 'NOTE',
         name: 'NOTE',
         render: (text, record) => (
-          <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'note')} />
+          <EditableInputCell value={text} onChange={this.onCellChange(record._id, 'note')} />
         ),
       },
       {
@@ -655,7 +655,7 @@ class TestFabricSkewShrinlege extends Component {
         title: 'START DATE',
         name: 'START DATE',
         render: (text, record) => (
-          <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'start_date')} />
+          <EditableDateCell value={text} onChange={this.onCellChange(record._id, 'start_date')} />
         ),
       },
       {
@@ -664,7 +664,7 @@ class TestFabricSkewShrinlege extends Component {
         title: 'END DATE',
         name: 'END DATE',
         render: (text, record) => (
-          <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'end_date')} />
+          <EditableDateCell value={text} onChange={this.onCellChange(record._id, 'end_date')} />
         ),
       },
     ]
