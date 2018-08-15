@@ -304,7 +304,7 @@ class TestFabricColorShard extends Component {
   onCellChange = (key, dataIndex) => {
     return value => {
       const data_detail = [...this.state.data_detail]
-      const target = data_detail.find(item => item.key === key)
+      const target = data_detail.find(item => item._id === key)
       if (target) {
         target[dataIndex] = value
         this.setState({ data_detail })
@@ -354,7 +354,7 @@ class TestFabricColorShard extends Component {
         dataIndex: 'shard_no',
         key: 'shard_no',
         render: (text, record, index) => (
-          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'shard_no')} />
+          <EditableNumberCell value={text} onChange={this.onCellChange(record._id, 'shard_no')} />
         ),
       },
       {
@@ -362,7 +362,7 @@ class TestFabricColorShard extends Component {
         dataIndex: 'group_no',
         key: 'group_no',
         render: (text, record, index) => (
-          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'group_no')} />
+          <EditableNumberCell value={text} onChange={this.onCellChange(record._id, 'group_no')} />
         ),
       },
       {
@@ -370,7 +370,7 @@ class TestFabricColorShard extends Component {
         dataIndex: 'note',
         key: 'note',
         render: (text, record, index) => (
-          <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'note')} />
+          <EditableInputCell value={text} onChange={this.onCellChange(record._id, 'note')} />
         ),
       },
       {
@@ -378,7 +378,7 @@ class TestFabricColorShard extends Component {
         dataIndex: 'start_date',
         key: 'start_date',
         render: (text, record, index) => (
-          <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'start_date')} />
+          <EditableDateCell value={text} onChange={this.onCellChange(record._id, 'start_date')} />
         ),
       },
       {
@@ -386,7 +386,7 @@ class TestFabricColorShard extends Component {
         dataIndex: 'end_date',
         key: 'end_date',
         render: (text, record, index) => (
-          <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'end_date')} />
+          <EditableDateCell value={text} onChange={this.onCellChange(record._id, 'end_date')} />
         ),
       },
     ]

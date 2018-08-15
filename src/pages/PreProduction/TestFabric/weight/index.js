@@ -320,7 +320,7 @@ class TestFabricWeight extends Component {
   onCellChange = (key, dataIndex) => {
     return value => {
       const data_detail = [...this.state.data_detail]
-      const target = data_detail.find(item => item.key === key)
+      const target = data_detail.find(item => item._id === key)
       if (target) {
         target[dataIndex] = value
         this.setState({ data_detail })
@@ -371,7 +371,7 @@ class TestFabricWeight extends Component {
         title: 'TEST #',
         name: 'TEST #',
         render: (text, record) => (
-          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'test_no')} />
+          <EditableNumberCell value={text} onChange={this.onCellChange(record._id, 'test_no')} />
         ),
       },
       {
@@ -380,7 +380,7 @@ class TestFabricWeight extends Component {
         title: 'FAIL #',
         name: 'FAIL #',
         render: (text, record) => (
-          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'fail_no')} />
+          <EditableNumberCell value={text} onChange={this.onCellChange(record._id, 'fail_no')} />
         ),
       },
       {
@@ -389,7 +389,7 @@ class TestFabricWeight extends Component {
         title: 'NOTE',
         name: 'NOTE',
         render: (text, record) => (
-          <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'note')} />
+          <EditableInputCell value={text} onChange={this.onCellChange(record._id, 'note')} />
         ),
       },
       {
@@ -398,7 +398,7 @@ class TestFabricWeight extends Component {
         title: 'START DATE',
         name: 'START DATE',
         render: (text, record) => (
-          <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'start_date')} />
+          <EditableDateCell value={text} onChange={this.onCellChange(record._id, 'start_date')} />
         ),
       },
       {
@@ -407,7 +407,7 @@ class TestFabricWeight extends Component {
         title: 'END DATE',
         name: 'END DATE',
         render: (text, record) => (
-          <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'end_date')} />
+          <EditableDateCell value={text} onChange={this.onCellChange(record._id, 'end_date')} />
         ),
       },
     ]

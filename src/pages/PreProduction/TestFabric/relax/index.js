@@ -294,7 +294,8 @@ class TestFabricRelax extends Component {
   onCellChange = (key, dataIndex) => {
     return value => {
       const data_detail = [...this.state.data_detail]
-      const target = data_detail.find(item => item.key === key)
+      const target = data_detail.find(item => item._id === key)
+      
       if (target) {
         target[dataIndex] = value
         this.setState({ data_detail })
@@ -306,6 +307,9 @@ class TestFabricRelax extends Component {
     return value => {
       const data_detail = [...this.state.data_detail]
       const target = data_detail.find(item => item._id === fabricrelax_id)
+
+      console.log('target ==>'+ JSON.stringify(target))
+      console.log('row_index ==>'+ row_index+',dataIndex ==> '+dataIndex)
       if (target) {
         target.details[row_index][dataIndex] = value
         this.setState({ data_detail })
@@ -357,7 +361,7 @@ class TestFabricRelax extends Component {
         title: 'RELAX',
         name: 'RELAX',
         render: (text, record) => (
-          <EditableNumberCell value={text} onChange={this.onCellChange(record.key, 'relax')} />
+          <EditableNumberCell value={text} onChange={this.onCellChange(record._id, 'relax')} />
         ),
       },
       {
@@ -368,7 +372,7 @@ class TestFabricRelax extends Component {
         render: (text, record) => (
           <EditableNumberCell
             value={text}
-            onChange={this.onCellChange(record.key, 'condition_hours')}
+            onChange={this.onCellChange(record._id, 'condition_hours')}
           />
         ),
       },
@@ -378,7 +382,7 @@ class TestFabricRelax extends Component {
         title: 'NOTE',
         name: 'NOTE',
         render: (text, record) => (
-          <EditableInputCell value={text} onChange={this.onCellChange(record.key, 'note')} />
+          <EditableInputCell value={text} onChange={this.onCellChange(record._id, 'note')} />
         ),
       },
       {
@@ -388,7 +392,7 @@ class TestFabricRelax extends Component {
         name: 'START DATE',
 
         render: (text, record) => (
-          <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'start_date')} />
+          <EditableDateCell value={text} onChange={this.onCellChange(record._id, 'start_date')} />
         ),
       },
       {
@@ -397,7 +401,7 @@ class TestFabricRelax extends Component {
         title: 'END DATE',
         name: 'END DATE',
         render: (text, record) => (
-          <EditableDateCell value={text} onChange={this.onCellChange(record.key, 'end_date')} />
+          <EditableDateCell value={text} onChange={this.onCellChange(record._id, 'end_date')} />
         ),
       },
     ]
