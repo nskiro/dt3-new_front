@@ -11,7 +11,7 @@ import {
   Spin,
   message,
   Checkbox,
-  Collapse
+  Collapse,
 } from 'antd'
 import _ from 'lodash'
 import axios from 'axiosInst'
@@ -36,7 +36,7 @@ class ExcelViewer extends Component {
     filters: {},
     columns: [],
     checkboxColumns: [],
-    checkboxGroup: []
+    checkboxGroup: [],
   }
 
   componentDidMount() {
@@ -83,7 +83,7 @@ class ExcelViewer extends Component {
           checkboxColumns: _.filter(res.data.columns, o => {
             return !o.visible && !o.name.match(removeCheckItem)
           }),
-          checkboxGroup: res.data.group
+          checkboxGroup: res.data.group,
         })
         scroller.scrollTo('viewer', {
           duration: 800,
@@ -135,7 +135,14 @@ class ExcelViewer extends Component {
   }
 
   render() {
-    const { selectedDept, loadingReport, reportList, columns, checkboxColumns, checkboxGroup } = this.state
+    const {
+      selectedDept,
+      loadingReport,
+      reportList,
+      columns,
+      checkboxColumns,
+      checkboxGroup,
+    } = this.state
     const visibleColumns = _.filter(columns, o => {
       return o.visible
     })
@@ -143,46 +150,39 @@ class ExcelViewer extends Component {
     if (checkboxGroup.length > 0) {
       checkboxsComp = (
         <Collapse defaultActiveKey={['General']} accordion>
-          {
-            checkboxGroup.map(group => {
-              let arrCols = group.group_columns.split(',')
-              return (
-                <Panel header={group.group_name} key={group.group_name}>
-                  <Row>
-                    {
-                      checkboxColumns.map(value => {
-                        if (_.findIndex(arrCols, o => o === value.name) > -1) {
-                          return (
-                            <Col xs={6} sm={3} key={value.key}>
-                              <Checkbox value={value.key} onChange={this.onCheckedChange}>
-                                {value.name}
-                              </Checkbox>
-                            </Col>
-                          )
-                        }
-                        return null
-                      })
+          {checkboxGroup.map(group => {
+            let arrCols = group.group_columns.split(',')
+            return (
+              <Panel header={group.group_name} key={group.group_name}>
+                <Row>
+                  {checkboxColumns.map(value => {
+                    if (_.findIndex(arrCols, o => o === value.name) > -1) {
+                      return (
+                        <Col xs={6} sm={3} key={value.key}>
+                          <Checkbox value={value.key} onChange={this.onCheckedChange}>
+                            {value.name}
+                          </Checkbox>
+                        </Col>
+                      )
                     }
-                  </Row>
-                </Panel>
-              )
-            })
-          }
+                    return null
+                  })}
+                </Row>
+              </Panel>
+            )
+          })}
         </Collapse>
       )
-    }
-    else {
-      checkboxsComp = (
-        checkboxColumns.map(value => {
-            return (
-              <Col xs={6} sm={3} key={value.key}>
-                <Checkbox value={value.key} onChange={this.onCheckedChange}>
-                  {value.name}
-                </Checkbox>
-              </Col>
-            )
-        })
-      )
+    } else {
+      checkboxsComp = checkboxColumns.map(value => {
+        return (
+          <Col xs={6} sm={3} key={value.key}>
+            <Checkbox value={value.key} onChange={this.onCheckedChange}>
+              {value.name}
+            </Checkbox>
+          </Col>
+        )
+      })
     }
 
     return (
@@ -237,9 +237,7 @@ class ExcelViewer extends Component {
             <Calendar fullscreen={false} style={{ width: '95%' }} />
           </Col>
         </Row>
-        <Row style={{ marginTop: '5px' }}>
-          {checkboxsComp}
-        </Row>
+        <Row style={{ marginTop: '5px' }}>{checkboxsComp}</Row>
         <Row style={{ marginTop: '5px' }}>
           <Col xs={24} md={24}>
             <Element name="viewer" className="element">
