@@ -295,7 +295,7 @@ class TestFabricRelax extends Component {
     return value => {
       const data_detail = [...this.state.data_detail]
       const target = data_detail.find(item => item._id === key)
-      
+
       if (target) {
         target[dataIndex] = value
         this.setState({ data_detail })
@@ -308,8 +308,8 @@ class TestFabricRelax extends Component {
       const data_detail = [...this.state.data_detail]
       const target = data_detail.find(item => item._id === fabricrelax_id)
 
-      console.log('target ==>'+ JSON.stringify(target))
-      console.log('row_index ==>'+ row_index+',dataIndex ==> '+dataIndex)
+      console.log('target ==>' + JSON.stringify(target))
+      console.log('row_index ==>' + row_index + ',dataIndex ==> ' + dataIndex)
       if (target) {
         target.details[row_index][dataIndex] = value
         this.setState({ data_detail })
