@@ -12,6 +12,7 @@ import _ from 'lodash'
 import moment from 'moment'
 
 import { isBuffer } from 'util'
+const ButtonGroup = Button.Group;
 
 const uuidv1 = require('uuid/v1')
 const decimal_fix = 1
@@ -390,6 +391,41 @@ class TestFabricSkewShrinlege extends Component {
         this.setState({ data_detail: [], loadtestfabricweight_done: true })
       })
   }
+
+  /*
+  onDeleteRow =(e)=>{
+    if(e.target){
+      const values = e.target.value?e.target.value.split(","):[]
+      try {
+        if(!_.isEmpty(values)){
+          const index = parseInt(values[0],10)
+          const fourpoint_id =values[1]
+          const data_detail = [...this.state.data_detail]
+          const row_index = _.findIndex(data_detail, { _id: fourpoint_id })
+          if (row_index >= 0) {
+            const target = data_detail[row_index]
+            if(target.details.length>index){
+              //lay detail_stt
+              const t_detail =target.details[index]
+              if(t_detail){
+                const t_detail_stt = t_detail.detail_stt
+                _.remove(target.details,(e)=>{
+                   return e.detail_stt === t_detail_stt
+                })
+                data_detail[row_index]= target
+                //update
+                this.setState({data_detail})
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
+  */
+
   onNewRow = e => {
     if (e.target) {
       let fourpoint_id = e.target.value
@@ -844,6 +880,23 @@ class TestFabricSkewShrinlege extends Component {
             }
           },
         },
+        /*
+        {
+          title: '',
+          dataIndex: 'actions',
+          key: 'actions',
+          render: (text, record, index) => {
+            if(index%4===0){
+              return (
+                <ButtonGroup>
+                      <Button type="danger" size="default" value={[index,fabricrelax_id]}
+                        onClick={this.onDeleteRow}
+                      ><Icon type="close-circle" /></Button>
+                </ButtonGroup>)
+            }else return null
+          } 
+        }
+        */
       ]
       const data = r.details
       return (
