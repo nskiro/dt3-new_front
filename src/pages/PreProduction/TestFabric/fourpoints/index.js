@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Table, Form, Row, Col, Button,Icon, Tag } from 'antd'
+import { Table, Form, Row, Col, Button, Icon, Tag } from 'antd'
 
 import axios from '../../../../axiosInst' //'../../../../../axiosInst'
 import EditableInputCell from '../../../Common/editableinputcell'
@@ -11,7 +11,7 @@ import moment from 'moment'
 
 import { formatDate } from '../../../Common/formatdate'
 import EditableDateCell from '../../../Common/editabledatecell'
-const ButtonGroup = Button.Group;
+const ButtonGroup = Button.Group
 const uuidv1 = require('uuid/v1')
 
 const test_fabric_fourpoint = '/api/testfabric/fourpoint/get'
@@ -499,28 +499,28 @@ class TestFabricFourPoint extends Component {
     }
   }
 
-  onDeleteRow =(e)=>{
-    if(e.target){
-      const values = e.target.value?e.target.value.split(","):[]
+  onDeleteRow = e => {
+    if (e.target) {
+      const values = e.target.value ? e.target.value.split(',') : []
       try {
-        if(!_.isEmpty(values)){
-          const index = parseInt(values[0],10)
-          const fourpoint_id =values[1]
+        if (!_.isEmpty(values)) {
+          const index = parseInt(values[0], 10)
+          const fourpoint_id = values[1]
           const data_detail = [...this.state.data_detail]
           const row_index = _.findIndex(data_detail, { _id: fourpoint_id })
           if (row_index >= 0) {
             const target = data_detail[row_index]
-            if(target.details.length>index){
+            if (target.details.length > index) {
               //lay detail_stt
-              const t_detail =target.details[index]
-              if(t_detail){
+              const t_detail = target.details[index]
+              if (t_detail) {
                 const t_detail_stt = t_detail.detail_stt
-                _.remove(target.details,(e)=>{
-                   return e.detail_stt === t_detail_stt
+                _.remove(target.details, e => {
+                  return e.detail_stt === t_detail_stt
                 })
-                data_detail[row_index]= target
+                data_detail[row_index] = target
                 //update
-                this.setState({data_detail})
+                this.setState({ data_detail })
               }
             }
           }
@@ -528,7 +528,6 @@ class TestFabricFourPoint extends Component {
       } catch (error) {
         console.log(error)
       }
-      
     }
   }
 
@@ -913,16 +912,22 @@ class TestFabricFourPoint extends Component {
           dataIndex: 'actions',
           key: 'actions',
           render: (text, record, index) => {
-            if(index%4===0){
+            if (index % 4 === 0) {
               return (
                 <ButtonGroup>
-                      <Button type="danger" size="default" value={[index,fabricrelax_id]}
-                        onClick={this.onDeleteRow}
-                      ><Icon type="close-circle" /></Button>
-                </ButtonGroup>)
-            }else return null
-          }        
-        }
+                  <Button
+                    type="danger"
+                    size="default"
+                    value={[index, fabricrelax_id]}
+                    onClick={this.onDeleteRow}
+                  >
+                    <Icon type="close-circle" />
+                  </Button>
+                </ButtonGroup>
+              )
+            } else return null
+          },
+        },
         /*{
           title: 'PHOTO OF DEFECT',
           dataIndex: 'photo_defect',
@@ -950,7 +955,6 @@ class TestFabricFourPoint extends Component {
                 New row
               </Button>
             </Col>
-            
           </Row>
           <Row gutter={2}>
             <Col>

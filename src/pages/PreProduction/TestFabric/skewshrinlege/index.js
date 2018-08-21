@@ -12,7 +12,7 @@ import _ from 'lodash'
 import moment from 'moment'
 
 import { isBuffer } from 'util'
-const ButtonGroup = Button.Group;
+const ButtonGroup = Button.Group
 
 const uuidv1 = require('uuid/v1')
 const decimal_fix = 1
